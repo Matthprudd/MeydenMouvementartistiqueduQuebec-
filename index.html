@@ -4,10 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MEYDEN — Plateforme 360°</title>
+
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -16,11 +15,6 @@
         radial-gradient(circle at top, rgba(255,102,0,0.18), transparent 22%),
         linear-gradient(180deg, #06060a 0%, #111118 100%);
       color: white;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
     }
 
     .container {
@@ -52,18 +46,14 @@
       gap: 14px;
     }
 
-    .brand-mark {
+    /* 🔥 LOGO FIX */
+    .logo-img {
       width: 54px;
       height: 54px;
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #ff6600, #ff944d);
-      color: black;
-      font-weight: 900;
-      font-size: 24px;
-      box-shadow: 0 10px 30px rgba(255,102,0,0.28);
+      object-fit: cover;
+      border-radius: 14px;
+      box-shadow: 0 8px 25px rgba(255,102,0,0.35);
+      display: block;
     }
 
     .brand h1 {
@@ -88,729 +78,83 @@
       flex-wrap: wrap;
     }
 
-    .nav button,
-    .btn,
-    .service-btn {
-      border: none;
-      cursor: pointer;
-      transition: 0.2s ease;
-      border-radius: 14px;
-      font-weight: 700;
-    }
-
     .nav button {
       padding: 12px 16px;
       background: rgba(255,255,255,0.05);
       color: white;
       border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .nav button:hover,
-    .btn:hover,
-    .service-btn:hover {
-      transform: translateY(-2px);
+      border-radius: 14px;
+      cursor: pointer;
     }
 
     .hero {
-      padding: 36px 0 24px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 32px;
-      overflow: hidden;
-      box-shadow: 0 20px 70px rgba(0,0,0,0.42);
-    }
-
-    .hero-left,
-    .hero-right {
-      padding: 34px;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,102,0,0.28);
-      background: rgba(255,102,0,0.1);
-      color: #ffbe8f;
-      font-size: 13px;
-      font-weight: 700;
+      padding: 36px 0;
     }
 
     .hero-title {
-      font-size: 64px;
-      line-height: 0.95;
-      margin: 20px 0 16px;
+      font-size: 48px;
       font-weight: 900;
-      max-width: 760px;
     }
 
     .hero-title span {
       color: #ff6600;
     }
 
-    .hero-text {
-      font-size: 20px;
-      line-height: 1.55;
-      color: rgba(255,255,255,0.72);
-      max-width: 760px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 26px;
-    }
-
     .btn {
-      padding: 15px 22px;
-    }
-
-    .btn-main {
+      padding: 14px 20px;
       background: #ff6600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
       color: black;
-      box-shadow: 0 14px 35px rgba(255,102,0,0.28);
+      font-weight: bold;
     }
 
-    .btn-secondary {
-      background: rgba(255,255,255,0.05);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 30px;
-    }
-
-    .stat-card {
-      background: rgba(0,0,0,0.22);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 22px;
-      padding: 18px;
-    }
-
-    .stat-card strong {
-      display: block;
-      color: #ff6600;
-      font-size: 30px;
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
-
-    .stat-card span {
-      color: rgba(255,255,255,0.62);
-      font-size: 14px;
-    }
-
-    .video-card {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .panel {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 28px;
-      padding: 20px;
-    }
-
-    .panel-title {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      text-transform: uppercase;
-      letter-spacing: 0.24em;
-      margin-bottom: 10px;
-    }
-
-    .video-preview {
-      aspect-ratio: 16/9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: linear-gradient(135deg, rgba(255,102,0,0.18), rgba(0,0,0,0.5));
-      color: rgba(255,255,255,0.58);
-      font-weight: 700;
-      padding: 20px;
-    }
-
-    .quick-note {
-      padding: 16px;
-      border-radius: 20px;
-      background: rgba(255,102,0,0.1);
-      border: 1px solid rgba(255,102,0,0.22);
-      color: #ffd7bb;
-      line-height: 1.5;
-    }
-
-    .section {
-      padding: 22px 0;
-    }
-
-    .section h2 {
-      color: #ff6600;
-      font-size: 38px;
-      margin: 0 0 10px;
-    }
-
-    .section p.lead {
-      color: rgba(255,255,255,0.72);
-      font-size: 17px;
-      line-height: 1.6;
-      margin: 0 0 22px;
-      max-width: 900px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 28px;
-      padding: 24px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.24);
-    }
-
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 28px;
-    }
-
-    .card p {
-      color: rgba(255,255,255,0.7);
-      line-height: 1.55;
-    }
-
-    .feature {
-      display: inline-block;
-      margin-bottom: 16px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: #ff6600;
-      color: black;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .media-box {
-      aspect-ratio: 16/9;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: linear-gradient(135deg, rgba(255,102,0,0.18), rgba(0,0,0,0.55));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 18px;
-      font-weight: 700;
-      padding: 20px;
-    }
-
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    .service-btn {
-      padding: 18px;
-      min-height: 120px;
-      text-align: left;
-      background: #ff6600;
-      color: black;
-      box-shadow: 0 12px 32px rgba(255,102,0,0.2);
-    }
-
-    .offer-grid {
-      display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
-      gap: 22px;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: rgba(255,255,255,0.72);
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(0,0,0,0.24);
-      color: white;
-      font-size: 15px;
-    }
-
-    .form-group input::placeholder {
-      color: rgba(255,255,255,0.28);
-    }
-
-    .offer-cards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-    }
-
-    .offer {
-      border-radius: 28px;
-      padding: 24px;
-      min-height: 100%;
-    }
-
-    .offer.primary {
-      background: linear-gradient(180deg, rgba(255,102,0,0.16), rgba(0,0,0,0.25));
-      border: 1px solid rgba(255,102,0,0.24);
-    }
-
-    .offer.secondary {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .offer small {
-      display: block;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 14px;
-      font-weight: 700;
-      font-size: 11px;
-    }
-
-    .offer strong {
-      display: block;
-      font-size: 34px;
-      margin-bottom: 10px;
-    }
-
-    .price {
-      color: #ff6600;
-      font-size: 58px;
-      font-weight: 900;
-      margin-bottom: 14px;
-      line-height: 1;
-    }
-
-    .offer p {
-      color: rgba(255,255,255,0.72);
-      line-height: 1.55;
-      margin-bottom: 20px;
-    }
-
-    .notification {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .notification-icon {
-      width: 54px;
-      height: 54px;
-      flex-shrink: 0;
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #ff6600, #ff944d);
-      color: black;
-      font-size: 22px;
-      font-weight: 900;
-      box-shadow: 0 10px 30px rgba(255,102,0,0.25);
-    }
-
-    .footer-space {
-      height: 60px;
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid,
-      .grid-2,
-      .grid-3,
-      .offer-grid,
-      .offer-cards,
-      .service-grid,
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-title {
-        font-size: 44px;
-      }
-
-      .topbar-inner {
-        align-items: flex-start;
-      }
-
-      .nav {
-        width: 100%;
-      }
-
-      .nav button {
-        flex: 1 1 calc(50% - 10px);
-      }
-    }
-
-    @media (max-width: 640px) {
-      .hero-left,
-      .hero-right,
-      .card,
-      .panel {
-        padding: 20px;
-      }
-
-      .hero-title {
-        font-size: 36px;
-      }
-
-      .section h2 {
-        font-size: 30px;
-      }
-    }
   </style>
 </head>
+
 <body>
 
-  <div class="brand">
-  <body>
-
+  <!-- HEADER -->
   <div class="topbar">
     <div class="container topbar-inner">
+
       <div class="brand">
         <img src="./logo.png" alt="Meyden logo" class="logo-img" />
         <div>
           <h1>MEYDEN</h1>
-          <small>Mouvement artistique du Québec</small>
+          <small>MOUVEMENT ARTISTIQUE DU QUÉBEC</small>
         </div>
       </div>
 
       <div class="nav">
-        <button onclick="document.getElementById('decouvrir').scrollIntoView({behavior:'smooth'})">Découvrir</button>
-        <button onclick="document.getElementById('bibliotheque').scrollIntoView({behavior:'smooth'})">Bibliothèque</button>
-        <button onclick="document.getElementById('boutique').scrollIntoView({behavior:'smooth'})">Boutique</button>
-        <button onclick="document.getElementById('entreprises').scrollIntoView({behavior:'smooth'})">Entreprises</button>
-        <button onclick="document.getElementById('abonnements').scrollIntoView({behavior:'smooth'})">Abonnements</button>
-        <button onclick="document.getElementById('notifications').scrollIntoView({behavior:'smooth'})">Notifications</button>
+        <button onclick="document.getElementById('decouvrir').scrollIntoView()">Découvrir</button>
+        <button onclick="document.getElementById('bibliotheque').scrollIntoView()">Bibliothèque</button>
+        <button onclick="document.getElementById('boutique').scrollIntoView()">Boutique</button>
+        <button onclick="document.getElementById('entreprises').scrollIntoView()">Entreprises</button>
+        <button onclick="document.getElementById('abonnements').scrollIntoView()">Abonnements</button>
       </div>
+
     </div>
   </div>
 
+  <!-- HERO -->
   <div class="container hero">
-    <div class="hero-grid">
-      <div class="hero-left">
-        <div class="tag">Plateforme 360° • artistes • studios • entreprises</div>
-        <div class="hero-title">
-          Fais entrer ton <span>mouvement</span> dans une vraie machine visuelle.
-        </div>
-        <div class="hero-text">
-          MEYDEN n’est pas juste une page. C’est une vitrine immersive pour découvrir, diffuser, connecter et monétiser les artistes, les studios et les entreprises du Québec.
-        </div>
 
-        <div class="hero-actions">
-          <button class="btn btn-main" onclick="document.getElementById('abonnements').scrollIntoView({behavior:'smooth'})">
-            Entrer dans Meyden
-          </button>
-          <button class="btn btn-secondary" onclick="document.getElementById('entreprises').scrollIntoView({behavior:'smooth'})">
-            Explorer les services
-          </button>
-        </div>
-
-        <div class="stats">
-          <div class="stat-card">
-            <strong>360°</strong>
-            <span>Création à diffusion</span>
-          </div>
-          <div class="stat-card">
-            <strong>Coins</strong>
-            <span>Récompenses d’engagement</span>
-          </div>
-          <div class="stat-card">
-            <strong>Studios</strong>
-            <span>Écosystème créatif actif</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="video-card">
-          <div class="panel">
-            <div class="panel-title">Vidéo du moment</div>
-            <div class="video-preview">
-              Aperçu vidéo<br />
-              current-video.mp4
-            </div>
-          </div>
-
-          <div class="quick-note">
-            Une plateforme pensée pour frapper vite, donner une présence réelle au mouvement et créer une première impression beaucoup plus forte.
-          </div>
-        </div>
-      </div>
+    <div class="hero-title">
+      Fais entrer ton <span>mouvement</span><br>
+      dans une vraie machine visuelle.
     </div>
+
+    <p>
+      MEYDEN n’est pas juste une page. C’est une vitrine immersive pour découvrir, diffuser, connecter et monétiser les artistes du Québec.
+    </p>
+
+    <br>
+
+    <button class="btn">Entrer dans Meyden</button>
+
   </div>
-
-  <div class="container">
-
-    <section class="section" id="decouvrir">
-      <h2>À découvrir</h2>
-      <p class="lead">
-        Cette zone doit montrer qu’il y a déjà de la vie, de la sélection et une vraie direction artistique.
-      </p>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="feature">Focus artiste</div>
-          <h3>🔥 Symbioz 2.0</h3>
-          <p>Band à découvrir absolument dans l’écosystème Meyden. Une proposition forte à mettre de l’avant pour donner immédiatement du poids à la plateforme.</p>
-          <button class="btn btn-main" onclick="alert('Ouverture de la fiche artiste Symbioz 2.0')">
-            Voir l’artiste
-          </button>
-        </div>
-
-        <div class="card">
-          <div class="media-box">Cover / affiche artiste</div>
-          <p>Cette zone peut ensuite accueillir une vraie image, une bande-annonce ou un visuel de lancement.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="bibliotheque">
-      <h2>Ma Bibliothèque</h2>
-      <p class="lead">
-        Une présentation plus plateforme média que simple liste vide.
-      </p>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="media-box">Aperçu vidéo<br />artiste-alpha.mp4</div>
-          <h3>Artiste Alpha</h3>
-          <p>Vidéo et musique mockées pour simuler une vraie bibliothèque de contenu.</p>
-          <button class="btn btn-main" onclick="alert('Lecture vidéo Artiste Alpha')">Lire la vidéo</button>
-          <button class="btn btn-secondary" onclick="alert('Lecture audio Artiste Alpha')">Écouter l’audio</button>
-        </div>
-
-        <div class="card">
-          <div class="media-box">Aperçu vidéo<br />artiste-beta.mp4</div>
-          <h3>Artiste Beta</h3>
-          <p>Contenu mocké pour tester l’expérience utilisateur et la logique média Meyden.</p>
-          <button class="btn btn-main" onclick="alert('Lecture vidéo Artiste Beta')">Lire la vidéo</button>
-          <button class="btn btn-secondary" onclick="alert('Lecture audio Artiste Beta')">Écouter l’audio</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="boutique">
-      <h2>Boutique Créateurs</h2>
-      <p class="lead">
-        Les partenaires studio doivent paraître désirables, crédibles et actifs.
-      </p>
-
-      <div class="grid-3">
-        <div class="card">
-          <h3>Studio Lujamko</h3>
-          <p>Production, accompagnement et possibilités créatives.</p>
-          <button class="btn btn-main" onclick="alert('Ouverture Studio Lujamko')">Voir le studio</button>
-        </div>
-
-        <div class="card">
-          <h3>Lestudio Evo</h3>
-          <p>Studio créatif à intégrer à l’expérience Meyden.</p>
-          <button class="btn btn-main" onclick="alert('Ouverture Lestudio Evo')">Voir le studio</button>
-        </div>
-
-        <div class="card">
-          <h3>Simoniaque Studio</h3>
-          <p>Studio partenaire et ressource potentielle dans l’écosystème.</p>
-          <button class="btn btn-main" onclick="alert('Ouverture Simoniaque Studio')">Voir le studio</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="entreprises">
-      <h2>Centre d’Achat Entreprises</h2>
-      <p class="lead">
-        Une entreprise qui arrive ici doit comprendre immédiatement qu’il y a de vrais services à réserver.
-      </p>
-
-      <div class="card">
-        <h3>Radio Pop</h3>
-        <p>Choisissez un service directement depuis la plateforme.</p>
-
-        <div class="service-grid">
-          <button class="service-btn" onclick="alert('Service sélectionné : Accompagnement artistique')">
-            Accompagnement artistique
-          </button>
-          <button class="service-btn" onclick="alert('Service sélectionné : Diffuser une chanson sur Radio Pop')">
-            Diffuser une chanson sur Radio Pop
-          </button>
-          <button class="service-btn" onclick="alert('Service sélectionné : Droit d’auteur et propriété intellectuelle')">
-            Droit d’auteur et propriété intellectuelle
-          </button>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-top:22px;">
-        <div class="card">
-          <h3>Corail Communication</h3>
-          <p>Prise de rendez-vous entreprise et communications.</p>
-          <button class="btn btn-main" onclick="alert('Prise de rendez-vous Corail Communication')">
-            Prendre rendez-vous
-          </button>
-        </div>
-
-        <div class="card">
-          <h3>Réseautage 888</h3>
-          <p>Maillage, développement et opportunités de réseau.</p>
-          <button class="btn btn-main" onclick="alert('Prise de rendez-vous Réseautage 888')">
-            Prendre rendez-vous
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="abonnements">
-      <h2>VIP & Abonnements</h2>
-      <p class="lead">
-        Cette section doit vendre et donner envie d’embarquer dans le mouvement.
-      </p>
-
-      <div class="offer-grid">
-        <div class="card">
-          <div class="form-group">
-            <label for="nom">Nom complet</label>
-            <input id="nom" type="text" placeholder="Ton nom" />
-          </div>
-
-          <div class="form-group">
-            <label for="email">Adresse courriel</label>
-            <input id="email" type="email" placeholder="toncourriel@email.com" />
-          </div>
-
-          <div class="form-group">
-            <label for="type">Type d’abonnement</label>
-            <select id="type">
-              <option value="">-- Choisir --</option>
-              <option value="Partenaire Entreprise - 65.99$">Partenaire Entreprise - 65.99$</option>
-              <option value="Artiste - 14.99$">Artiste - 14.99$</option>
-            </select>
-          </div>
-
-          <button class="btn btn-main" style="width:100%;font-size:18px;padding:16px;" onclick="payer()">
-            Payer maintenant
-          </button>
-        </div>
-
-        <div class="offer-cards">
-          <div class="offer primary">
-            <small>Offre entreprise</small>
-            <strong>Partenaire Entreprise</strong>
-            <div class="price">65.99$</div>
-            <p>Pour les partenaires qui veulent visibilité, services et positionnement dans l’écosystème Meyden.</p>
-            <button class="btn btn-main" onclick="choisirOffre('Partenaire Entreprise - 65.99$')">Choisir cette offre</button>
-          </div>
-
-          <div class="offer secondary">
-            <small>Offre artiste</small>
-            <strong>Artiste</strong>
-            <div class="price">14.99$</div>
-            <p>Une entrée accessible pour les artistes qui veulent exister, diffuser et évoluer dans le mouvement.</p>
-            <button class="btn btn-main" onclick="choisirOffre('Artiste - 14.99$')">Choisir cette offre</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="notifications">
-      <h2>Notifications</h2>
-      <p class="lead">
-        Une plateforme qui semble active inspire plus confiance.
-      </p>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="notification">
-            <div class="notification-icon">✦</div>
-            <div>
-              <h3 style="margin-top:0;">Meyden Coins</h3>
-              <p>💰 Vous avez reçu un Meyden Coins grâce à vos 500 vues.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="notification">
-            <div class="notification-icon">⏰</div>
-            <div>
-              <h3 style="margin-top:0;">Rendez-vous</h3>
-              <p>📅 Votre rendez-vous avec Radio Pop est sedulé pour le 25 sept 2925.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="footer-space"></div>
-  </div>
-
-  <script>
-    function choisirOffre(valeur) {
-      document.getElementById('type').value = valeur;
-      alert('Offre sélectionnée : ' + valeur);
-    }
-
-    function payer() {
-      const nom = document.getElementById('nom').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const type = document.getElementById('type').value;
-
-      if (!nom || !email || !type) {
-        alert('Complète le formulaire avant de payer.');
-        return;
-      }
-
-      alert(
-        'Paiement simulé envoyé\\n\\n' +
-        'Nom : ' + nom + '\\n' +
-        'Courriel : ' + email + '\\n' +
-        'Type : ' + type + '\\n\\n' +
-        'Virement préparé vers : matthieuprudhomme1984@gmail.com'
-      );
-    }
-  </script>
 
 </body>
 </html>
