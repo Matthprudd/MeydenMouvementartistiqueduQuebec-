@@ -2,23 +2,111 @@
 <html>
 <head>
   <title>Meyden Platform</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: radial-gradient(circle at top, #ff660020, black);
+      color: white;
+    }
+
+    .container {
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #ff6600;
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 500px;
+      backdrop-filter: blur(10px);
+    }
+
+    button {
+      padding: 15px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .main-btn {
+      background: #ff6600;
+      color: black;
+    }
+
+    .main-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .secondary {
+      background: #222;
+      color: white;
+    }
+
+    .section-title {
+      margin-top: 40px;
+      font-size: 22px;
+      color: #ff6600;
+    }
+
+  </style>
 </head>
-<body style="background:black;color:white;font-family:sans-serif;text-align:center;padding:40px;">
 
-<h1 style="color:#ff6600;">MEYDEN</h1>
-<p>Plateforme 360° — création, diffusion et monétisation</p>
+<body>
 
-<br><br>
+<div class="container">
 
-<button onclick="alert('Paiement simulé envoyé à matthieuprudhomme1984@gmail.com')" style="padding:15px;background:#ff6600;border:none;color:black;font-weight:bold;">
-Payer maintenant
-</button>
+  <h1>MEYDEN</h1>
+  <div class="subtitle">
+    Plateforme 360° — création • diffusion • monétisation
+  </div>
 
-<br><br>
+  <div class="card">
+    <h2>🔥 Symbioz 2.0</h2>
+    <p>Band à découvrir absolument dans l'écosystème Meyden</p>
+    <button class="secondary" onclick="alert('Ouverture fiche artiste')">Voir l’artiste</button>
+  </div>
 
-<button onclick="alert('Service Radio Pop réservé')">Radio Pop</button>
-<button onclick="alert('Rendez-vous Corail Communication')">Corail</button>
-<button onclick="alert('Rendez-vous Réseautage 888')">Réseautage 888</button>
+  <div class="section-title">🎬 Actions rapides</div>
+
+  <div class="card">
+    <button class="main-btn" onclick="alert('Paiement simulé envoyé à matthieuprudhomme1984@gmail.com')">
+      Payer maintenant
+    </button>
+  </div>
+
+  <div class="section-title">🏢 Services entreprises</div>
+
+  <div class="card">
+    <button class="secondary" onclick="alert('Radio Pop - accompagnement')">Radio Pop</button>
+    <button class="secondary" onclick="alert('Corail Communication')">Corail</button>
+    <button class="secondary" onclick="alert('Réseautage 888')">Réseautage 888</button>
+  </div>
+
+  <div class="section-title">🔔 Notifications</div>
+
+  <div class="card">
+    <p>💰 Meyden Coins reçus (500 vues)</p>
+    <p>📅 Rendez-vous Radio Pop prévu</p>
+  </div>
+
+</div>
 
 </body>
 </html>
