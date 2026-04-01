@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meyden Monitor — Version 12</title>
+  <title>Meyden Monitor — Version 13</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-black text-white min-h-screen">
   <div class="max-w-7xl mx-auto px-6 py-8">
     <header class="mb-10">
-      <h1 class="text-4xl font-bold tracking-tight">Meyden Monitor — Version 12</h1>
-      <p class="text-white/60 mt-2">Les 5 monitors, la simulation vidéo, l’évolution du contenu, le dashboard créateur, les abonnements, les Meyden Coins et la logique économique dans une seule interface.</p>
+      <h1 class="text-4xl font-bold tracking-tight">Meyden Monitor — Version 13</h1>
+      <p class="text-white/60 mt-2">Version investisseur : diffusion, évolution, abonnements, Meyden Coins, sécurité économique et simulation de croissance par niveau d’abonnement.</p>
     </header>
 
     <section class="grid gap-6 lg:grid-cols-4 mb-8">
@@ -155,6 +155,20 @@
 
     <section class="grid gap-6 lg:grid-cols-2 mb-10">
       <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution d’abonnement créateur</h2>
+        <div class="mb-4 text-sm text-white/70">Cette section montre la capacité mensuelle, l’accès système et l’effet business de chaque niveau créateur.</div>
+        <div id="creatorSimulationGrid" class="grid gap-4"></div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution d’abonnement public</h2>
+        <div class="mb-4 text-sm text-white/70">Cette section montre l’accès à la diffusion, la portée et l’évolution de la base public selon chaque niveau.</div>
+        <div id="publicSimulationGrid" class="grid gap-4"></div>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-2 mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
         <h2 class="text-2xl font-semibold mb-4">Meyden Coins visibles</h2>
         <div class="grid grid-cols-2 gap-4 text-sm">
           <div class="rounded-xl border border-white/10 bg-black/30 p-4">
@@ -163,7 +177,7 @@
           </div>
           <div class="rounded-xl border border-white/10 bg-black/30 p-4">
             <div class="text-white/50">Valeur estimée</div>
-            <div id="coinVisibleMoney" class="text-2xl font-bold mt-1">22.20$</div>
+            <div id="coinVisibleMoney" class="text-2xl font-bold mt-1">22.20$ CAD</div>
           </div>
         </div>
       </div>
@@ -194,7 +208,11 @@
       {
         id: 'creator-free',
         name: 'Créateur Gratuit',
-        price: '0$',
+        price: 0,
+        label: '0$',
+        monthlyUploads: 'Jusqu’à 5 cycles d’essai',
+        access: 'Accès limité',
+        investorText: 'Entrée massive dans le système, acquisition de créateurs, sans monétisation ni courriel avancé.',
         features: [
           'Accès sans monétisation',
           'Aucun courriel de conseils d’amélioration',
@@ -205,7 +223,11 @@
       {
         id: 'creator-weekly',
         name: 'Créateur 14.99$',
-        price: '14.99$/mois',
+        price: 14.99,
+        label: '14.99$/mois',
+        monthlyUploads: '4 contenus / mois',
+        access: 'Accès complet',
+        investorText: 'Monétisation accessible, cadence stable, feedback et réinjection continue.',
         features: [
           '1 contenu par semaine',
           'Accès à tout le système',
@@ -216,7 +238,11 @@
       {
         id: 'creator-daily',
         name: 'Créateur 65.99$',
-        price: '65.99$/mois',
+        price: 65.99,
+        label: '65.99$/mois',
+        monthlyUploads: '30 contenus / mois',
+        access: 'Accès prioritaire',
+        investorText: 'Plan intensif pour créateurs actifs, monétisation forte et volume élevé.',
         features: [
           '1 contenu par jour',
           'Accès complet',
@@ -230,7 +256,10 @@
       {
         id: 'public-free',
         name: 'Public Gratuit',
-        price: '0$',
+        price: 0,
+        label: '0$',
+        access: 'Accès partiel',
+        investorText: 'Base de public gratuite pour nourrir la plateforme et créer l’habitude d’écoute.',
         features: [
           'Accès à toute diffusion sauf International et Grand Public',
         ],
@@ -238,7 +267,10 @@
       {
         id: 'public-premium',
         name: 'Public 1.99$',
-        price: '1.99$/mois',
+        price: 1.99,
+        label: '1.99$/mois',
+        access: 'Accès total',
+        investorText: 'Monétisation simple et scalable sur la consommation de diffusion complète.',
         features: [
           'Accès à toute diffusion',
         ],
@@ -281,10 +313,16 @@
     const flowGrid = document.getElementById('flowGrid');
     const creatorPlansGrid = document.getElementById('creatorPlansGrid');
     const publicPlansGrid = document.getElementById('publicPlansGrid');
+    const creatorSimulationGrid = document.getElementById('creatorSimulationGrid');
+    const publicSimulationGrid = document.getElementById('publicSimulationGrid');
     const emailBox = document.getElementById('emailBox');
 
     function moneyFromCoins(value) {
       return (value * 0.15).toFixed(2) + '$ CAD';
+    }
+
+    function yearly(value) {
+      return (value * 12).toFixed(2) + '$';
     }
 
     function renderMonitors() {
@@ -327,7 +365,7 @@
         btn.innerHTML = `
           <div class="flex items-start justify-between gap-4">
             <div class="font-semibold">${plan.name}</div>
-            <div class="text-orange-400 font-bold">${plan.price}</div>
+            <div class="text-orange-400 font-bold">${plan.label}</div>
           </div>
           <div class="mt-3 space-y-1 text-sm text-white/70">${plan.features.map(f => `<div>• ${f}</div>`).join('')}</div>
         `;
@@ -335,6 +373,7 @@
           selectedCreatorPlan = index;
           updateUI();
           renderCreatorPlans();
+          renderCreatorSimulation();
         };
         creatorPlansGrid.appendChild(btn);
       });
@@ -349,7 +388,7 @@
         btn.innerHTML = `
           <div class="flex items-start justify-between gap-4">
             <div class="font-semibold">${plan.name}</div>
-            <div class="text-orange-400 font-bold">${plan.price}</div>
+            <div class="text-orange-400 font-bold">${plan.label}</div>
           </div>
           <div class="mt-3 space-y-1 text-sm text-white/70">${plan.features.map(f => `<div>• ${f}</div>`).join('')}</div>
         `;
@@ -357,8 +396,91 @@
           selectedPublicPlan = index;
           updateUI();
           renderPublicPlans();
+          renderPublicSimulation();
         };
         publicPlansGrid.appendChild(btn);
+      });
+    }
+
+    function renderCreatorSimulation() {
+      creatorSimulationGrid.innerHTML = '';
+      creatorPlans.forEach((plan, index) => {
+        const monthlyRevenue = plan.price;
+        const yearlyRevenue = plan.price * 12;
+        const reserve = monthlyRevenue / 3;
+        const card = document.createElement('div');
+        card.className = `rounded-xl border p-4 transition ${index === selectedCreatorPlan ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-black/30'}`;
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="font-semibold">${plan.name}</div>
+              <div class="text-sm text-white/60 mt-1">${plan.investorText}</div>
+            </div>
+            <div class="text-orange-400 font-bold">${plan.label}</div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Capacité</div>
+              <div class="font-semibold mt-1">${plan.monthlyUploads}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Accès</div>
+              <div class="font-semibold mt-1">${plan.access}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Revenu mensuel / 1 abonné</div>
+              <div class="font-semibold mt-1">${monthlyRevenue.toFixed(2)}$</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Provision 1/3</div>
+              <div class="font-semibold mt-1">${reserve.toFixed(2)}$</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3 col-span-2">
+              <div class="text-white/50">Projection annuelle / 1 abonné</div>
+              <div class="font-semibold mt-1">${yearlyRevenue.toFixed(2)}$</div>
+            </div>
+          </div>
+        `;
+        creatorSimulationGrid.appendChild(card);
+      });
+    }
+
+    function renderPublicSimulation() {
+      publicSimulationGrid.innerHTML = '';
+      publicPlans.forEach((plan, index) => {
+        const monthlyRevenue = plan.price;
+        const yearlyRevenue = plan.price * 12;
+        const reserve = monthlyRevenue / 3;
+        const card = document.createElement('div');
+        card.className = `rounded-xl border p-4 transition ${index === selectedPublicPlan ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-black/30'}`;
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="font-semibold">${plan.name}</div>
+              <div class="text-sm text-white/60 mt-1">${plan.investorText}</div>
+            </div>
+            <div class="text-orange-400 font-bold">${plan.label}</div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Accès diffusion</div>
+              <div class="font-semibold mt-1">${plan.access}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Revenu mensuel / 1 abonné</div>
+              <div class="font-semibold mt-1">${monthlyRevenue.toFixed(2)}$</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Provision 1/3</div>
+              <div class="font-semibold mt-1">${reserve.toFixed(2)}$</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Projection annuelle / 1 abonné</div>
+              <div class="font-semibold mt-1">${yearlyRevenue.toFixed(2)}$</div>
+            </div>
+          </div>
+        `;
+        publicSimulationGrid.appendChild(card);
       });
     }
 
@@ -450,6 +572,8 @@
     renderMonitors();
     renderCreatorPlans();
     renderPublicPlans();
+    renderCreatorSimulation();
+    renderPublicSimulation();
     updateUI();
   </script>
 </body>
