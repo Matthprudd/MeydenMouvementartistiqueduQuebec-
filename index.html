@@ -3,75 +3,200 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meyden Monitor 8.5</title>
+  <title>Meyden Monitor 8.5 + 10</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-black text-white p-6">
 
 <div class="max-w-7xl mx-auto">
 
-  <h1 class="text-3xl font-bold mb-2">Meyden Monitor — Version 8.5 UI complète</h1>
-  <p class="text-white/60 mb-8">Diffusion, abonnements, Meyden Coins et évolution du contenu.</p>
+  <h1 class="text-3xl font-bold mb-2">Meyden Monitor — Version 8.5 UI complète + logique V10</h1>
+  <p class="text-white/60 mb-8">Diffusion, abonnements, Meyden Coins, évolution du contenu et monétisation réelle.</p>
 
   <!-- TOP INFO -->
-  <div class="grid md:grid-cols-3 gap-6 mb-8">
+  <div class="grid md:grid-cols-4 gap-6 mb-8">
 
-    <div class="bg-white/5 p-6 rounded-xl">
+    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
       <div class="text-white/50">Monitor actif</div>
       <div id="monitorName" class="text-xl font-bold text-orange-400 mt-2">International</div>
+      <div id="monitorReward" class="text-sm text-white/60 mt-2">3 coins / 24h</div>
     </div>
 
-    <div class="bg-white/5 p-6 rounded-xl">
+    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
       <div class="text-white/50">Meyden Coins</div>
       <div id="coins" class="text-2xl font-bold text-yellow-400 mt-2">148</div>
+      <div class="text-sm text-white/60 mt-2">1 coin = 0.15$ CAD</div>
     </div>
 
-    <div class="bg-white/5 p-6 rounded-xl">
+    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
       <div class="text-white/50">Tuned On</div>
       <div id="tuned" class="text-2xl font-bold text-green-400 mt-2">1200</div>
+      <div class="text-sm text-white/60 mt-2">Signal humain réel</div>
+    </div>
+
+    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+      <div class="text-white/50">Monétisation</div>
+      <div id="moneyValue" class="text-2xl font-bold text-white mt-2">22.20$</div>
+      <div class="text-sm text-white/60 mt-2">Échange trimestriel</div>
     </div>
 
   </div>
 
   <!-- MONITORS -->
   <div class="mb-8">
-    <h2 class="text-xl mb-4">Les 5 Meyden Monitors</h2>
+    <h2 class="text-xl mb-4 font-semibold">Les 5 Meyden Monitors</h2>
     <div id="monitors" class="grid md:grid-cols-3 gap-3"></div>
   </div>
 
   <!-- PLAYER -->
-  <div class="bg-white/5 p-6 rounded-xl mb-8">
+  <div class="bg-white/5 p-6 rounded-xl border border-white/10 mb-8">
 
     <div class="text-white/50">Now Playing</div>
-    <div id="version" class="text-xl">Clip V1</div>
+    <div id="version" class="text-xl font-semibold mt-1">Clip V1</div>
 
-    <div class="grid grid-cols-2 mt-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
       <div>
-        <div class="text-white/50">Score</div>
+        <div class="text-white/50 text-sm">Score</div>
         <div id="score" class="text-2xl font-bold text-green-400">72</div>
       </div>
       <div>
-        <div class="text-white/50">Coins gagnés</div>
+        <div class="text-white/50 text-sm">Coins gagnés</div>
         <div id="coins2" class="text-2xl font-bold text-yellow-400">148</div>
+      </div>
+      <div>
+        <div class="text-white/50 text-sm">Génération</div>
+        <div id="generationText" class="text-sm font-semibold mt-1">Performance + Tuned On + 3 coins / 24h</div>
+      </div>
+      <div>
+        <div class="text-white/50 text-sm">Paiement</div>
+        <div class="text-sm font-semibold mt-1">Provision 1/3 abonnements</div>
       </div>
     </div>
 
   </div>
 
   <!-- FLOW -->
-  <div id="flow" class="grid grid-cols-2 gap-3 mb-8"></div>
+  <div>
+    <h2 class="text-xl mb-4 font-semibold">Flow d’évolution</h2>
+    <div id="flow" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8"></div>
+  </div>
+
+  <!-- EMAIL -->
+  <div id="emailBox" class="hidden mb-8 rounded-xl border border-orange-500 bg-orange-500/10 p-4">
+    <div class="font-semibold">📧 Courriel de recommandation</div>
+    <div class="text-sm mt-2 text-white/80">Ton intro est trop lente. Coupe à 3 secondes et ajoute un impact visuel dès le départ.</div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="grid lg:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+      <h2 class="text-xl font-semibold mb-4">Dashboard créateur</h2>
+      <div class="space-y-2 text-sm text-white/80">
+        <div>Audience : <span id="dashboardAudience">International</span></div>
+        <div>Performance : <span id="dashboardScore">72</span></div>
+        <div>Meyden Coins : <span id="dashboardCoins">148</span></div>
+        <div>Plan actif : <span id="dashboardPlan">Créateur 14.99</span></div>
+      </div>
+      <button onclick="submitNewVersion()" class="mt-5 px-4 py-3 bg-orange-500 text-black rounded-xl font-semibold w-full">
+        Submit nouvelle version
+      </button>
+    </div>
+
+    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+      <h2 class="text-xl font-semibold mb-4">Abonnements public</h2>
+      <div id="publicPlans" class="grid gap-4"></div>
+    </div>
+  </div>
+
+  <!-- CREATOR PLANS -->
+  <div class="mb-8 bg-white/5 p-6 rounded-xl border border-white/10">
+    <h2 class="text-xl font-semibold mb-4">Abonnements créateur</h2>
+    <div id="creatorPlans" class="grid gap-4"></div>
+  </div>
 
   <!-- BUTTON -->
-  <button onclick="tunedOn()" class="w-full py-4 bg-orange-500 text-black font-bold text-xl rounded-xl">
-    Tuned On
+  <button onclick="tunedOn()" class="w-full py-4 bg-orange-500 text-black font-bold text-xl rounded-xl hover:scale-[1.01] transition">
+    <span id="tunedBtnLabel">Tuned On (1200)</span>
   </button>
+
+  <div class="mt-10 text-sm text-white/60 leading-7 max-w-4xl">
+    Chaque monitor représente un type d’audience. Le contenu ne descend pas : il trouve son public. Les Meyden Coins s’accumulent selon l’attention réelle, le signal Tuned On, la performance et la présence du contenu dans les meilleurs monitors. Cette version garde le visuel 8.5 tout en intégrant l’intégralité des options stratégiques de la version 10.
+  </div>
 
 </div>
 
 <script>
+const monitors = [
+  { name: "International", reward: 3, rewardText: "3 coins / 24h" },
+  { name: "Grand Public", reward: 1.5, rewardText: "1.5 coin / 24h" },
+  { name: "Niche", reward: 0.5, rewardText: "0.5 coin / 24h" },
+  { name: "Public Ciblé", reward: 0, rewardText: "Optimisation audience" },
+  { name: "Fans", reward: 0, rewardText: "Validation communauté" }
+];
 
-const monitors = ["International","Grand Public","Niche","Public Ciblé","Fans"];
-const phases = ["Upload","Monitor","Analyse","Chute","Recyclage","Email","Amélioration","Retour"];
+const creatorPlans = [
+  {
+    id: 'free',
+    name: 'Créateur Gratuit',
+    price: '0$',
+    features: [
+      'Accès au système de diffusion',
+      '1 passage dans chacun des 5 monitors',
+      'Maximum 72h dans le système',
+      'Aucune monétisation',
+      'Aucun courriel de conseils avancés'
+    ]
+  },
+  {
+    id: 'weekly',
+    name: 'Créateur 14.99',
+    price: '14.99$/mois',
+    features: [
+      '1 contenu par semaine',
+      'Accès complet aux 5 monitors',
+      'Courriels de recommandations',
+      'Accès Meyden Coins',
+      'Réinjection du contenu amélioré'
+    ]
+  },
+  {
+    id: 'daily',
+    name: 'Créateur 65.99',
+    price: '65.99$/mois',
+    features: [
+      '1 contenu par jour',
+      'Accès complet au système',
+      'Optimisation continue',
+      'Monétisation active',
+      'Réinjection et suivi complet'
+    ]
+  }
+];
+
+const publicPlans = [
+  {
+    id: 'audience-free',
+    name: 'Public Gratuit',
+    price: '0$',
+    features: [
+      'Accès aux diffusions Niche, Public Ciblé et Fans',
+      'Aucun accès International',
+      'Aucun accès Grand Public'
+    ]
+  },
+  {
+    id: 'audience-premium',
+    name: 'Public Premium',
+    price: '1.99$/mois',
+    features: [
+      'Accès à toute la diffusion',
+      'International inclus',
+      'Grand Public inclus'
+    ]
+  }
+];
+
+const phases = ["Upload","Analyse","Optimisation","Retour"];
 
 let score = 72;
 let coins = 148;
@@ -79,28 +204,71 @@ let tuned = 1200;
 let version = 1;
 let phase = 0;
 let selected = 0;
+let selectedCreatorPlan = 'weekly';
+let selectedPublicPlan = 'audience-premium';
 
-const monitorDiv = document.getElementById("monitors");
-const flowDiv = document.getElementById("flow");
+const monitorDiv = document.getElementById('monitors');
+const flowDiv = document.getElementById('flow');
+const creatorPlansDiv = document.getElementById('creatorPlans');
+const publicPlansDiv = document.getElementById('publicPlans');
+const emailBox = document.getElementById('emailBox');
+
+function moneyFromCoins(value){
+  return (value * 0.15).toFixed(2) + '$';
+}
 
 function renderMonitors(){
-  monitorDiv.innerHTML="";
-  monitors.forEach((m,i)=>{
-    let btn=document.createElement("div");
-    btn.innerText=m;
-    btn.className = "p-3 border rounded cursor-pointer " + (i===selected?"bg-orange-500 text-black":"bg-white/5");
-    btn.onclick=()=>{selected=i;update();renderMonitors();};
+  monitorDiv.innerHTML = '';
+  monitors.forEach((m, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'rounded-xl border p-4 text-left transition ' + (i === selected ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-white/5 hover:bg-white/10');
+    btn.innerHTML = `<div class="font-semibold">${m.name}</div><div class="text-sm text-white/60 mt-2">${m.rewardText}</div>`;
+    btn.onclick = () => { selected = i; update(); renderMonitors(); };
     monitorDiv.appendChild(btn);
   });
 }
 
 function renderFlow(){
-  flowDiv.innerHTML="";
-  phases.forEach((p,i)=>{
-    let div=document.createElement("div");
-    div.innerText=p;
-    div.className="p-3 rounded " + (i===phase?"bg-orange-500 text-black":"bg-white/5");
+  flowDiv.innerHTML = '';
+  phases.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.textContent = p;
+    div.className = 'p-3 border rounded-xl transition-all ' + (i === phase ? 'bg-orange-500 text-black' : 'bg-white/5 border-white/10');
     flowDiv.appendChild(div);
+  });
+}
+
+function renderCreatorPlans(){
+  creatorPlansDiv.innerHTML = '';
+  creatorPlans.forEach((plan) => {
+    const btn = document.createElement('button');
+    btn.className = 'rounded-xl border p-4 text-left transition w-full ' + (selectedCreatorPlan === plan.id ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-white/5 hover:bg-white/10');
+    btn.onclick = () => { selectedCreatorPlan = plan.id; update(); renderCreatorPlans(); };
+    btn.innerHTML = `
+      <div class="flex items-start justify-between gap-4">
+        <div class="font-semibold">${plan.name}</div>
+        <div class="text-orange-400 font-bold">${plan.price}</div>
+      </div>
+      <div class="mt-3 space-y-1 text-sm text-white/70">${plan.features.map(f => `<div>• ${f}</div>`).join('')}</div>
+    `;
+    creatorPlansDiv.appendChild(btn);
+  });
+}
+
+function renderPublicPlans(){
+  publicPlansDiv.innerHTML = '';
+  publicPlans.forEach((plan) => {
+    const btn = document.createElement('button');
+    btn.className = 'rounded-xl border p-4 text-left transition w-full ' + (selectedPublicPlan === plan.id ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-white/5 hover:bg-white/10');
+    btn.onclick = () => { selectedPublicPlan = plan.id; update(); renderPublicPlans(); };
+    btn.innerHTML = `
+      <div class="flex items-start justify-between gap-4">
+        <div class="font-semibold">${plan.name}</div>
+        <div class="text-orange-400 font-bold">${plan.price}</div>
+      </div>
+      <div class="mt-3 space-y-1 text-sm text-white/70">${plan.features.map(f => `<div>• ${f}</div>`).join('')}</div>
+    `;
+    publicPlansDiv.appendChild(btn);
   });
 }
 
@@ -110,43 +278,64 @@ function tunedOn(){
   update();
 }
 
+function submitNewVersion(){
+  version = 2;
+  score = 85;
+  coins += 12;
+  emailBox.classList.remove('hidden');
+  update();
+  setTimeout(() => emailBox.classList.add('hidden'), 2500);
+}
+
 function update(){
-  document.getElementById("score").innerText=score;
-  document.getElementById("coins").innerText=Math.floor(coins);
-  document.getElementById("coins2").innerText=Math.floor(coins);
-  document.getElementById("tuned").innerText=tuned;
-  document.getElementById("version").innerText="Clip V"+version;
-  document.getElementById("monitorName").innerText=monitors[selected];
+  document.getElementById('score').textContent = Math.round(score);
+  document.getElementById('score').className = 'text-2xl font-bold ' + (score > 75 ? 'text-green-400' : 'text-red-400');
+  document.getElementById('coins').textContent = Math.floor(coins);
+  document.getElementById('coins2').textContent = Math.floor(coins);
+  document.getElementById('tuned').textContent = tuned;
+  document.getElementById('version').textContent = 'Clip V' + version;
+  document.getElementById('monitorName').textContent = monitors[selected].name;
+  document.getElementById('monitorReward').textContent = monitors[selected].rewardText;
+  document.getElementById('generationText').textContent = monitors[selected].reward > 0 ? `Performance + Tuned On + ${monitors[selected].rewardText}` : 'Performance + Tuned On';
+  document.getElementById('moneyValue').textContent = moneyFromCoins(Math.floor(coins));
+  document.getElementById('dashboardAudience').textContent = monitors[selected].name;
+  document.getElementById('dashboardScore').textContent = Math.round(score);
+  document.getElementById('dashboardCoins').textContent = Math.floor(coins);
+  document.getElementById('dashboardPlan').textContent = creatorPlans.find(p => p.id === selectedCreatorPlan).name;
+  document.getElementById('tunedBtnLabel').textContent = `Tuned On (${tuned})`;
   renderFlow();
 }
 
-setInterval(()=>{
+setInterval(() => {
+  phase = (phase + 1) % phases.length;
 
-  phase=(phase+1)%phases.length;
+  let delta = Math.random() > 0.5 ? 6 : -4;
+  score = Math.max(0, Math.min(100, score + delta));
 
-  if(phase===3){
-    score=Math.max(0,score-20);
-    coins+=1;
+  if (phase === 2) {
+    version = 2;
+    if (monitors[selected].reward > 0) {
+      coins += monitors[selected].reward;
+    } else {
+      coins += 0.5;
+    }
   }
 
-  if(phase===6){
-    score=Math.min(100,score+30);
-    version=2;
-    coins+=8;
+  if (phase === 1 && score > 75) {
+    coins += 1;
   }
 
-  if(phase===0){
-    version=1;
-    score=72;
+  if (phase === 3) {
+    version = 1;
   }
 
   update();
-
-},2200);
+}, 2500);
 
 renderMonitors();
+renderCreatorPlans();
+renderPublicPlans();
 update();
-
 </script>
 
 </body>
