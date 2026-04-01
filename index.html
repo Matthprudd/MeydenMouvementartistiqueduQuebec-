@@ -1,342 +1,456 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meyden Monitor 8.5 + 10</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meyden Monitor — Version 12</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white p-6">
+<body class="bg-black text-white min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight">Meyden Monitor — Version 12</h1>
+      <p class="text-white/60 mt-2">Les 5 monitors, la simulation vidéo, l’évolution du contenu, le dashboard créateur, les abonnements, les Meyden Coins et la logique économique dans une seule interface.</p>
+    </header>
 
-<div class="max-w-7xl mx-auto">
-
-  <h1 class="text-3xl font-bold mb-2">Meyden Monitor — Version 8.5 UI complète + logique V10</h1>
-  <p class="text-white/60 mb-8">Diffusion, abonnements, Meyden Coins, évolution du contenu et monétisation réelle.</p>
-
-  <!-- TOP INFO -->
-  <div class="grid md:grid-cols-4 gap-6 mb-8">
-
-    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-      <div class="text-white/50">Monitor actif</div>
-      <div id="monitorName" class="text-xl font-bold text-orange-400 mt-2">International</div>
-      <div id="monitorReward" class="text-sm text-white/60 mt-2">3 coins / 24h</div>
-    </div>
-
-    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-      <div class="text-white/50">Meyden Coins</div>
-      <div id="coins" class="text-2xl font-bold text-yellow-400 mt-2">148</div>
-      <div class="text-sm text-white/60 mt-2">1 coin = 0.15$ CAD</div>
-    </div>
-
-    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-      <div class="text-white/50">Tuned On</div>
-      <div id="tuned" class="text-2xl font-bold text-green-400 mt-2">1200</div>
-      <div class="text-sm text-white/60 mt-2">Signal humain réel</div>
-    </div>
-
-    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-      <div class="text-white/50">Monétisation</div>
-      <div id="moneyValue" class="text-2xl font-bold text-white mt-2">22.20$</div>
-      <div class="text-sm text-white/60 mt-2">Échange trimestriel</div>
-    </div>
-
-  </div>
-
-  <!-- MONITORS -->
-  <div class="mb-8">
-    <h2 class="text-xl mb-4 font-semibold">Les 5 Meyden Monitors</h2>
-    <div id="monitors" class="grid md:grid-cols-3 gap-3"></div>
-  </div>
-
-  <!-- PLAYER -->
-  <div class="bg-white/5 p-6 rounded-xl border border-white/10 mb-8">
-
-    <div class="text-white/50">Now Playing</div>
-    <div id="version" class="text-xl font-semibold mt-1">Clip V1</div>
-
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-      <div>
-        <div class="text-white/50 text-sm">Score</div>
-        <div id="score" class="text-2xl font-bold text-green-400">72</div>
+    <section class="grid gap-6 lg:grid-cols-4 mb-8">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/50">Monitor actif</div>
+        <div id="activeMonitorName" class="text-2xl font-bold text-orange-400 mt-2">International</div>
+        <div id="activeMonitorAudience" class="text-sm text-white/70 mt-2">Audience large</div>
       </div>
-      <div>
-        <div class="text-white/50 text-sm">Coins gagnés</div>
-        <div id="coins2" class="text-2xl font-bold text-yellow-400">148</div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/50">Score performance</div>
+        <div id="topScore" class="text-2xl font-bold text-green-400 mt-2">78</div>
+        <div class="text-sm text-white/70 mt-2">Lecture comportementale réelle</div>
       </div>
-      <div>
-        <div class="text-white/50 text-sm">Génération</div>
-        <div id="generationText" class="text-sm font-semibold mt-1">Performance + Tuned On + 3 coins / 24h</div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/50">Meyden Coins</div>
+        <div id="topCoins" class="text-2xl font-bold text-yellow-400 mt-2">148</div>
+        <div id="moneyValue" class="text-sm text-white/70 mt-2">Valeur : 22.20$ CAD</div>
       </div>
-      <div>
-        <div class="text-white/50 text-sm">Paiement</div>
-        <div class="text-sm font-semibold mt-1">Provision 1/3 abonnements</div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/50">Signal public</div>
+        <div id="topTuned" class="text-2xl font-bold text-green-400 mt-2">1200</div>
+        <div class="text-sm text-white/70 mt-2">Tuned On cumulés</div>
       </div>
-    </div>
+    </section>
 
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold mb-4">Les 5 Meyden Monitors</h2>
+      <div id="monitorGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Simulation de vidéo</h2>
+        <div class="rounded-2xl border border-white/10 bg-black/40 p-6">
+          <div class="text-sm text-white/50">Now Playing</div>
+          <div id="videoTitle" class="text-2xl font-bold mt-2">Clip V1</div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
+            <div>
+              <div class="text-xs text-white/50">Audience</div>
+              <div id="videoAudience" class="font-semibold mt-1">International</div>
+            </div>
+            <div>
+              <div class="text-xs text-white/50">Performance</div>
+              <div id="videoScore" class="font-semibold mt-1 text-green-400">78</div>
+            </div>
+            <div>
+              <div class="text-xs text-white/50">Coins</div>
+              <div id="videoCoins" class="font-semibold mt-1 text-yellow-400">148</div>
+            </div>
+            <div>
+              <div class="text-xs text-white/50">Statut</div>
+              <div id="videoStatus" class="font-semibold mt-1">Actif</div>
+            </div>
+          </div>
+        </div>
+
+        <button id="tunedBtn" type="button" class="w-full mt-5 py-4 bg-orange-500 text-black font-bold text-xl rounded-xl hover:scale-[1.01] transition">
+          Tuned On (1200)
+        </button>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution du contenu</h2>
+        <div id="flowGrid" class="grid grid-cols-2 gap-3"></div>
+        <div id="flowText" class="mt-4 text-sm text-white/70 leading-6">Le contenu entre dans le système et commence son analyse.</div>
+        <div id="emailBox" class="hidden mt-4 rounded-xl border border-orange-500 bg-orange-500/10 p-4">
+          <div class="font-semibold">📧 Courriel de recommandation</div>
+          <div class="text-sm mt-2 text-white/80">Ton contenu manque d’impact dans les premières secondes. Coupe l’intro et clarifie l’audience visée.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-2 mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Dashboard créateur</h2>
+        <div class="space-y-2 text-sm text-white/80">
+          <div>Audience actuelle : <span id="dashboardAudience" class="text-orange-300">International</span></div>
+          <div>Performance : <span id="dashboardPerformance">78</span></div>
+          <div>Meyden Coins : <span id="dashboardCoins">148</span></div>
+          <div>Plan créateur : <span id="dashboardCreatorPlan">Créateur 14.99$</span></div>
+          <div>Plan public : <span id="dashboardPublicPlan">Public Premium 1.99$</span></div>
+          <div>Statut du contenu : <span id="dashboardStatus">En circulation</span></div>
+        </div>
+        <button id="submitVersionBtn" type="button" class="w-full mt-5 py-4 bg-orange-500 text-black font-semibold rounded-xl hover:scale-[1.01] transition">
+          Submit nouvelle version de votre contenu
+        </button>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Lien stratégique</h2>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Audience</div>
+            <div id="linkAudience" class="font-semibold mt-1">International</div>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Performance</div>
+            <div id="linkPerformance" class="font-semibold mt-1">78</div>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Coins</div>
+            <div id="linkCoins" class="font-semibold mt-1 text-yellow-400">148</div>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Amélioration</div>
+            <div id="linkImprovement" class="font-semibold mt-1">Version 1</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-2 mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Abonnements créateur</h2>
+        <div class="mb-4 grid gap-3">
+          <label class="block text-sm">Nom créateur
+            <input id="creatorNameInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Nom du créateur" />
+          </label>
+          <label class="block text-sm">Courriel
+            <input id="creatorEmailInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="courriel@exemple.com" />
+          </label>
+          <label class="block text-sm">Nom du contenu
+            <input id="contentNameInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Titre du contenu" />
+          </label>
+        </div>
+        <div id="creatorPlansGrid" class="grid gap-4"></div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Abonnements public</h2>
+        <div class="mb-4 grid gap-3">
+          <label class="block text-sm">Nom public
+            <input id="publicNameInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Nom du public" />
+          </label>
+          <label class="block text-sm">Courriel public
+            <input id="publicEmailInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="courriel@exemple.com" />
+          </label>
+        </div>
+        <div id="publicPlansGrid" class="grid gap-4"></div>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-2 mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Meyden Coins visibles</h2>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Coins accumulés</div>
+            <div id="coinVisibleTotal" class="text-2xl font-bold text-yellow-400 mt-1">148</div>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Valeur estimée</div>
+            <div id="coinVisibleMoney" class="text-2xl font-bold mt-1">22.20$</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Règle économique</h2>
+        <div class="text-sm text-white/75 leading-7 space-y-2">
+          <p><strong>1/3 des revenus mensuels d’abonnement</strong> est mis en provision pour soutenir l’échange trimestriel des Meyden Coins.</p>
+          <p><strong>Sécurité :</strong></p>
+          <p>• plafond trimestriel global</p>
+          <p>• ajustement dynamique si nécessaire</p>
+          <p>• contrôle anti-abus</p>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <!-- FLOW -->
-  <div>
-    <h2 class="text-xl mb-4 font-semibold">Flow d’évolution</h2>
-    <div id="flow" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8"></div>
-  </div>
+  <script>
+    const monitors = [
+      { id: 1, name: 'International', audience: 'Audience large', reward: 3, rewardText: '3 coins / 24h' },
+      { id: 2, name: 'Grand Public', audience: 'Grand public', reward: 1.5, rewardText: '1.5 coin / 24h' },
+      { id: 3, name: 'Petit Public', audience: 'Audience restreinte', reward: 0.5, rewardText: '0.5 coin / 24h' },
+      { id: 4, name: 'Public Ciblé', audience: 'Public précis', reward: 0, rewardText: 'Optimisation audience' },
+      { id: 5, name: 'Fans', audience: 'Communauté engagée', reward: 0, rewardText: 'Validation communauté' },
+    ];
 
-  <!-- EMAIL -->
-  <div id="emailBox" class="hidden mb-8 rounded-xl border border-orange-500 bg-orange-500/10 p-4">
-    <div class="font-semibold">📧 Courriel de recommandation</div>
-    <div class="text-sm mt-2 text-white/80">Ton intro est trop lente. Coupe à 3 secondes et ajoute un impact visuel dès le départ.</div>
-  </div>
+    const creatorPlans = [
+      {
+        id: 'creator-free',
+        name: 'Créateur Gratuit',
+        price: '0$',
+        features: [
+          'Accès sans monétisation',
+          'Aucun courriel de conseils d’amélioration',
+          '1 seule boucle de 2h dans chacun des 5 monitors',
+          'Maximum 72h dans les monitors pour un contenu',
+        ],
+      },
+      {
+        id: 'creator-weekly',
+        name: 'Créateur 14.99$',
+        price: '14.99$/mois',
+        features: [
+          '1 contenu par semaine',
+          'Accès à tout le système',
+          'Courriels d’amélioration',
+          'Accès Meyden Coins',
+        ],
+      },
+      {
+        id: 'creator-daily',
+        name: 'Créateur 65.99$',
+        price: '65.99$/mois',
+        features: [
+          '1 contenu par jour',
+          'Accès complet',
+          'Courriels et suivi complet',
+          'Accès Meyden Coins',
+        ],
+      },
+    ];
 
-  <!-- DASHBOARD -->
-  <div class="grid lg:grid-cols-2 gap-6 mb-8">
-    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-      <h2 class="text-xl font-semibold mb-4">Dashboard créateur</h2>
-      <div class="space-y-2 text-sm text-white/80">
-        <div>Audience : <span id="dashboardAudience">International</span></div>
-        <div>Performance : <span id="dashboardScore">72</span></div>
-        <div>Meyden Coins : <span id="dashboardCoins">148</span></div>
-        <div>Plan actif : <span id="dashboardPlan">Créateur 14.99</span></div>
-      </div>
-      <button onclick="submitNewVersion()" class="mt-5 px-4 py-3 bg-orange-500 text-black rounded-xl font-semibold w-full">
-        Submit nouvelle version
-      </button>
-    </div>
+    const publicPlans = [
+      {
+        id: 'public-free',
+        name: 'Public Gratuit',
+        price: '0$',
+        features: [
+          'Accès à toute diffusion sauf International et Grand Public',
+        ],
+      },
+      {
+        id: 'public-premium',
+        name: 'Public 1.99$',
+        price: '1.99$/mois',
+        features: [
+          'Accès à toute diffusion',
+        ],
+      },
+    ];
 
-    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-      <h2 class="text-xl font-semibold mb-4">Abonnements public</h2>
-      <div id="publicPlans" class="grid gap-4"></div>
-    </div>
-  </div>
+    const phases = [
+      'Upload',
+      'Monitor',
+      'Analyse',
+      'Monte ou chute',
+      'Recyclage',
+      'Email',
+      'Amélioration',
+      'Sortie ou retour',
+    ];
 
-  <!-- CREATOR PLANS -->
-  <div class="mb-8 bg-white/5 p-6 rounded-xl border border-white/10">
-    <h2 class="text-xl font-semibold mb-4">Abonnements créateur</h2>
-    <div id="creatorPlans" class="grid gap-4"></div>
-  </div>
+    const flowDescriptions = [
+      'Le contenu entre dans le système et commence son analyse.',
+      'Le contenu circule dans le monitor correspondant à son audience.',
+      'Le comportement réel du public est analysé.',
+      'Le contenu monte ou chute selon sa performance réelle.',
+      'Le contenu est regroupé dans un environnement cohérent.',
+      'Un courriel de recommandation est généré pour le créateur.',
+      'Le créateur améliore le contenu et prépare une nouvelle version.',
+      'Le contenu sort ou revient au début du processus selon son évolution.',
+    ];
 
-  <!-- BUTTON -->
-  <button onclick="tunedOn()" class="w-full py-4 bg-orange-500 text-black font-bold text-xl rounded-xl hover:scale-[1.01] transition">
-    <span id="tunedBtnLabel">Tuned On (1200)</span>
-  </button>
+    let selectedMonitor = 0;
+    let selectedCreatorPlan = 1;
+    let selectedPublicPlan = 1;
+    let score = 78;
+    let tuned = 1200;
+    let coins = 148;
+    let version = 1;
+    let flowPhase = 0;
+    let currentStatus = 'En circulation';
 
-  <div class="mt-10 text-sm text-white/60 leading-7 max-w-4xl">
-    Chaque monitor représente un type d’audience. Le contenu ne descend pas : il trouve son public. Les Meyden Coins s’accumulent selon l’attention réelle, le signal Tuned On, la performance et la présence du contenu dans les meilleurs monitors. Cette version garde le visuel 8.5 tout en intégrant l’intégralité des options stratégiques de la version 10.
-  </div>
+    const monitorGrid = document.getElementById('monitorGrid');
+    const flowGrid = document.getElementById('flowGrid');
+    const creatorPlansGrid = document.getElementById('creatorPlansGrid');
+    const publicPlansGrid = document.getElementById('publicPlansGrid');
+    const emailBox = document.getElementById('emailBox');
 
-</div>
-
-<script>
-const monitors = [
-  { name: "International", reward: 3, rewardText: "3 coins / 24h" },
-  { name: "Grand Public", reward: 1.5, rewardText: "1.5 coin / 24h" },
-  { name: "Niche", reward: 0.5, rewardText: "0.5 coin / 24h" },
-  { name: "Public Ciblé", reward: 0, rewardText: "Optimisation audience" },
-  { name: "Fans", reward: 0, rewardText: "Validation communauté" }
-];
-
-const creatorPlans = [
-  {
-    id: 'free',
-    name: 'Créateur Gratuit',
-    price: '0$',
-    features: [
-      'Accès au système de diffusion',
-      '1 passage dans chacun des 5 monitors',
-      'Maximum 72h dans le système',
-      'Aucune monétisation',
-      'Aucun courriel de conseils avancés'
-    ]
-  },
-  {
-    id: 'weekly',
-    name: 'Créateur 14.99',
-    price: '14.99$/mois',
-    features: [
-      '1 contenu par semaine',
-      'Accès complet aux 5 monitors',
-      'Courriels de recommandations',
-      'Accès Meyden Coins',
-      'Réinjection du contenu amélioré'
-    ]
-  },
-  {
-    id: 'daily',
-    name: 'Créateur 65.99',
-    price: '65.99$/mois',
-    features: [
-      '1 contenu par jour',
-      'Accès complet au système',
-      'Optimisation continue',
-      'Monétisation active',
-      'Réinjection et suivi complet'
-    ]
-  }
-];
-
-const publicPlans = [
-  {
-    id: 'audience-free',
-    name: 'Public Gratuit',
-    price: '0$',
-    features: [
-      'Accès aux diffusions Niche, Public Ciblé et Fans',
-      'Aucun accès International',
-      'Aucun accès Grand Public'
-    ]
-  },
-  {
-    id: 'audience-premium',
-    name: 'Public Premium',
-    price: '1.99$/mois',
-    features: [
-      'Accès à toute la diffusion',
-      'International inclus',
-      'Grand Public inclus'
-    ]
-  }
-];
-
-const phases = ["Upload","Analyse","Optimisation","Retour"];
-
-let score = 72;
-let coins = 148;
-let tuned = 1200;
-let version = 1;
-let phase = 0;
-let selected = 0;
-let selectedCreatorPlan = 'weekly';
-let selectedPublicPlan = 'audience-premium';
-
-const monitorDiv = document.getElementById('monitors');
-const flowDiv = document.getElementById('flow');
-const creatorPlansDiv = document.getElementById('creatorPlans');
-const publicPlansDiv = document.getElementById('publicPlans');
-const emailBox = document.getElementById('emailBox');
-
-function moneyFromCoins(value){
-  return (value * 0.15).toFixed(2) + '$';
-}
-
-function renderMonitors(){
-  monitorDiv.innerHTML = '';
-  monitors.forEach((m, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'rounded-xl border p-4 text-left transition ' + (i === selected ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-white/5 hover:bg-white/10');
-    btn.innerHTML = `<div class="font-semibold">${m.name}</div><div class="text-sm text-white/60 mt-2">${m.rewardText}</div>`;
-    btn.onclick = () => { selected = i; update(); renderMonitors(); };
-    monitorDiv.appendChild(btn);
-  });
-}
-
-function renderFlow(){
-  flowDiv.innerHTML = '';
-  phases.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.textContent = p;
-    div.className = 'p-3 border rounded-xl transition-all ' + (i === phase ? 'bg-orange-500 text-black' : 'bg-white/5 border-white/10');
-    flowDiv.appendChild(div);
-  });
-}
-
-function renderCreatorPlans(){
-  creatorPlansDiv.innerHTML = '';
-  creatorPlans.forEach((plan) => {
-    const btn = document.createElement('button');
-    btn.className = 'rounded-xl border p-4 text-left transition w-full ' + (selectedCreatorPlan === plan.id ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-white/5 hover:bg-white/10');
-    btn.onclick = () => { selectedCreatorPlan = plan.id; update(); renderCreatorPlans(); };
-    btn.innerHTML = `
-      <div class="flex items-start justify-between gap-4">
-        <div class="font-semibold">${plan.name}</div>
-        <div class="text-orange-400 font-bold">${plan.price}</div>
-      </div>
-      <div class="mt-3 space-y-1 text-sm text-white/70">${plan.features.map(f => `<div>• ${f}</div>`).join('')}</div>
-    `;
-    creatorPlansDiv.appendChild(btn);
-  });
-}
-
-function renderPublicPlans(){
-  publicPlansDiv.innerHTML = '';
-  publicPlans.forEach((plan) => {
-    const btn = document.createElement('button');
-    btn.className = 'rounded-xl border p-4 text-left transition w-full ' + (selectedPublicPlan === plan.id ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-white/5 hover:bg-white/10');
-    btn.onclick = () => { selectedPublicPlan = plan.id; update(); renderPublicPlans(); };
-    btn.innerHTML = `
-      <div class="flex items-start justify-between gap-4">
-        <div class="font-semibold">${plan.name}</div>
-        <div class="text-orange-400 font-bold">${plan.price}</div>
-      </div>
-      <div class="mt-3 space-y-1 text-sm text-white/70">${plan.features.map(f => `<div>• ${f}</div>`).join('')}</div>
-    `;
-    publicPlansDiv.appendChild(btn);
-  });
-}
-
-function tunedOn(){
-  tuned++;
-  coins++;
-  update();
-}
-
-function submitNewVersion(){
-  version = 2;
-  score = 85;
-  coins += 12;
-  emailBox.classList.remove('hidden');
-  update();
-  setTimeout(() => emailBox.classList.add('hidden'), 2500);
-}
-
-function update(){
-  document.getElementById('score').textContent = Math.round(score);
-  document.getElementById('score').className = 'text-2xl font-bold ' + (score > 75 ? 'text-green-400' : 'text-red-400');
-  document.getElementById('coins').textContent = Math.floor(coins);
-  document.getElementById('coins2').textContent = Math.floor(coins);
-  document.getElementById('tuned').textContent = tuned;
-  document.getElementById('version').textContent = 'Clip V' + version;
-  document.getElementById('monitorName').textContent = monitors[selected].name;
-  document.getElementById('monitorReward').textContent = monitors[selected].rewardText;
-  document.getElementById('generationText').textContent = monitors[selected].reward > 0 ? `Performance + Tuned On + ${monitors[selected].rewardText}` : 'Performance + Tuned On';
-  document.getElementById('moneyValue').textContent = moneyFromCoins(Math.floor(coins));
-  document.getElementById('dashboardAudience').textContent = monitors[selected].name;
-  document.getElementById('dashboardScore').textContent = Math.round(score);
-  document.getElementById('dashboardCoins').textContent = Math.floor(coins);
-  document.getElementById('dashboardPlan').textContent = creatorPlans.find(p => p.id === selectedCreatorPlan).name;
-  document.getElementById('tunedBtnLabel').textContent = `Tuned On (${tuned})`;
-  renderFlow();
-}
-
-setInterval(() => {
-  phase = (phase + 1) % phases.length;
-
-  let delta = Math.random() > 0.5 ? 6 : -4;
-  score = Math.max(0, Math.min(100, score + delta));
-
-  if (phase === 2) {
-    version = 2;
-    if (monitors[selected].reward > 0) {
-      coins += monitors[selected].reward;
-    } else {
-      coins += 0.5;
+    function moneyFromCoins(value) {
+      return (value * 0.15).toFixed(2) + '$ CAD';
     }
-  }
 
-  if (phase === 1 && score > 75) {
-    coins += 1;
-  }
+    function renderMonitors() {
+      monitorGrid.innerHTML = '';
+      monitors.forEach((monitor, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `rounded-2xl border p-4 text-left transition ${index === selectedMonitor ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`;
+        btn.innerHTML = `
+          <div class="font-semibold">${monitor.name}</div>
+          <div class="text-sm text-white/60 mt-2">${monitor.audience}</div>
+          <div class="text-sm text-yellow-400 mt-2">${monitor.rewardText}</div>
+        `;
+        btn.onclick = () => {
+          selectedMonitor = index;
+          updateUI();
+          renderMonitors();
+        };
+        monitorGrid.appendChild(btn);
+      });
+    }
 
-  if (phase === 3) {
-    version = 1;
-  }
+    function renderFlow() {
+      flowGrid.innerHTML = '';
+      phases.forEach((phaseLabel, index) => {
+        const div = document.createElement('div');
+        div.className = `rounded-xl border p-3 text-sm transition ${index === flowPhase ? 'bg-orange-500 text-black border-orange-500' : 'bg-black/30 border-white/10 text-white/70'}`;
+        div.textContent = phaseLabel;
+        flowGrid.appendChild(div);
+      });
+      document.getElementById('flowText').textContent = flowDescriptions[flowPhase];
+    }
 
-  update();
-}, 2500);
+    function renderCreatorPlans() {
+      creatorPlansGrid.innerHTML = '';
+      creatorPlans.forEach((plan, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `rounded-xl border p-4 text-left transition ${index === selectedCreatorPlan ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-black/30 hover:bg-white/10'}`;
+        btn.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div class="font-semibold">${plan.name}</div>
+            <div class="text-orange-400 font-bold">${plan.price}</div>
+          </div>
+          <div class="mt-3 space-y-1 text-sm text-white/70">${plan.features.map(f => `<div>• ${f}</div>`).join('')}</div>
+        `;
+        btn.onclick = () => {
+          selectedCreatorPlan = index;
+          updateUI();
+          renderCreatorPlans();
+        };
+        creatorPlansGrid.appendChild(btn);
+      });
+    }
 
-renderMonitors();
-renderCreatorPlans();
-renderPublicPlans();
-update();
-</script>
+    function renderPublicPlans() {
+      publicPlansGrid.innerHTML = '';
+      publicPlans.forEach((plan, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `rounded-xl border p-4 text-left transition ${index === selectedPublicPlan ? 'border-orange-400 bg-orange-500/10' : 'border-white/10 bg-black/30 hover:bg-white/10'}`;
+        btn.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div class="font-semibold">${plan.name}</div>
+            <div class="text-orange-400 font-bold">${plan.price}</div>
+          </div>
+          <div class="mt-3 space-y-1 text-sm text-white/70">${plan.features.map(f => `<div>• ${f}</div>`).join('')}</div>
+        `;
+        btn.onclick = () => {
+          selectedPublicPlan = index;
+          updateUI();
+          renderPublicPlans();
+        };
+        publicPlansGrid.appendChild(btn);
+      });
+    }
 
+    function updateUI() {
+      const monitor = monitors[selectedMonitor];
+      document.getElementById('activeMonitorName').textContent = monitor.name;
+      document.getElementById('activeMonitorAudience').textContent = monitor.audience;
+      document.getElementById('topScore').textContent = Math.round(score);
+      document.getElementById('topScore').className = `text-2xl font-bold mt-2 ${score > 75 ? 'text-green-400' : 'text-red-400'}`;
+      document.getElementById('topCoins').textContent = Math.floor(coins);
+      document.getElementById('moneyValue').textContent = `Valeur : ${moneyFromCoins(Math.floor(coins))}`;
+      document.getElementById('topTuned').textContent = tuned;
+      document.getElementById('videoTitle').textContent = `Clip V${version}`;
+      document.getElementById('videoAudience').textContent = monitor.name;
+      document.getElementById('videoScore').textContent = Math.round(score);
+      document.getElementById('videoScore').className = `font-semibold mt-1 ${score > 75 ? 'text-green-400' : 'text-red-400'}`;
+      document.getElementById('videoCoins').textContent = Math.floor(coins);
+      document.getElementById('videoStatus').textContent = currentStatus;
+      document.getElementById('dashboardAudience').textContent = monitor.name;
+      document.getElementById('dashboardPerformance').textContent = Math.round(score);
+      document.getElementById('dashboardCoins').textContent = Math.floor(coins);
+      document.getElementById('dashboardCreatorPlan').textContent = creatorPlans[selectedCreatorPlan].name;
+      document.getElementById('dashboardPublicPlan').textContent = publicPlans[selectedPublicPlan].name;
+      document.getElementById('dashboardStatus').textContent = currentStatus;
+      document.getElementById('linkAudience').textContent = monitor.name;
+      document.getElementById('linkPerformance').textContent = Math.round(score);
+      document.getElementById('linkCoins').textContent = Math.floor(coins);
+      document.getElementById('linkImprovement').textContent = `Version ${version}`;
+      document.getElementById('coinVisibleTotal').textContent = Math.floor(coins);
+      document.getElementById('coinVisibleMoney').textContent = moneyFromCoins(Math.floor(coins));
+      document.getElementById('tunedBtn').textContent = `Tuned On (${tuned})`;
+      renderFlow();
+    }
+
+    function tunedOn() {
+      tuned += 1;
+      coins += 1;
+      score = Math.min(100, score + 2);
+      updateUI();
+    }
+
+    function submitNewVersion() {
+      version = 2;
+      score = Math.min(100, score + 12);
+      coins += 12;
+      currentStatus = 'Version améliorée soumise';
+      emailBox.classList.add('hidden');
+      updateUI();
+    }
+
+    document.getElementById('tunedBtn').addEventListener('click', tunedOn);
+    document.getElementById('submitVersionBtn').addEventListener('click', submitNewVersion);
+
+    setInterval(() => {
+      flowPhase = (flowPhase + 1) % phases.length;
+      emailBox.classList.toggle('hidden', flowPhase !== 5);
+
+      const monitor = monitors[selectedMonitor];
+      const delta = Math.random() > 0.5 ? 5 : -4;
+      score = Math.max(0, Math.min(100, score + delta));
+
+      if (flowPhase === 3) {
+        currentStatus = score > 75 ? 'Monte' : 'Chute';
+      } else if (flowPhase === 4) {
+        currentStatus = 'En recyclage';
+      } else if (flowPhase === 5) {
+        currentStatus = 'Courriel envoyé';
+      } else if (flowPhase === 6) {
+        version = 2;
+        currentStatus = 'En amélioration';
+        coins += 8;
+      } else if (flowPhase === 7) {
+        currentStatus = score > 60 ? 'Retour au système' : 'Sortie du système';
+      } else {
+        currentStatus = 'En circulation';
+      }
+
+      if (flowPhase === 1 && monitor.reward > 0) {
+        coins += monitor.reward;
+      }
+
+      if (flowPhase === 7 && score < 45) {
+        version = 1;
+      }
+
+      updateUI();
+    }, 2400);
+
+    renderMonitors();
+    renderCreatorPlans();
+    renderPublicPlans();
+    updateUI();
+  </script>
 </body>
 </html>
