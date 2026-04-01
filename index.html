@@ -1,347 +1,157 @@
-import { useEffect, useMemo, useState } from "react";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meyden Monitor V10</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-neutral-950 text-white">
+  <div class="min-h-screen flex flex-col items-center px-6 py-10">
+    <div class="text-center mb-12">
+      <h1 class="text-5xl font-bold tracking-tight">Meyden Monitor</h1>
+      <p class="text-white/40 mt-3 text-lg">Diffusion intelligente • Évolution • Monétisation réelle</p>
+    </div>
 
-export default function MeydenMonitorPrototype() {
-  const monitors = useMemo(
-    () => [
-      { id: 1, name: "International", payout: "3 coins / 24h", access: "Premium public", accent: "orange" },
-      { id: 2, name: "Grand Public", payout: "1.5 coin / 24h", access: "Premium public", accent: "amber" },
-      { id: 3, name: "Niche", payout: "0.5 coin / 24h", access: "Public gratuit", accent: "yellow" },
-      { id: 4, name: "Public Ciblé", payout: "Optimisation audience", access: "Public gratuit", accent: "red" },
-      { id: 5, name: "Fans", payout: "Validation communauté", access: "Public gratuit", accent: "rose" },
-    ],
-    [],
-  );
+    <div class="w-full max-w-5xl">
+      <div id="monitorButtons" class="flex justify-center gap-2 mb-8 flex-wrap"></div>
 
-  const creatorPlans = [
-    {
-      id: "free",
-      name: "Créateur Gratuit",
-      price: "0$",
-      description: "Entrée découverte sans monétisation.",
-      features: [
-        "Accès au système de diffusion",
-        "1 passage dans chacun des 5 monitors",
-        "Maximum 72h dans le système",
-        "Aucune monétisation",
-        "Aucun courriel de conseils avancés",
-      ],
-    },
-    {
-      id: "weekly",
-      name: "Créateur 14.99",
-      price: "14.99$/mois",
-      description: "1 contenu par semaine avec accès complet.",
-      features: [
-        "1 contenu par semaine",
-        "Accès complet aux 5 monitors",
-        "Courriels de recommandations",
-        "Accès Meyden Coins",
-        "Réinjection du contenu amélioré",
-      ],
-    },
-    {
-      id: "daily",
-      name: "Créateur 65.99",
-      price: "65.99$/mois",
-      description: "1 contenu par jour avec accès complet.",
-      features: [
-        "1 contenu par jour",
-        "Accès complet au système",
-        "Optimisation continue",
-        "Monétisation active",
-        "Réinjection et suivi complet",
-      ],
-    },
-  ];
+      <div class="rounded-3xl bg-gradient-to-br from-neutral-900 to-black border border-white/10 p-10 text-center shadow-[0_0_80px_rgba(0,0,0,0.7)]">
+        <div class="text-sm text-white/40 mb-2">Now Playing</div>
+        <div id="clipVersion" class="text-3xl font-semibold">Clip V1</div>
 
-  const publicPlans = [
-    {
-      id: "audience-free",
-      name: "Public Gratuit",
-      price: "0$",
-      features: [
-        "Accès aux diffusions Niche, Public Ciblé et Fans",
-        "Aucun accès International",
-        "Aucun accès Grand Public",
-      ],
-    },
-    {
-      id: "audience-premium",
-      name: "Public Premium",
-      price: "1.99$/mois",
-      features: [
-        "Accès à toute la diffusion",
-        "International inclus",
-        "Grand Public inclus",
-      ],
-    },
-  ];
-
-  const [selectedMonitor, setSelectedMonitor] = useState(1);
-  const [selectedCreatorPlan, setSelectedCreatorPlan] = useState("weekly");
-  const [selectedPublicPlan, setSelectedPublicPlan] = useState("audience-premium");
-  const [phase, setPhase] = useState(0);
-  const [tuned, setTuned] = useState(1200);
-  const [score, setScore] = useState(72);
-  const [emailVisible, setEmailVisible] = useState(false);
-  const [version, setVersion] = useState(1);
-  const [coins, setCoins] = useState(148);
-
-  const phases = ["Upload", "Monitor", "Analyse", "Chute", "Recyclage", "Email", "Amélioration", "Retour"];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPhase((prev) => {
-        const next = (prev + 1) % phases.length;
-
-        if (next === 3) {
-          setScore((s) => Math.max(0, s - 25));
-          setCoins((c) => c + 1);
-        }
-
-        if (next === 6) {
-          setScore((s) => Math.min(100, s + 35));
-          setVersion(2);
-          setCoins((c) => c + 8);
-        }
-
-        if (next === 5) {
-          setEmailVisible(true);
-          setTimeout(() => setEmailVisible(false), 2500);
-        }
-
-        if (next === 0) {
-          setVersion(1);
-          setScore(72);
-        }
-
-        return next;
-      });
-    }, 2200);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const currentMonitor = monitors.find((m) => m.id === selectedMonitor);
-  const currentCreatorPlan = creatorPlans.find((p) => p.id === selectedCreatorPlan);
-  const currentPublicPlan = publicPlans.find((p) => p.id === selectedPublicPlan);
-
-  const handleTunedOn = () => {
-    setTuned((prev) => prev + 1);
-    setCoins((prev) => prev + 1);
-  };
-
-  return (
-    <div className="min-h-screen bg-black text-white p-6">
-      <div className="mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold mb-2">Meyden Monitor — Version 8.5 UI complète</h1>
-        <p className="text-white/60 mb-8">
-          Diffusion, abonnements, Meyden Coins et évolution du contenu dans une seule interface.
-        </p>
-
-        <section className="grid gap-6 lg:grid-cols-3 mb-8">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <div className="text-sm text-white/50">Monitor actif</div>
-            <div className="text-2xl font-bold text-orange-400 mt-2">{currentMonitor.name}</div>
-            <div className="mt-3 text-sm text-white/70">Récompense : {currentMonitor.payout}</div>
-            <div className="text-sm text-white/70">Accès public : {currentMonitor.access}</div>
+        <div class="flex justify-center gap-16 mt-10">
+          <div>
+            <div class="text-white/40 text-sm">Score</div>
+            <div id="scoreValue" class="text-4xl font-bold text-green-400">72</div>
           </div>
-
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <div className="text-sm text-white/50">Meyden Coins</div>
-            <div className="text-3xl font-bold text-yellow-400 mt-2">{coins}</div>
-            <div className="mt-3 text-sm text-white/70">1 coin = 0.15$ CAD</div>
-            <div className="text-sm text-white/70">Échange trimestriel</div>
+          <div>
+            <div class="text-white/40 text-sm">Meyden Coins</div>
+            <div id="coinsValue" class="text-4xl font-bold text-yellow-400">148</div>
           </div>
+        </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <div className="text-sm text-white/50">Signal public</div>
-            <div className="text-3xl font-bold text-green-400 mt-2">{tuned}</div>
-            <div className="mt-3 text-sm text-white/70">Tuned On cumulés</div>
-            <div className="text-sm text-white/70">Basé sur l’attention réelle</div>
-          </div>
-        </section>
+        <div id="phases" class="flex justify-center gap-3 mt-10 flex-wrap"></div>
+      </div>
 
-        <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] mb-8">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-2xl font-semibold mb-4">Les 5 Meyden Monitors</h2>
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {monitors.map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => setSelectedMonitor(m.id)}
-                  type="button"
-                  className={`rounded-xl border p-4 text-left transition ${
-                    selectedMonitor === m.id ? "border-orange-400 bg-orange-500/10" : "border-white/10 bg-white/5 hover:bg-white/10"
-                  }`}
-                >
-                  <div className="font-semibold">{m.name}</div>
-                  <div className="text-sm text-white/60 mt-2">{m.payout}</div>
-                  <div className="text-sm text-white/50">{m.access}</div>
-                </button>
-              ))}
-            </div>
+      <button id="tunedBtn" class="w-full mt-10 py-5 rounded-2xl bg-orange-500 text-black text-xl font-bold tracking-wide hover:scale-[1.01] transition">
+        Tuned On (1200)
+      </button>
 
-            <div className="mt-8">
-              <h3 className="text-xl font-semibold mb-4">Flow d’évolution</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {phases.map((p, i) => (
-                  <div
-                    key={i}
-                    className={`p-4 border rounded-xl transition-all ${
-                      i === phase ? "bg-orange-500 text-black scale-105" : "bg-white/5 border-white/10"
-                    }`}
-                  >
-                    {p}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      <div class="mt-10 grid md:grid-cols-3 gap-6 text-center">
+        <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+          <div class="text-white/40 text-sm">Monétisation</div>
+          <div class="text-lg mt-2">1 coin = 0.15$ CAD</div>
+        </div>
 
-          <div className="space-y-6">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h2 className="text-2xl font-semibold mb-4">Simulation du contenu</h2>
-              <div className="grid md:grid-cols-2 gap-4 mb-4">
-                <div className="border border-white/10 rounded-xl p-4">
-                  <div className="text-sm text-white/50">Version 1</div>
-                  <div className="text-lg mt-2">Hook lent</div>
-                  <div className="text-sm text-red-400 mt-2">Faible rétention</div>
-                </div>
-                <div className="border border-white/10 rounded-xl p-4">
-                  <div className="text-sm text-white/50">Version 2</div>
-                  <div className="text-lg mt-2">Hook optimisé</div>
-                  <div className="text-sm text-green-400 mt-2">Forte attention</div>
-                </div>
-              </div>
+        <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+          <div class="text-white/40 text-sm">Génération</div>
+          <div id="generationText" class="text-lg mt-2">Performance + Tuned On</div>
+        </div>
 
-              <div className="border border-white/10 rounded-xl p-5">
-                <div className="text-sm text-white/50">Now Playing</div>
-                <div className="text-xl mt-2 font-semibold">Clip V{version}</div>
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                  <div>
-                    <div className="text-sm text-white/50">Score</div>
-                    <div className={`text-2xl font-bold ${score > 70 ? "text-green-400" : "text-red-400"}`}>{score}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-white/50">Coins gagnés</div>
-                    <div className="text-2xl font-bold text-yellow-400">{coins}</div>
-                  </div>
-                </div>
-              </div>
-
-              {emailVisible && (
-                <div className="mt-4 rounded-xl border border-orange-500 bg-orange-500/10 p-4">
-                  <div className="font-semibold">📧 Courriel de recommandation</div>
-                  <div className="text-sm mt-2 text-white/80">
-                    Ton intro est trop lente. Coupe à 3 secondes et ajoute un impact visuel dès le départ.
-                  </div>
-                </div>
-              )}
-
-              <button
-                onClick={handleTunedOn}
-                type="button"
-                className="w-full mt-5 py-4 bg-orange-500 text-black font-bold text-xl rounded-xl hover:scale-[1.01] transition"
-              >
-                Tuned On ({tuned})
-              </button>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h2 className="text-2xl font-semibold mb-4">Dashboard créateur</h2>
-              <div className="space-y-2 text-sm text-white/80">
-                <div>Audience : {currentMonitor.name}</div>
-                <div>Performance : {score}</div>
-                <div>Meyden Coins : {coins}</div>
-                <div>Plan actif : {currentCreatorPlan.name}</div>
-              </div>
-              <button
-                onClick={() => {
-                  setVersion(2);
-                  setScore(85);
-                  setCoins((prev) => prev + 12);
-                }}
-                type="button"
-                className="mt-5 px-4 py-3 bg-orange-500 text-black rounded-xl font-semibold"
-              >
-                Submit nouvelle version
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <section className="grid gap-6 lg:grid-cols-2 mb-8">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-2xl font-semibold mb-4">Abonnements créateur</h2>
-            <div className="grid gap-4">
-              {creatorPlans.map((plan) => (
-                <button
-                  key={plan.id}
-                  onClick={() => setSelectedCreatorPlan(plan.id)}
-                  type="button"
-                  className={`rounded-xl border p-4 text-left transition ${
-                    selectedCreatorPlan === plan.id ? "border-orange-400 bg-orange-500/10" : "border-white/10 bg-white/5 hover:bg-white/10"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="font-semibold">{plan.name}</div>
-                      <div className="text-sm text-white/60 mt-1">{plan.description}</div>
-                    </div>
-                    <div className="text-orange-400 font-bold">{plan.price}</div>
-                  </div>
-                  <div className="mt-3 space-y-1 text-sm text-white/70">
-                    {plan.features.map((feature) => (
-                      <div key={feature}>• {feature}</div>
-                    ))}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-2xl font-semibold mb-4">Abonnements public</h2>
-            <div className="grid gap-4">
-              {publicPlans.map((plan) => (
-                <button
-                  key={plan.id}
-                  onClick={() => setSelectedPublicPlan(plan.id)}
-                  type="button"
-                  className={`rounded-xl border p-4 text-left transition ${
-                    selectedPublicPlan === plan.id ? "border-orange-400 bg-orange-500/10" : "border-white/10 bg-white/5 hover:bg-white/10"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="font-semibold">{plan.name}</div>
-                    <div className="text-orange-400 font-bold">{plan.price}</div>
-                  </div>
-                  <div className="mt-3 space-y-1 text-sm text-white/70">
-                    {plan.features.map((feature) => (
-                      <div key={feature}>• {feature}</div>
-                    ))}
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-6 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4">
-              <div className="font-semibold text-yellow-300">Règle économique</div>
-              <div className="text-sm text-white/75 mt-2 leading-6">
-                1/3 des paiements mensuels des abonnements est mis en provision pour soutenir l’échange trimestriel des Meyden Coins.
-              </div>
-              <div className="text-sm text-white/75 mt-2 leading-6">
-                Plan public actif : <span className="text-yellow-300">{currentPublicPlan.name}</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="text-sm text-white/60 leading-7 max-w-4xl">
-          Chaque monitor représente un type d’audience. Le contenu ne descend pas : il trouve son public. Les Meyden Coins s’accumulent selon l’attention réelle, le signal Tuned On et l’amélioration du contenu. Cette version 8.5 relie enfin diffusion, abonnements, récompenses et progression créative dans une seule interface cohérente.
+        <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+          <div class="text-white/40 text-sm">Paiement</div>
+          <div class="text-lg mt-2">Échange trimestriel</div>
         </div>
       </div>
+
+      <div class="mt-12 text-center text-white/40 text-sm leading-6 max-w-xl mx-auto">
+        Le public ne choisit pas.<br />
+        Il ressent.<br />
+        Et cette émotion devient une économie.
+      </div>
     </div>
-  );
-}
+  </div>
+
+  <script>
+    const monitors = [
+      { name: "International", reward: 3 },
+      { name: "Grand Public", reward: 1.5 },
+      { name: "Niche", reward: 0.5 },
+      { name: "Public Ciblé", reward: 0 },
+      { name: "Fans", reward: 0 }
+    ];
+
+    const phases = ["Upload", "Analyse", "Optimisation", "Retour"];
+
+    let selectedMonitor = 0;
+    let score = 72;
+    let coins = 148;
+    let tuned = 1200;
+    let version = 1;
+    let phase = 0;
+
+    const monitorButtons = document.getElementById('monitorButtons');
+    const phasesWrap = document.getElementById('phases');
+    const scoreValue = document.getElementById('scoreValue');
+    const coinsValue = document.getElementById('coinsValue');
+    const clipVersion = document.getElementById('clipVersion');
+    const tunedBtn = document.getElementById('tunedBtn');
+    const generationText = document.getElementById('generationText');
+
+    function renderMonitors() {
+      monitorButtons.innerHTML = '';
+      monitors.forEach((monitor, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = monitor.name;
+        btn.className = `px-4 py-2 rounded-full text-sm transition ${selectedMonitor === index ? 'bg-white text-black' : 'bg-white/5 text-white/60 hover:bg-white/10'}`;
+        btn.onclick = () => {
+          selectedMonitor = index;
+          renderMonitors();
+          updateGenerationText();
+        };
+        monitorButtons.appendChild(btn);
+      });
+    }
+
+    function renderPhases() {
+      phasesWrap.innerHTML = '';
+      phases.forEach((p, index) => {
+        const item = document.createElement('div');
+        item.textContent = p;
+        item.className = `px-4 py-2 rounded-full text-sm ${index === phase ? 'bg-orange-500 text-black' : 'bg-white/10 text-white/60'}`;
+        phasesWrap.appendChild(item);
+      });
+    }
+
+    function updateGenerationText() {
+      const reward = monitors[selectedMonitor].reward;
+      generationText.textContent = reward > 0 ? `Performance + Tuned On + ${reward} coins / 24h` : 'Performance + Tuned On';
+    }
+
+    function updateUI() {
+      scoreValue.textContent = Math.round(score);
+      scoreValue.className = `text-4xl font-bold ${score > 75 ? 'text-green-400' : 'text-red-400'}`;
+      coinsValue.textContent = Math.floor(coins);
+      clipVersion.textContent = `Clip V${version}`;
+      tunedBtn.textContent = `Tuned On (${tuned})`;
+      renderPhases();
+    }
+
+    tunedBtn.addEventListener('click', () => {
+      tuned += 1;
+      coins += 1;
+      updateUI();
+    });
+
+    setInterval(() => {
+      phase = (phase + 1) % phases.length;
+
+      const delta = Math.random() > 0.5 ? 6 : -4;
+      score = Math.max(0, Math.min(100, score + delta));
+
+      if (phase === 2) version = 2;
+      if (phase === 3) version = 1;
+
+      coins += score > 75 ? 2 : 0.5;
+
+      updateUI();
+    }, 2500);
+
+    renderMonitors();
+    updateGenerationText();
+    updateUI();
+  </script>
+</body>
+</html>
+
