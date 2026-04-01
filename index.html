@@ -1,813 +1,348 @@
-     <!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MEYDEN â€” Plateforme 360Â°</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(255,102,0,0.18), transparent 22%),
-        linear-gradient(180deg, #06060a 0%, #111118 100%);
-      color: white;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      width: min(1200px, 92%);
-      margin: 0 auto;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(14px);
-      background: rgba(8, 8, 12, 0.85);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .topbar-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      padding: 18px 0;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand-mark {
-      width: 54px;
-      height: 54px;
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #ff6600, #ff944d);
-      color: black;
-      font-weight: 900;
-      font-size: 24px;
-      box-shadow: 0 10px 30px rgba(255,102,0,0.28);
-    }
-
-    .brand h1 {
-      margin: 0;
-      color: #ff6600;
-      letter-spacing: 0.18em;
-      font-size: 28px;
-    }
-
-    .brand small {
-      display: block;
-      color: rgba(255,255,255,0.45);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      margin-top: 3px;
-      font-size: 11px;
-    }
-
-    .nav {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .nav button,
-    .btn,
-    .service-btn {
-      border: none;
-      cursor: pointer;
-      transition: 0.2s ease;
-      border-radius: 14px;
-      font-weight: 700;
-    }
-
-    .nav button {
-      padding: 12px 16px;
-      background: rgba(255,255,255,0.05);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .nav button:hover,
-    .btn:hover,
-    .service-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .hero {
-      padding: 36px 0 24px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 32px;
-      overflow: hidden;
-      box-shadow: 0 20px 70px rgba(0,0,0,0.42);
-    }
-
-    .hero-left,
-    .hero-right {
-      padding: 34px;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,102,0,0.28);
-      background: rgba(255,102,0,0.1);
-      color: #ffbe8f;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .hero-title {
-      font-size: 64px;
-      line-height: 0.95;
-      margin: 20px 0 16px;
-      font-weight: 900;
-      max-width: 760px;
-    }
-
-    .hero-title span {
-      color: #ff6600;
-    }
-
-    .hero-text {
-      font-size: 20px;
-      line-height: 1.55;
-      color: rgba(255,255,255,0.72);
-      max-width: 760px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 26px;
-    }
-
-    .btn {
-      padding: 15px 22px;
-    }
-
-    .btn-main {
-      background: #ff6600;
-      color: black;
-      box-shadow: 0 14px 35px rgba(255,102,0,0.28);
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,0.05);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 30px;
-    }
-
-    .stat-card {
-      background: rgba(0,0,0,0.22);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 22px;
-      padding: 18px;
-    }
-
-    .stat-card strong {
-      display: block;
-      color: #ff6600;
-      font-size: 30px;
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
-
-    .stat-card span {
-      color: rgba(255,255,255,0.62);
-      font-size: 14px;
-    }
-
-    .video-card {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .panel {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 28px;
-      padding: 20px;
-    }
-
-    .panel-title {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      text-transform: uppercase;
-      letter-spacing: 0.24em;
-      margin-bottom: 10px;
-    }
-
-    .video-preview {
-      aspect-ratio: 16/9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: linear-gradient(135deg, rgba(255,102,0,0.18), rgba(0,0,0,0.5));
-      color: rgba(255,255,255,0.58);
-      font-weight: 700;
-      padding: 20px;
-    }
-
-    .quick-note {
-      padding: 16px;
-      border-radius: 20px;
-      background: rgba(255,102,0,0.1);
-      border: 1px solid rgba(255,102,0,0.22);
-      color: #ffd7bb;
-      line-height: 1.5;
-    }
-
-    .section {
-      padding: 22px 0;
-    }
-
-    .section h2 {
-      color: #ff6600;
-      font-size: 38px;
-      margin: 0 0 10px;
-    }
-
-    .section p.lead {
-      color: rgba(255,255,255,0.72);
-      font-size: 17px;
-      line-height: 1.6;
-      margin: 0 0 22px;
-      max-width: 900px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 28px;
-      padding: 24px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.24);
-    }
-
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 28px;
-    }
-
-    .card p {
-      color: rgba(255,255,255,0.7);
-      line-height: 1.55;
-    }
-
-    .feature {
-      display: inline-block;
-      margin-bottom: 16px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: #ff6600;
-      color: black;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .media-box {
-      aspect-ratio: 16/9;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: linear-gradient(135deg, rgba(255,102,0,0.18), rgba(0,0,0,0.55));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 18px;
-      font-weight: 700;
-      padding: 20px;
-    }
-
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    .service-btn {
-      padding: 18px;
-      min-height: 120px;
-      text-align: left;
-      background: #ff6600;
-      color: black;
-      box-shadow: 0 12px 32px rgba(255,102,0,0.2);
-    }
-
-    .offer-grid {
-      display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
-      gap: 22px;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: rgba(255,255,255,0.72);
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(0,0,0,0.24);
-      color: white;
-      font-size: 15px;
-    }
-
-    .form-group input::placeholder {
-      color: rgba(255,255,255,0.28);
-    }
-
-    .offer-cards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-    }
-
-    .offer {
-      border-radius: 28px;
-      padding: 24px;
-      min-height: 100%;
-    }
-
-    .offer.primary {
-      background: linear-gradient(180deg, rgba(255,102,0,0.16), rgba(0,0,0,0.25));
-      border: 1px solid rgba(255,102,0,0.24);
-    }
-
-    .offer.secondary {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .offer small {
-      display: block;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 14px;
-      font-weight: 700;
-      font-size: 11px;
-    }
-
-    .offer strong {
-      display: block;
-      font-size: 34px;
-      margin-bottom: 10px;
-    }
-
-    .price {
-      color: #ff6600;
-      font-size: 58px;
-      font-weight: 900;
-      margin-bottom: 14px;
-      line-height: 1;
-    }
-
-    .offer p {
-      color: rgba(255,255,255,0.72);
-      line-height: 1.55;
-      margin-bottom: 20px;
-    }
-
-    .notification {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .notification-icon {
-      width: 54px;
-      height: 54px;
-      flex-shrink: 0;
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #ff6600, #ff944d);
-      color: black;
-      font-size: 22px;
-      font-weight: 900;
-      box-shadow: 0 10px 30px rgba(255,102,0,0.25);
-    }
-
-    .footer-space {
-      height: 60px;
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid,
-      .grid-2,
-      .grid-3,
-      .offer-grid,
-      .offer-cards,
-      .service-grid,
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-title {
-        font-size: 44px;
-      }
-
-      .topbar-inner {
-        align-items: flex-start;
-      }
-
-      .nav {
-        width: 100%;
-      }
-
-      .nav button {
-        flex: 1 1 calc(50% - 10px);
-      }
-    }
-
-    @media (max-width: 640px) {
-      .hero-left,
-      .hero-right,
-      .card,
-      .panel {
-        padding: 20px;
-      }
-
-      .hero-title {
-        font-size: 36px;
-      }
-
-      .section h2 {
-        font-size: 30px;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="topbar">
-    <div class="container topbar-inner">
-      <div class="brand">
-        <div class="brand-mark">M</div>
-        <div>
-          <h1>MEYDEN</h1>
-          <small>Mouvement artistique du QuÃ©bec</small>
-        </div>
-      </div>
-
-      <div class="nav">
-        <button onclick="document.getElementById('decouvrir').scrollIntoView({behavior:'smooth'})">DÃ©couvrir</button>
-        <button onclick="document.getElementById('bibliotheque').scrollIntoView({behavior:'smooth'})">BibliothÃ¨que</button>
-        <button onclick="document.getElementById('boutique').scrollIntoView({behavior:'smooth'})">Boutique</button>
-        <button onclick="document.getElementById('entreprises').scrollIntoView({behavior:'smooth'})">Entreprises</button>
-        <button onclick="document.getElementById('abonnements').scrollIntoView({behavior:'smooth'})">Abonnements</button>
-        <button onclick="document.getElementById('notifications').scrollIntoView({behavior:'smooth'})">Notifications</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="container hero">
-    <div class="hero-grid">
-      <div class="hero-left">
-        <div class="tag">Plateforme 360Â° â€¢ artistes â€¢ studios â€¢ entreprises</div>
-        <div class="hero-title">
-          Fais entrer ton <span>mouvement</span> dans une vraie machine visuelle.
-        </div>
-        <div class="hero-text">
-          MEYDEN nâ€™est pas juste une page. Câ€™est une vitrine immersive pour dÃ©couvrir, diffuser, connecter et monÃ©tiser les artistes, les studios et les entreprises du QuÃ©bec.
-        </div>
-
-        <div class="hero-actions">
-          <button class="btn btn-main" onclick="document.getElementById('abonnements').scrollIntoView({behavior:'smooth'})">
-            Entrer dans Meyden
-          </button>
-          <button class="btn btn-secondary" onclick="document.getElementById('entreprises').scrollIntoView({behavior:'smooth'})">
-            Explorer les services
-          </button>
-        </div>
-
-        <div class="stats">
-          <div class="stat-card">
-            <strong>360Â°</strong>
-            <span>CrÃ©ation Ã  diffusion</span>
+import { useEffect, useMemo, useState } from "react";
+
+export default function MeydenMonitorPrototype() {
+  const monitors = useMemo(
+    () => [
+      { id: 1, name: "International", payout: "3 coins / 24h", access: "Premium public", accent: "orange" },
+      { id: 2, name: "Grand Public", payout: "1.5 coin / 24h", access: "Premium public", accent: "amber" },
+      { id: 3, name: "Niche", payout: "0.5 coin / 24h", access: "Public gratuit", accent: "yellow" },
+      { id: 4, name: "Public Ciblé", payout: "Optimisation audience", access: "Public gratuit", accent: "red" },
+      { id: 5, name: "Fans", payout: "Validation communauté", access: "Public gratuit", accent: "rose" },
+    ],
+    [],
+  );
+
+  const creatorPlans = [
+    {
+      id: "free",
+      name: "Créateur Gratuit",
+      price: "0$",
+      description: "Entrée découverte sans monétisation.",
+      features: [
+        "Accès au système de diffusion",
+        "1 passage dans chacun des 5 monitors",
+        "Maximum 72h dans le système",
+        "Aucune monétisation",
+        "Aucun courriel de conseils avancés",
+      ],
+    },
+    {
+      id: "weekly",
+      name: "Créateur 14.99",
+      price: "14.99$/mois",
+      description: "1 contenu par semaine avec accès complet.",
+      features: [
+        "1 contenu par semaine",
+        "Accès complet aux 5 monitors",
+        "Courriels de recommandations",
+        "Accès Meyden Coins",
+        "Réinjection du contenu amélioré",
+      ],
+    },
+    {
+      id: "daily",
+      name: "Créateur 65.99",
+      price: "65.99$/mois",
+      description: "1 contenu par jour avec accès complet.",
+      features: [
+        "1 contenu par jour",
+        "Accès complet au système",
+        "Optimisation continue",
+        "Monétisation active",
+        "Réinjection et suivi complet",
+      ],
+    },
+  ];
+
+  const publicPlans = [
+    {
+      id: "audience-free",
+      name: "Public Gratuit",
+      price: "0$",
+      features: [
+        "Accès aux diffusions Niche, Public Ciblé et Fans",
+        "Aucun accès International",
+        "Aucun accès Grand Public",
+      ],
+    },
+    {
+      id: "audience-premium",
+      name: "Public Premium",
+      price: "1.99$/mois",
+      features: [
+        "Accès à toute la diffusion",
+        "International inclus",
+        "Grand Public inclus",
+      ],
+    },
+  ];
+
+  const [selectedMonitor, setSelectedMonitor] = useState(1);
+  const [selectedCreatorPlan, setSelectedCreatorPlan] = useState("weekly");
+  const [selectedPublicPlan, setSelectedPublicPlan] = useState("audience-premium");
+  const [phase, setPhase] = useState(0);
+  const [tuned, setTuned] = useState(1200);
+  const [score, setScore] = useState(72);
+  const [emailVisible, setEmailVisible] = useState(false);
+  const [version, setVersion] = useState(1);
+  const [coins, setCoins] = useState(148);
+
+  const phases = ["Upload", "Monitor", "Analyse", "Chute", "Recyclage", "Email", "Amélioration", "Retour"];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhase((prev) => {
+        const next = (prev + 1) % phases.length;
+
+        if (next === 3) {
+          setScore((s) => Math.max(0, s - 25));
+          setCoins((c) => c + 1);
+        }
+
+        if (next === 6) {
+          setScore((s) => Math.min(100, s + 35));
+          setVersion(2);
+          setCoins((c) => c + 8);
+        }
+
+        if (next === 5) {
+          setEmailVisible(true);
+          setTimeout(() => setEmailVisible(false), 2500);
+        }
+
+        if (next === 0) {
+          setVersion(1);
+          setScore(72);
+        }
+
+        return next;
+      });
+    }, 2200);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentMonitor = monitors.find((m) => m.id === selectedMonitor);
+  const currentCreatorPlan = creatorPlans.find((p) => p.id === selectedCreatorPlan);
+  const currentPublicPlan = publicPlans.find((p) => p.id === selectedPublicPlan);
+
+  const handleTunedOn = () => {
+    setTuned((prev) => prev + 1);
+    setCoins((prev) => prev + 1);
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white p-6">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="text-3xl font-bold mb-2">Meyden Monitor — Version 8.5 UI complète</h1>
+        <p className="text-white/60 mb-8">
+          Diffusion, abonnements, Meyden Coins et évolution du contenu dans une seule interface.
+        </p>
+
+        <section className="grid gap-6 lg:grid-cols-3 mb-8">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="text-sm text-white/50">Monitor actif</div>
+            <div className="text-2xl font-bold text-orange-400 mt-2">{currentMonitor.name}</div>
+            <div className="mt-3 text-sm text-white/70">Récompense : {currentMonitor.payout}</div>
+            <div className="text-sm text-white/70">Accès public : {currentMonitor.access}</div>
           </div>
-          <div class="stat-card">
-            <strong>Coins</strong>
-            <span>RÃ©compenses dâ€™engagement</span>
-          </div>
-          <div class="stat-card">
-            <strong>Studios</strong>
-            <span>Ã‰cosystÃ¨me crÃ©atif actif</span>
-          </div>
-        </div>
-      </div>
 
-      <div class="hero-right">
-        <div class="video-card">
-          <div class="panel">
-            <div class="panel-title">VidÃ©o du moment</div>
-            <div class="video-preview">
-              AperÃ§u vidÃ©o<br />
-              current-video.mp4
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="text-sm text-white/50">Meyden Coins</div>
+            <div className="text-3xl font-bold text-yellow-400 mt-2">{coins}</div>
+            <div className="mt-3 text-sm text-white/70">1 coin = 0.15$ CAD</div>
+            <div className="text-sm text-white/70">Échange trimestriel</div>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="text-sm text-white/50">Signal public</div>
+            <div className="text-3xl font-bold text-green-400 mt-2">{tuned}</div>
+            <div className="mt-3 text-sm text-white/70">Tuned On cumulés</div>
+            <div className="text-sm text-white/70">Basé sur l’attention réelle</div>
+          </div>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] mb-8">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <h2 className="text-2xl font-semibold mb-4">Les 5 Meyden Monitors</h2>
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {monitors.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => setSelectedMonitor(m.id)}
+                  type="button"
+                  className={`rounded-xl border p-4 text-left transition ${
+                    selectedMonitor === m.id ? "border-orange-400 bg-orange-500/10" : "border-white/10 bg-white/5 hover:bg-white/10"
+                  }`}
+                >
+                  <div className="font-semibold">{m.name}</div>
+                  <div className="text-sm text-white/60 mt-2">{m.payout}</div>
+                  <div className="text-sm text-white/50">{m.access}</div>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-8">
+              <h3 className="text-xl font-semibold mb-4">Flow d’évolution</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {phases.map((p, i) => (
+                  <div
+                    key={i}
+                    className={`p-4 border rounded-xl transition-all ${
+                      i === phase ? "bg-orange-500 text-black scale-105" : "bg-white/5 border-white/10"
+                    }`}
+                  >
+                    {p}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div class="quick-note">
-            Une plateforme pensÃ©e pour frapper vite, donner une prÃ©sence rÃ©elle au mouvement et crÃ©er une premiÃ¨re impression beaucoup plus forte.
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <h2 className="text-2xl font-semibold mb-4">Simulation du contenu</h2>
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div className="border border-white/10 rounded-xl p-4">
+                  <div className="text-sm text-white/50">Version 1</div>
+                  <div className="text-lg mt-2">Hook lent</div>
+                  <div className="text-sm text-red-400 mt-2">Faible rétention</div>
+                </div>
+                <div className="border border-white/10 rounded-xl p-4">
+                  <div className="text-sm text-white/50">Version 2</div>
+                  <div className="text-lg mt-2">Hook optimisé</div>
+                  <div className="text-sm text-green-400 mt-2">Forte attention</div>
+                </div>
+              </div>
+
+              <div className="border border-white/10 rounded-xl p-5">
+                <div className="text-sm text-white/50">Now Playing</div>
+                <div className="text-xl mt-2 font-semibold">Clip V{version}</div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div>
+                    <div className="text-sm text-white/50">Score</div>
+                    <div className={`text-2xl font-bold ${score > 70 ? "text-green-400" : "text-red-400"}`}>{score}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-white/50">Coins gagnés</div>
+                    <div className="text-2xl font-bold text-yellow-400">{coins}</div>
+                  </div>
+                </div>
+              </div>
+
+              {emailVisible && (
+                <div className="mt-4 rounded-xl border border-orange-500 bg-orange-500/10 p-4">
+                  <div className="font-semibold">📧 Courriel de recommandation</div>
+                  <div className="text-sm mt-2 text-white/80">
+                    Ton intro est trop lente. Coupe à 3 secondes et ajoute un impact visuel dès le départ.
+                  </div>
+                </div>
+              )}
+
+              <button
+                onClick={handleTunedOn}
+                type="button"
+                className="w-full mt-5 py-4 bg-orange-500 text-black font-bold text-xl rounded-xl hover:scale-[1.01] transition"
+              >
+                Tuned On ({tuned})
+              </button>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <h2 className="text-2xl font-semibold mb-4">Dashboard créateur</h2>
+              <div className="space-y-2 text-sm text-white/80">
+                <div>Audience : {currentMonitor.name}</div>
+                <div>Performance : {score}</div>
+                <div>Meyden Coins : {coins}</div>
+                <div>Plan actif : {currentCreatorPlan.name}</div>
+              </div>
+              <button
+                onClick={() => {
+                  setVersion(2);
+                  setScore(85);
+                  setCoins((prev) => prev + 12);
+                }}
+                type="button"
+                className="mt-5 px-4 py-3 bg-orange-500 text-black rounded-xl font-semibold"
+              >
+                Submit nouvelle version
+              </button>
+            </div>
           </div>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-2 mb-8">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <h2 className="text-2xl font-semibold mb-4">Abonnements créateur</h2>
+            <div className="grid gap-4">
+              {creatorPlans.map((plan) => (
+                <button
+                  key={plan.id}
+                  onClick={() => setSelectedCreatorPlan(plan.id)}
+                  type="button"
+                  className={`rounded-xl border p-4 text-left transition ${
+                    selectedCreatorPlan === plan.id ? "border-orange-400 bg-orange-500/10" : "border-white/10 bg-white/5 hover:bg-white/10"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="font-semibold">{plan.name}</div>
+                      <div className="text-sm text-white/60 mt-1">{plan.description}</div>
+                    </div>
+                    <div className="text-orange-400 font-bold">{plan.price}</div>
+                  </div>
+                  <div className="mt-3 space-y-1 text-sm text-white/70">
+                    {plan.features.map((feature) => (
+                      <div key={feature}>• {feature}</div>
+                    ))}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <h2 className="text-2xl font-semibold mb-4">Abonnements public</h2>
+            <div className="grid gap-4">
+              {publicPlans.map((plan) => (
+                <button
+                  key={plan.id}
+                  onClick={() => setSelectedPublicPlan(plan.id)}
+                  type="button"
+                  className={`rounded-xl border p-4 text-left transition ${
+                    selectedPublicPlan === plan.id ? "border-orange-400 bg-orange-500/10" : "border-white/10 bg-white/5 hover:bg-white/10"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="font-semibold">{plan.name}</div>
+                    <div className="text-orange-400 font-bold">{plan.price}</div>
+                  </div>
+                  <div className="mt-3 space-y-1 text-sm text-white/70">
+                    {plan.features.map((feature) => (
+                      <div key={feature}>• {feature}</div>
+                    ))}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-6 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4">
+              <div className="font-semibold text-yellow-300">Règle économique</div>
+              <div className="text-sm text-white/75 mt-2 leading-6">
+                1/3 des paiements mensuels des abonnements est mis en provision pour soutenir l’échange trimestriel des Meyden Coins.
+              </div>
+              <div className="text-sm text-white/75 mt-2 leading-6">
+                Plan public actif : <span className="text-yellow-300">{currentPublicPlan.name}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="text-sm text-white/60 leading-7 max-w-4xl">
+          Chaque monitor représente un type d’audience. Le contenu ne descend pas : il trouve son public. Les Meyden Coins s’accumulent selon l’attention réelle, le signal Tuned On et l’amélioration du contenu. Cette version 8.5 relie enfin diffusion, abonnements, récompenses et progression créative dans une seule interface cohérente.
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="container">
-
-    <section class="section" id="decouvrir">
-      <h2>Ã€ dÃ©couvrir</h2>
-      <p class="lead">
-        Cette zone doit montrer quâ€™il y a dÃ©jÃ  de la vie, de la sÃ©lection et une vraie direction artistique.
-      </p>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="feature">Focus artiste</div>
-          <h3>ðŸ”¥ Symbioz 2.0</h3>
-          <p>Band Ã  dÃ©couvrir absolument dans lâ€™Ã©cosystÃ¨me Meyden. Une proposition forte Ã  mettre de lâ€™avant pour donner immÃ©diatement du poids Ã  la plateforme.</p>
-          <button class="btn btn-main" onclick="alert('Ouverture de la fiche artiste Symbioz 2.0')">
-            Voir lâ€™artiste
-          </button>
-        </div>
-
-        <div class="card">
-          <div class="media-box">Cover / affiche artiste</div>
-          <p>Cette zone peut ensuite accueillir une vraie image, une bande-annonce ou un visuel de lancement.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="bibliotheque">
-      <h2>Ma BibliothÃ¨que</h2>
-      <p class="lead">
-        Une prÃ©sentation plus plateforme mÃ©dia que simple liste vide.
-      </p>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="media-box">AperÃ§u vidÃ©o<br />artiste-alpha.mp4</div>
-          <h3>Artiste Alpha</h3>
-          <p>VidÃ©o et musique mockÃ©es pour simuler une vraie bibliothÃ¨que de contenu.</p>
-          <button class="btn btn-main" onclick="alert('Lecture vidÃ©o Artiste Alpha')">Lire la vidÃ©o</button>
-          <button class="btn btn-secondary" onclick="alert('Lecture audio Artiste Alpha')">Ã‰couter lâ€™audio</button>
-        </div>
-
-        <div class="card">
-          <div class="media-box">AperÃ§u vidÃ©o<br />artiste-beta.mp4</div>
-          <h3>Artiste Beta</h3>
-          <p>Contenu mockÃ© pour tester lâ€™expÃ©rience utilisateur et la logique mÃ©dia Meyden.</p>
-          <button class="btn btn-main" onclick="alert('Lecture vidÃ©o Artiste Beta')">Lire la vidÃ©o</button>
-          <button class="btn btn-secondary" onclick="alert('Lecture audio Artiste Beta')">Ã‰couter lâ€™audio</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="boutique">
-      <h2>Boutique CrÃ©ateurs</h2>
-      <p class="lead">
-        Les partenaires studio doivent paraÃ®tre dÃ©sirables, crÃ©dibles et actifs.
-      </p>
-
-      <div class="grid-3">
-        <div class="card">
-          <h3>Studio Lujamko</h3>
-          <p>Production, accompagnement et possibilitÃ©s crÃ©atives.</p>
-          <button class="btn btn-main" onclick="alert('Ouverture Studio Lujamko')">Voir le studio</button>
-        </div>
-
-        <div class="card">
-          <h3>Lestudio Evo</h3>
-          <p>Studio crÃ©atif Ã  intÃ©grer Ã  lâ€™expÃ©rience Meyden.</p>
-          <button class="btn btn-main" onclick="alert('Ouverture Lestudio Evo')">Voir le studio</button>
-        </div>
-
-        <div class="card">
-          <h3>Simoniaque Studio</h3>
-          <p>Studio partenaire et ressource potentielle dans lâ€™Ã©cosystÃ¨me.</p>
-          <button class="btn btn-main" onclick="alert('Ouverture Simoniaque Studio')">Voir le studio</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="entreprises">
-      <h2>Centre dâ€™Achat Entreprises</h2>
-      <p class="lead">
-        Une entreprise qui arrive ici doit comprendre immÃ©diatement quâ€™il y a de vrais services Ã  rÃ©server.
-      </p>
-
-      <div class="card">
-        <h3>Radio Pop</h3>
-        <p>Choisissez un service directement depuis la plateforme.</p>
-
-        <div class="service-grid">
-          <button class="service-btn" onclick="alert('Service sÃ©lectionnÃ© : Accompagnement artistique')">
-            Accompagnement artistique
-          </button>
-          <button class="service-btn" onclick="alert('Service sÃ©lectionnÃ© : Diffuser une chanson sur Radio Pop')">
-            Diffuser une chanson sur Radio Pop
-          </button>
-          <button class="service-btn" onclick="alert('Service sÃ©lectionnÃ© : Droit dâ€™auteur et propriÃ©tÃ© intellectuelle')">
-            Droit dâ€™auteur et propriÃ©tÃ© intellectuelle
-          </button>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-top:22px;">
-        <div class="card">
-          <h3>Corail Communication</h3>
-          <p>Prise de rendez-vous entreprise et communications.</p>
-          <button class="btn btn-main" onclick="alert('Prise de rendez-vous Corail Communication')">
-            Prendre rendez-vous
-          </button>
-        </div>
-
-        <div class="card">
-          <h3>RÃ©seautage 888</h3>
-          <p>Maillage, dÃ©veloppement et opportunitÃ©s de rÃ©seau.</p>
-          <button class="btn btn-main" onclick="alert('Prise de rendez-vous RÃ©seautage 888')">
-            Prendre rendez-vous
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="abonnements">
-      <h2>VIP & Abonnements</h2>
-      <p class="lead">
-        Cette section doit vendre et donner envie dâ€™embarquer dans le mouvement.
-      </p>
-
-      <div class="offer-grid">
-        <div class="card">
-          <div class="form-group">
-            <label for="nom">Nom complet</label>
-            <input id="nom" type="text" placeholder="Ton nom" />
-          </div>
-
-          <div class="form-group">
-            <label for="email">Adresse courriel</label>
-            <input id="email" type="email" placeholder="toncourriel@email.com" />
-          </div>
-
-          <div class="form-group">
-            <label for="type">Type dâ€™abonnement</label>
-            <select id="type">
-              <option value="">-- Choisir --</option>
-              <option value="Partenaire Entreprise - 65.99$">Partenaire Entreprise - 65.99$</option>
-              <option value="Artiste - 14.99$">Artiste - 14.99$</option>
-            </select>
-          </div>
-
-          <button class="btn btn-main" style="width:100%;font-size:18px;padding:16px;" onclick="payer()">
-            Payer maintenant
-          </button>
-        </div>
-
-        <div class="offer-cards">
-          <div class="offer primary">
-            <small>Offre entreprise</small>
-            <strong>Partenaire Entreprise</strong>
-            <div class="price">65.99$</div>
-            <p>Pour les partenaires qui veulent visibilitÃ©, services et positionnement dans lâ€™Ã©cosystÃ¨me Meyden.</p>
-            <button class="btn btn-main" onclick="choisirOffre('Partenaire Entreprise - 65.99$')">Choisir cette offre</button>
-          </div>
-
-          <div class="offer secondary">
-            <small>Offre artiste</small>
-            <strong>Artiste</strong>
-            <div class="price">14.99$</div>
-            <p>Une entrÃ©e accessible pour les artistes qui veulent exister, diffuser et Ã©voluer dans le mouvement.</p>
-            <button class="btn btn-main" onclick="choisirOffre('Artiste - 14.99$')">Choisir cette offre</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="notifications">
-      <h2>Notifications</h2>
-      <p class="lead">
-        Une plateforme qui semble active inspire plus confiance.
-      </p>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="notification">
-            <div class="notification-icon">âœ¦</div>
-            <div>
-              <h3 style="margin-top:0;">Meyden Coins</h3>
-              <p>ðŸ’° Vous avez reÃ§u un Meyden Coins grÃ¢ce Ã  vos 500 vues.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="notification">
-            <div class="notification-icon">â°</div>
-            <div>
-              <h3 style="margin-top:0;">Rendez-vous</h3>
-              <p>ðŸ“… Votre rendez-vous avec Radio Pop est sedulÃ© pour le 25 sept 2925.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="footer-space"></div>
-  </div>
-
-  <script>
-    function choisirOffre(valeur) {
-      document.getElementById('type').value = valeur;
-      alert('Offre sÃ©lectionnÃ©e : ' + valeur);
-    }
-
-    function payer() {
-      const nom = document.getElementById('nom').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const type = document.getElementById('type').value;
-
-      if (!nom || !email || !type) {
-        alert('ComplÃ¨te le formulaire avant de payer.');
-        return;
-      }
-
-      alert(
-        'Paiement simulÃ© envoyÃ©\\n\\n' +
-        'Nom : ' + nom + '\\n' +
-        'Courriel : ' + email + '\\n' +
-        'Type : ' + type + '\\n\\n' +
-        'Virement prÃ©parÃ© vers : matthieuprudhomme1984@gmail.com'
-      );
-    }
-  </script>
-
-</body>
-</html> 
+  );
+}
