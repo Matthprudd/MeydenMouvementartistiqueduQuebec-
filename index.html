@@ -1,157 +1,153 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meyden Monitor V10</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meyden Monitor 8.5</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen bg-neutral-950 text-white">
-  <div class="min-h-screen flex flex-col items-center px-6 py-10">
-    <div class="text-center mb-12">
-      <h1 class="text-5xl font-bold tracking-tight">Meyden Monitor</h1>
-      <p class="text-white/40 mt-3 text-lg">Diffusion intelligente • Évolution • Monétisation réelle</p>
+<body class="bg-black text-white p-6">
+
+<div class="max-w-7xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-2">Meyden Monitor — Version 8.5 UI complète</h1>
+  <p class="text-white/60 mb-8">Diffusion, abonnements, Meyden Coins et évolution du contenu.</p>
+
+  <!-- TOP INFO -->
+  <div class="grid md:grid-cols-3 gap-6 mb-8">
+
+    <div class="bg-white/5 p-6 rounded-xl">
+      <div class="text-white/50">Monitor actif</div>
+      <div id="monitorName" class="text-xl font-bold text-orange-400 mt-2">International</div>
     </div>
 
-    <div class="w-full max-w-5xl">
-      <div id="monitorButtons" class="flex justify-center gap-2 mb-8 flex-wrap"></div>
-
-      <div class="rounded-3xl bg-gradient-to-br from-neutral-900 to-black border border-white/10 p-10 text-center shadow-[0_0_80px_rgba(0,0,0,0.7)]">
-        <div class="text-sm text-white/40 mb-2">Now Playing</div>
-        <div id="clipVersion" class="text-3xl font-semibold">Clip V1</div>
-
-        <div class="flex justify-center gap-16 mt-10">
-          <div>
-            <div class="text-white/40 text-sm">Score</div>
-            <div id="scoreValue" class="text-4xl font-bold text-green-400">72</div>
-          </div>
-          <div>
-            <div class="text-white/40 text-sm">Meyden Coins</div>
-            <div id="coinsValue" class="text-4xl font-bold text-yellow-400">148</div>
-          </div>
-        </div>
-
-        <div id="phases" class="flex justify-center gap-3 mt-10 flex-wrap"></div>
-      </div>
-
-      <button id="tunedBtn" class="w-full mt-10 py-5 rounded-2xl bg-orange-500 text-black text-xl font-bold tracking-wide hover:scale-[1.01] transition">
-        Tuned On (1200)
-      </button>
-
-      <div class="mt-10 grid md:grid-cols-3 gap-6 text-center">
-        <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
-          <div class="text-white/40 text-sm">Monétisation</div>
-          <div class="text-lg mt-2">1 coin = 0.15$ CAD</div>
-        </div>
-
-        <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
-          <div class="text-white/40 text-sm">Génération</div>
-          <div id="generationText" class="text-lg mt-2">Performance + Tuned On</div>
-        </div>
-
-        <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
-          <div class="text-white/40 text-sm">Paiement</div>
-          <div class="text-lg mt-2">Échange trimestriel</div>
-        </div>
-      </div>
-
-      <div class="mt-12 text-center text-white/40 text-sm leading-6 max-w-xl mx-auto">
-        Le public ne choisit pas.<br />
-        Il ressent.<br />
-        Et cette émotion devient une économie.
-      </div>
+    <div class="bg-white/5 p-6 rounded-xl">
+      <div class="text-white/50">Meyden Coins</div>
+      <div id="coins" class="text-2xl font-bold text-yellow-400 mt-2">148</div>
     </div>
+
+    <div class="bg-white/5 p-6 rounded-xl">
+      <div class="text-white/50">Tuned On</div>
+      <div id="tuned" class="text-2xl font-bold text-green-400 mt-2">1200</div>
+    </div>
+
   </div>
 
-  <script>
-    const monitors = [
-      { name: "International", reward: 3 },
-      { name: "Grand Public", reward: 1.5 },
-      { name: "Niche", reward: 0.5 },
-      { name: "Public Ciblé", reward: 0 },
-      { name: "Fans", reward: 0 }
-    ];
+  <!-- MONITORS -->
+  <div class="mb-8">
+    <h2 class="text-xl mb-4">Les 5 Meyden Monitors</h2>
+    <div id="monitors" class="grid md:grid-cols-3 gap-3"></div>
+  </div>
 
-    const phases = ["Upload", "Analyse", "Optimisation", "Retour"];
+  <!-- PLAYER -->
+  <div class="bg-white/5 p-6 rounded-xl mb-8">
 
-    let selectedMonitor = 0;
-    let score = 72;
-    let coins = 148;
-    let tuned = 1200;
-    let version = 1;
-    let phase = 0;
+    <div class="text-white/50">Now Playing</div>
+    <div id="version" class="text-xl">Clip V1</div>
 
-    const monitorButtons = document.getElementById('monitorButtons');
-    const phasesWrap = document.getElementById('phases');
-    const scoreValue = document.getElementById('scoreValue');
-    const coinsValue = document.getElementById('coinsValue');
-    const clipVersion = document.getElementById('clipVersion');
-    const tunedBtn = document.getElementById('tunedBtn');
-    const generationText = document.getElementById('generationText');
+    <div class="grid grid-cols-2 mt-4">
+      <div>
+        <div class="text-white/50">Score</div>
+        <div id="score" class="text-2xl font-bold text-green-400">72</div>
+      </div>
+      <div>
+        <div class="text-white/50">Coins gagnés</div>
+        <div id="coins2" class="text-2xl font-bold text-yellow-400">148</div>
+      </div>
+    </div>
 
-    function renderMonitors() {
-      monitorButtons.innerHTML = '';
-      monitors.forEach((monitor, index) => {
-        const btn = document.createElement('button');
-        btn.textContent = monitor.name;
-        btn.className = `px-4 py-2 rounded-full text-sm transition ${selectedMonitor === index ? 'bg-white text-black' : 'bg-white/5 text-white/60 hover:bg-white/10'}`;
-        btn.onclick = () => {
-          selectedMonitor = index;
-          renderMonitors();
-          updateGenerationText();
-        };
-        monitorButtons.appendChild(btn);
-      });
-    }
+  </div>
 
-    function renderPhases() {
-      phasesWrap.innerHTML = '';
-      phases.forEach((p, index) => {
-        const item = document.createElement('div');
-        item.textContent = p;
-        item.className = `px-4 py-2 rounded-full text-sm ${index === phase ? 'bg-orange-500 text-black' : 'bg-white/10 text-white/60'}`;
-        phasesWrap.appendChild(item);
-      });
-    }
+  <!-- FLOW -->
+  <div id="flow" class="grid grid-cols-2 gap-3 mb-8"></div>
 
-    function updateGenerationText() {
-      const reward = monitors[selectedMonitor].reward;
-      generationText.textContent = reward > 0 ? `Performance + Tuned On + ${reward} coins / 24h` : 'Performance + Tuned On';
-    }
+  <!-- BUTTON -->
+  <button onclick="tunedOn()" class="w-full py-4 bg-orange-500 text-black font-bold text-xl rounded-xl">
+    Tuned On
+  </button>
 
-    function updateUI() {
-      scoreValue.textContent = Math.round(score);
-      scoreValue.className = `text-4xl font-bold ${score > 75 ? 'text-green-400' : 'text-red-400'}`;
-      coinsValue.textContent = Math.floor(coins);
-      clipVersion.textContent = `Clip V${version}`;
-      tunedBtn.textContent = `Tuned On (${tuned})`;
-      renderPhases();
-    }
+</div>
 
-    tunedBtn.addEventListener('click', () => {
-      tuned += 1;
-      coins += 1;
-      updateUI();
-    });
+<script>
 
-    setInterval(() => {
-      phase = (phase + 1) % phases.length;
+const monitors = ["International","Grand Public","Niche","Public Ciblé","Fans"];
+const phases = ["Upload","Monitor","Analyse","Chute","Recyclage","Email","Amélioration","Retour"];
 
-      const delta = Math.random() > 0.5 ? 6 : -4;
-      score = Math.max(0, Math.min(100, score + delta));
+let score = 72;
+let coins = 148;
+let tuned = 1200;
+let version = 1;
+let phase = 0;
+let selected = 0;
 
-      if (phase === 2) version = 2;
-      if (phase === 3) version = 1;
+const monitorDiv = document.getElementById("monitors");
+const flowDiv = document.getElementById("flow");
 
-      coins += score > 75 ? 2 : 0.5;
+function renderMonitors(){
+  monitorDiv.innerHTML="";
+  monitors.forEach((m,i)=>{
+    let btn=document.createElement("div");
+    btn.innerText=m;
+    btn.className = "p-3 border rounded cursor-pointer " + (i===selected?"bg-orange-500 text-black":"bg-white/5");
+    btn.onclick=()=>{selected=i;update();renderMonitors();};
+    monitorDiv.appendChild(btn);
+  });
+}
 
-      updateUI();
-    }, 2500);
+function renderFlow(){
+  flowDiv.innerHTML="";
+  phases.forEach((p,i)=>{
+    let div=document.createElement("div");
+    div.innerText=p;
+    div.className="p-3 rounded " + (i===phase?"bg-orange-500 text-black":"bg-white/5");
+    flowDiv.appendChild(div);
+  });
+}
 
-    renderMonitors();
-    updateGenerationText();
-    updateUI();
-  </script>
+function tunedOn(){
+  tuned++;
+  coins++;
+  update();
+}
+
+function update(){
+  document.getElementById("score").innerText=score;
+  document.getElementById("coins").innerText=Math.floor(coins);
+  document.getElementById("coins2").innerText=Math.floor(coins);
+  document.getElementById("tuned").innerText=tuned;
+  document.getElementById("version").innerText="Clip V"+version;
+  document.getElementById("monitorName").innerText=monitors[selected];
+  renderFlow();
+}
+
+setInterval(()=>{
+
+  phase=(phase+1)%phases.length;
+
+  if(phase===3){
+    score=Math.max(0,score-20);
+    coins+=1;
+  }
+
+  if(phase===6){
+    score=Math.min(100,score+30);
+    version=2;
+    coins+=8;
+  }
+
+  if(phase===0){
+    version=1;
+    score=72;
+  }
+
+  update();
+
+},2200);
+
+renderMonitors();
+update();
+
+</script>
+
 </body>
 </html>
-
