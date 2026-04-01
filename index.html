@@ -163,6 +163,131 @@
         </div>
       </div>
     </section>
+
+    <section class="rounded-2xl border border-white/10 bg-white/5 p-6 mb-10">
+      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
+        <div>
+          <h2 class="text-2xl font-semibold">Simulation interactive — abonnements, coins et bénéfices</h2>
+          <p class="text-white/70 mt-2 text-sm leading-6">Cette section simule la croissance progressive des abonnements, les revenus qui entrent, les retraits de Meyden Coins et le bénéfice net estimé pour montrer que le système reste rentable.</p>
+        </div>
+        <button id="growthTickBtn" type="button" class="rounded-xl bg-orange-500 px-4 py-3 font-semibold text-black hover:scale-[1.01] transition">Simuler 1 cycle</button>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-3 mb-6">
+        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/50">Créateurs abonnés</div>
+          <div id="simCreatorTotal" class="mt-2 text-3xl font-bold text-orange-300">410</div>
+          <div id="simCreatorMix" class="mt-2 text-sm text-white/70">Gratuit 260 • 14.99$ 110 • 65.99$ 40</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/50">Public abonné</div>
+          <div id="simPublicTotal" class="mt-2 text-3xl font-bold text-orange-300">5200</div>
+          <div id="simPublicMix" class="mt-2 text-sm text-white/70">Gratuit 4800 • 1.99$ 400</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/50">Bénéfice net simulé</div>
+          <div id="simNetProfit" class="mt-2 text-3xl font-bold text-green-300">$0</div>
+          <div class="mt-2 text-sm text-white/70">Après provision, retraits de coins et coussin de sécurité</div>
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-semibold mb-4">Entrées financières</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-white/50 border-b border-white/10">
+                  <th class="py-2 pr-3">Source</th>
+                  <th class="py-2 pr-3">Abonnés</th>
+                  <th class="py-2 pr-3">Prix</th>
+                  <th class="py-2">Revenu mensuel</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 pr-3">Créateur 14.99$</td>
+                  <td id="revCreatorWeeklyCount" class="py-2 pr-3">110</td>
+                  <td class="py-2 pr-3">14.99$</td>
+                  <td id="revCreatorWeekly" class="py-2 text-green-300">$0</td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 pr-3">Créateur 65.99$</td>
+                  <td id="revCreatorDailyCount" class="py-2 pr-3">40</td>
+                  <td class="py-2 pr-3">65.99$</td>
+                  <td id="revCreatorDaily" class="py-2 text-green-300">$0</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3">Public 1.99$</td>
+                  <td id="revPublicPremiumCount" class="py-2 pr-3">400</td>
+                  <td class="py-2 pr-3">1.99$</td>
+                  <td id="revPublicPremium" class="py-2 text-green-300">$0</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="border-t border-white/10 font-semibold">
+                  <td class="py-3 pr-3">Total entrées</td>
+                  <td></td><td></td>
+                  <td id="revTotalIn" class="py-3 text-green-300">$0</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-semibold mb-4">Sorties et sécurité</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-white/50 border-b border-white/10">
+                  <th class="py-2 pr-3">Poste</th>
+                  <th class="py-2 pr-3">Valeur</th>
+                  <th class="py-2">Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 pr-3">Provision 1/3</td>
+                  <td id="outReserve" class="py-2 pr-3 text-yellow-300">$0</td>
+                  <td class="py-2">Réserve pour coins</td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 pr-3">Retraits coins trimestriels simulés</td>
+                  <td id="outCoinWithdrawals" class="py-2 pr-3 text-red-300">$0</td>
+                  <td class="py-2">Créateurs qui encaissent</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3">Coussin sécurité anti-abus</td>
+                  <td id="outSafety" class="py-2 pr-3 text-yellow-300">$0</td>
+                  <td class="py-2">Plafond / ajustement</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="border-t border-white/10 font-semibold">
+                  <td class="py-3 pr-3">Total sorties</td>
+                  <td id="outTotal" class="py-3 pr-3 text-red-300">$0</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2 mt-6">
+        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-semibold mb-4">Retraits de coins simulés</h3>
+          <div id="withdrawalList" class="space-y-3 text-sm"></div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-semibold mb-4">Lecture du modèle</h3>
+          <div id="profitConclusion" class="text-sm text-white/75 leading-7">
+            La simulation montre si les revenus d’abonnements couvrent la réserve, les retraits de coins et la marge de sécurité tout en laissant un bénéfice net.
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script>
@@ -228,8 +353,21 @@
     const publicSimulationGrid = document.getElementById('publicSimulationGrid');
     const marketScenarioGrid = document.getElementById('marketScenarioGrid');
     const emailBox = document.getElementById('emailBox');
+    const growthTickBtn = document.getElementById('growthTickBtn');
+
+    const simState = {
+      creatorFree: 260,
+      creatorWeekly: 110,
+      creatorDaily: 40,
+      publicFree: 4800,
+      publicPremium: 400,
+      quarterlyWithdrawCreators: 26,
+      avgWithdrawalCoins: 92,
+      safetyRate: 0.08,
+    };
 
     function moneyFromCoins(value) { return (value * 0.15).toFixed(2) + '$ CAD'; }
+    function plainMoney(value) { return '$' + value.toLocaleString('fr-CA', { maximumFractionDigits: 0 }); }
     function formatMoney(value) { return value.toLocaleString('fr-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }); }
 
     function renderMonitors() {
@@ -358,6 +496,76 @@
       });
     }
 
+    function renderGrowthSimulation() {
+      const creatorTotal = simState.creatorFree + simState.creatorWeekly + simState.creatorDaily;
+      const publicTotal = simState.publicFree + simState.publicPremium;
+
+      const creatorWeeklyRevenue = simState.creatorWeekly * 14.99;
+      const creatorDailyRevenue = simState.creatorDaily * 65.99;
+      const publicPremiumRevenue = simState.publicPremium * 1.99;
+      const totalIn = creatorWeeklyRevenue + creatorDailyRevenue + publicPremiumRevenue;
+
+      const reserve = totalIn / 3;
+      const quarterlyCoinWithdrawals = simState.quarterlyWithdrawCreators * simState.avgWithdrawalCoins * 0.15;
+      const monthlyCoinWithdrawalsNormalized = quarterlyCoinWithdrawals / 3;
+      const safety = totalIn * simState.safetyRate;
+      const totalOut = reserve + monthlyCoinWithdrawalsNormalized + safety;
+      const netProfit = totalIn - totalOut;
+
+      document.getElementById('simCreatorTotal').textContent = creatorTotal.toLocaleString('fr-CA');
+      document.getElementById('simCreatorMix').textContent = `Gratuit ${simState.creatorFree} • 14.99$ ${simState.creatorWeekly} • 65.99$ ${simState.creatorDaily}`;
+      document.getElementById('simPublicTotal').textContent = publicTotal.toLocaleString('fr-CA');
+      document.getElementById('simPublicMix').textContent = `Gratuit ${simState.publicFree} • 1.99$ ${simState.publicPremium}`;
+      document.getElementById('simNetProfit').textContent = plainMoney(Math.round(netProfit));
+      document.getElementById('simNetProfit').className = `mt-2 text-3xl font-bold ${netProfit >= 0 ? 'text-green-300' : 'text-red-300'}`;
+
+      document.getElementById('revCreatorWeeklyCount').textContent = simState.creatorWeekly.toLocaleString('fr-CA');
+      document.getElementById('revCreatorDailyCount').textContent = simState.creatorDaily.toLocaleString('fr-CA');
+      document.getElementById('revPublicPremiumCount').textContent = simState.publicPremium.toLocaleString('fr-CA');
+      document.getElementById('revCreatorWeekly').textContent = plainMoney(Math.round(creatorWeeklyRevenue));
+      document.getElementById('revCreatorDaily').textContent = plainMoney(Math.round(creatorDailyRevenue));
+      document.getElementById('revPublicPremium').textContent = plainMoney(Math.round(publicPremiumRevenue));
+      document.getElementById('revTotalIn').textContent = plainMoney(Math.round(totalIn));
+
+      document.getElementById('outReserve').textContent = plainMoney(Math.round(reserve));
+      document.getElementById('outCoinWithdrawals').textContent = plainMoney(Math.round(monthlyCoinWithdrawalsNormalized));
+      document.getElementById('outSafety').textContent = plainMoney(Math.round(safety));
+      document.getElementById('outTotal').textContent = plainMoney(Math.round(totalOut));
+
+      const withdrawalList = document.getElementById('withdrawalList');
+      withdrawalList.innerHTML = '';
+      const sampleRows = [
+        { label: 'Créateurs qui retirent ce trimestre', value: simState.quarterlyWithdrawCreators.toLocaleString('fr-CA') },
+        { label: 'Coins moyens retirés / créateur', value: simState.avgWithdrawalCoins.toLocaleString('fr-CA') },
+        { label: 'Retrait moyen / créateur', value: plainMoney(Math.round(simState.avgWithdrawalCoins * 0.15)) },
+        { label: 'Retrait trimestriel total', value: plainMoney(Math.round(quarterlyCoinWithdrawals)) },
+      ];
+      sampleRows.forEach((row) => {
+        const item = document.createElement('div');
+        item.className = 'rounded-lg border border-white/10 bg-white/5 p-3 flex items-center justify-between gap-4';
+        item.innerHTML = `<span class="text-white/70">${row.label}</span><span class="font-semibold">${row.value}</span>`;
+        withdrawalList.appendChild(item);
+      });
+
+      const conclusion = document.getElementById('profitConclusion');
+      if (netProfit >= 0) {
+        conclusion.innerHTML = `Le modèle reste <span class="text-green-300 font-semibold">bénéficiaire</span> dans cette simulation : les abonnements couvrent la provision, les retraits de coins et la sécurité, avec un bénéfice net mensuel estimé à <span class="text-green-300 font-semibold">${plainMoney(Math.round(netProfit))}</span>.`;
+      } else {
+        conclusion.innerHTML = `Le modèle devient <span class="text-red-300 font-semibold">déficitaire</span> dans cette simulation : il faut réduire les retraits, ajuster la réserve ou augmenter la base d'abonnés premium.`;
+      }
+    }
+
+    function tickGrowthSimulation() {
+      simState.creatorFree += Math.floor(Math.random() * 8) + 2;
+      simState.creatorWeekly += Math.floor(Math.random() * 4) + 1;
+      simState.creatorDaily += Math.random() > 0.5 ? 1 : 0;
+      simState.publicFree += Math.floor(Math.random() * 60) + 15;
+      simState.publicPremium += Math.floor(Math.random() * 10) + 2;
+      simState.quarterlyWithdrawCreators += Math.random() > 0.65 ? 1 : 0;
+      simState.avgWithdrawalCoins = Math.min(140, simState.avgWithdrawalCoins + (Math.random() > 0.5 ? 2 : -1));
+      renderGrowthSimulation();
+    }
+
     function updateUI() {
       const monitor = monitors[selectedMonitor];
       document.getElementById('activeMonitorName').textContent = monitor.name;
@@ -407,6 +615,7 @@
 
     document.getElementById('tunedBtn').addEventListener('click', tunedOn);
     document.getElementById('submitVersionBtn').addEventListener('click', submitNewVersion);
+    growthTickBtn.addEventListener('click', tickGrowthSimulation);
 
     setInterval(() => {
       flowPhase = (flowPhase + 1) % phases.length;
@@ -433,6 +642,7 @@
     renderCreatorSimulation();
     renderPublicSimulation();
     renderMarketScenarios();
+    renderGrowthSimulation();
     updateUI();
   </script>
 </body>
