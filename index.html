@@ -3,551 +3,1130 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meyden Monitor v17 Fusion 14</title>
+  <title>Meyden Monitor — Version 14.75</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root {
-      --bg: #0b0f14;
-      --panel: #121923;
-      --panel-2: #182331;
-      --line: rgba(255,255,255,.08);
-      --text: #f5f7fa;
-      --muted: #9fb0c3;
-      --orange: #ff7a00;
-      --orange-2: #ff9d3f;
-      --green: #22c55e;
-      --red: #ef4444;
-      --yellow: #f59e0b;
-      --blue: #38bdf8;
-      --shadow: 0 20px 50px rgba(0,0,0,.35);
-      --radius: 22px;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; font-family: Inter, Arial, Helvetica, sans-serif; background: radial-gradient(circle at top, #18212e 0%, #0b0f14 45%, #080b10 100%); color: var(--text); }
-    body { min-height: 100vh; }
-    .wrap { width: min(1440px, calc(100% - 32px)); margin: 20px auto 60px; }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.35fr .85fr;
-      gap: 18px;
-      margin-bottom: 18px;
-    }
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    .hero-main { padding: 28px; position: relative; overflow: hidden; }
-    .hero-main::after {
-      content: "";
-      position: absolute;
-      width: 460px;
-      height: 460px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,122,0,.22), rgba(255,122,0,0));
-      top: -140px;
-      right: -140px;
-      pointer-events: none;
-    }
-    .topline {
-      display: inline-flex;
-      gap: 10px;
-      align-items: center;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(255,122,0,.08);
-      border: 1px solid rgba(255,122,0,.2);
-      color: var(--orange-2);
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
-    h1 { font-size: clamp(32px, 4vw, 56px); line-height: .95; margin: 0 0 14px; letter-spacing: -.04em; }
-    .accent { color: var(--orange); }
-    .lead { color: var(--muted); font-size: 16px; line-height: 1.6; max-width: 900px; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-    button, .pill { border: 0; cursor: pointer; color: white; font-weight: 700; border-radius: 14px; padding: 14px 18px; transition: .2s ease; }
-    button:hover { transform: translateY(-1px); }
-    .primary { background: linear-gradient(135deg, var(--orange), #ff5a00); }
-    .secondary { background: #1a2431; border: 1px solid var(--line); }
-    .success { background: linear-gradient(135deg, #1f9d57, #22c55e); }
-    .danger { background: linear-gradient(135deg, #d93b3b, #ef4444); }
-    .warning { background: linear-gradient(135deg, #d48a00, #f59e0b); }
-
-    .hero-side { padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
-    .hero-side h3 { margin: 0 0 10px; font-size: 18px; }
-    .mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
-    .mini {
-      padding: 16px; border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); border: 1px solid var(--line);
-    }
-    .mini label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .08em; }
-    .mini strong { display: block; font-size: 28px; }
-    .mini small { color: var(--muted); }
-
-    .toolbar {
-      display: grid; grid-template-columns: 1fr auto auto auto auto auto; gap: 12px; align-items: center; margin-bottom: 18px; padding: 14px; position: sticky; top: 10px; z-index: 10;
-    }
-    .toolbar .status {
-      display: flex; gap: 12px; align-items: center; min-height: 52px; padding: 0 16px; border-radius: 16px; background: rgba(255,255,255,.03); border: 1px solid var(--line);
-    }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 6px rgba(34,197,94,.12); }
-    .status span { color: var(--muted); font-size: 14px; }
-    .status strong { display: block; font-size: 15px; }
-
-    .grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; margin-bottom: 18px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 18px; }
-    .section { padding: 22px; }
-    .section h2 { margin: 0 0 8px; font-size: 24px; letter-spacing: -.03em; }
-    .section p { color: var(--muted); margin: 0 0 18px; }
-
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-    .stat { padding: 16px; border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); border: 1px solid var(--line); }
-    .stat .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
-    .stat .value { font-size: 28px; font-weight: 800; margin-top: 8px; }
-    .stat .sub { color: var(--muted); font-size: 13px; margin-top: 6px; }
-
-    .content-table { display: grid; gap: 12px; }
-    .content-row {
-      display: grid;
-      grid-template-columns: 1.1fr .85fr .7fr .55fr .75fr;
-      gap: 12px;
-      align-items: center;
-      padding: 14px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.025);
-      border: 1px solid var(--line);
-    }
-    .content-row.header { background: rgba(255,122,0,.08); font-weight: 700; color: var(--orange-2); }
-    .title-cell strong { display: block; }
-    .title-cell small, .muted { color: var(--muted); }
-    .score-badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 88px; padding: 8px 12px; border-radius: 999px; font-weight: 700;
-      background: rgba(56,189,248,.12); color: var(--blue); border: 1px solid rgba(56,189,248,.25);
-    }
-    .status-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 120px; padding: 8px 12px; border-radius: 999px; font-weight: 800; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
-    .tuned-on { background: rgba(34,197,94,.12); color: #6ee7a2; border: 1px solid rgba(34,197,94,.22); }
-    .recyclage { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.22); }
-    .boosting { background: rgba(245,158,11,.12); color: #fcd34d; border: 1px solid rgba(245,158,11,.22); }
-    .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-    .small-btn { padding: 10px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; background: #192434; border: 1px solid var(--line); }
-
-    .kpi-list { display: grid; gap: 12px; }
-    .kpi-item { padding: 16px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-    .kpi-item strong { font-size: 18px; }
-    .progress { width: 160px; height: 12px; border-radius: 999px; background: #1d2734; overflow: hidden; border: 1px solid var(--line); }
-    .progress span { display: block; height: 100%; background: linear-gradient(90deg, var(--orange), #ffb066); }
-    .chart-wrap { position: relative; height: 360px; }
-    .chart-wrap.tall { height: 420px; }
-
-    .quarter-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 18px; }
-    .quarter { padding: 16px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid var(--line); }
-    .quarter small { color: var(--muted); }
-    .quarter strong { display: block; margin-top: 8px; font-size: 20px; }
-
-    .footer-note { margin-top: 18px; padding: 18px; border-radius: 18px; background: rgba(255,122,0,.06); border: 1px solid rgba(255,122,0,.18); color: #ffd4af; line-height: 1.6; }
-    input[type="range"] { width: 100%; accent-color: var(--orange); }
-    .scenario { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 18px; }
-
-    .loop-card { padding: 18px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid var(--line); }
-    .loop-card h3, .panel-title { margin: 0 0 10px; font-size: 18px; }
-    .loop-list { display: grid; gap: 10px; }
-    .loop-item { padding: 12px; border-radius: 14px; background: rgba(255,255,255,.03); border: 1px solid var(--line); display: flex; justify-content: space-between; gap: 10px; }
-    .loop-item span:last-child { color: var(--orange-2); font-weight: 700; }
-
-    .console { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.5; background: #091019; border: 1px solid var(--line); border-radius: 16px; padding: 14px; height: 260px; overflow: auto; color: #cde2ff; }
-    .console-line { margin-bottom: 6px; }
-
-    .timeline { display: grid; gap: 10px; }
-    .timeline-row { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: center; }
-    .timeline-row .time { color: var(--orange-2); font-weight: 800; }
-    .bar-shell { height: 12px; border-radius: 999px; overflow: hidden; background: #182331; border: 1px solid var(--line); }
-    .bar-shell span { display: block; height: 100%; background: linear-gradient(90deg, var(--orange), #ffb066); }
-
-    @media (max-width: 1180px) {
-      .hero, .grid, .grid-3 { grid-template-columns: 1fr; }
-      .toolbar { grid-template-columns: 1fr 1fr 1fr; }
-      .stats { grid-template-columns: repeat(2, 1fr); }
-      .content-row { grid-template-columns: 1fr; }
-      .quarter-cards { grid-template-columns: repeat(2, 1fr); }
-      .scenario { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 720px) {
-      .wrap { width: min(100% - 20px, 1440px); }
-      .toolbar, .stats, .mini-grid, .quarter-cards { grid-template-columns: 1fr; }
-      .hero-main, .hero-side, .section { padding: 18px; }
-      h1 { font-size: 34px; }
-      .timeline-row { grid-template-columns: 1fr; }
-    }
-  </style>
 </head>
-<body>
-  <div class="wrap">
-    <section class="hero">
-      <div class="card hero-main">
-        <div class="topline">Meyden Monitor • v17 Fusion intégrale avec logique v14</div>
-        <h1><span class="accent">Meyden</span> Monitor v17 + v14</h1>
-        <div class="lead">
-          Cette fusion garde le visuel premium de la v17, mais récupère l’intégralité de la logique dynamique de la v14 : montée, dégression, boucle de diffusion, rotation automatique, simulation des trimestres, lecture opérationnelle et console vivante du moteur.
-        </div>
-        <div class="hero-actions">
-          <button class="primary" id="playBtn">▶ Lancer l’évolution</button>
-          <button class="secondary" id="pauseBtn">⏸ Pause</button>
-          <button class="success" id="boostBtn">⬆ Monter</button>
-          <button class="danger" id="deboostBtn">⬇ Dégréser</button>
-          <button class="warning" id="pulseBtn">⚡ Impulsion v14</button>
-        </div>
+<body class="bg-black text-white min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- HEADER -->
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight">Meyden Monitor — Version 14.75</h1>
+      <p class="text-white/60 mt-2">
+        Version investisseur : diffusion, évolution, abonnements, Meyden Coins, sécurité économique,
+        projection 24 mois et lecture du modèle.
+      </p>
+    </header>
+
+    <!-- TOP KPIs -->
+    <section class="grid gap-6 lg:grid-cols-4 mb-8">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/50">Monitor actif</div>
+        <div id="activeMonitorName" class="text-2xl font-bold text-orange-400 mt-2">International</div>
+        <div id="activeMonitorAudience" class="text-sm text-white/70 mt-2">Audience large</div>
       </div>
 
-      <aside class="card hero-side">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/50">Score performance</div>
+        <div id="topScore" class="text-2xl font-bold text-green-400 mt-2">78</div>
+        <div class="text-sm text-white/70 mt-2">Lecture comportementale réelle</div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/50">Meyden Coins</div>
+        <div id="topCoins" class="text-2xl font-bold text-yellow-400 mt-2">148</div>
+        <div id="moneyValue" class="text-sm text-white/70 mt-2">Valeur : 22.20$ CAD</div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/50">Signal public</div>
+        <div id="topTuned" class="text-2xl font-bold text-green-400 mt-2">1200</div>
+        <div class="text-sm text-white/70 mt-2">Tuned On cumulés</div>
+      </div>
+    </section>
+
+    <!-- 5 MONITORS -->
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold mb-4">Les 5 Meyden Monitors</h2>
+      <div id="monitorGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
+    </section>
+
+    <!-- VIDEO + FLOW -->
+    <section class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Simulation de vidéo</h2>
+
+        <div class="rounded-2xl border border-white/10 bg-black/40 p-6">
+          <div class="text-sm text-white/50">Now Playing</div>
+          <div id="videoTitle" class="text-2xl font-bold mt-2">Clip V1</div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
+            <div>
+              <div class="text-xs text-white/50">Audience</div>
+              <div id="videoAudience" class="font-semibold mt-1">International</div>
+            </div>
+            <div>
+              <div class="text-xs text-white/50">Performance</div>
+              <div id="videoScore" class="font-semibold mt-1 text-green-400">78</div>
+            </div>
+            <div>
+              <div class="text-xs text-white/50">Coins</div>
+              <div id="videoCoins" class="font-semibold mt-1 text-yellow-400">148</div>
+            </div>
+            <div>
+              <div class="text-xs text-white/50">Statut</div>
+              <div id="videoStatus" class="font-semibold mt-1">Actif</div>
+            </div>
+          </div>
+        </div>
+
+        <button id="tunedBtn" type="button" class="w-full mt-5 py-4 bg-orange-500 text-black font-bold text-xl rounded-xl hover:scale-[1.01] transition">
+          Tuned On (1200)
+        </button>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution du contenu</h2>
+        <div id="flowGrid" class="grid grid-cols-2 gap-3"></div>
+        <div id="flowText" class="mt-4 text-sm text-white/70 leading-6">
+          Le contenu entre dans le système et commence son analyse.
+        </div>
+
+        <div id="emailBox" class="hidden mt-4 rounded-xl border border-orange-500 bg-orange-500/10 p-4">
+          <div class="font-semibold">📧 Courriel de recommandation</div>
+          <div class="text-sm mt-2 text-white/80">
+            Ton contenu manque d’impact dans les premières secondes. Coupe l’intro, clarifie le hook
+            et vise mieux le public.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD + STRATEGIC LINK -->
+    <section class="grid gap-6 lg:grid-cols-2 mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Dashboard créateur</h2>
+
+        <div class="grid gap-3 mb-5">
+          <label class="block text-sm">
+            Nom du créateur
+            <input id="creatorNameInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Nom du créateur" />
+          </label>
+
+          <label class="block text-sm">
+            Courriel
+            <input id="creatorEmailInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="courriel@exemple.com" />
+          </label>
+
+          <label class="block text-sm">
+            Nom du contenu
+            <input id="contentNameInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Titre du contenu" />
+          </label>
+        </div>
+
+        <div class="space-y-2 text-sm text-white/80">
+          <div>Audience actuelle : <span id="dashboardAudience" class="text-orange-300">International</span></div>
+          <div>Performance : <span id="dashboardPerformance">78</span></div>
+          <div>Meyden Coins : <span id="dashboardCoins">148</span></div>
+          <div>Plan créateur : <span id="dashboardCreatorPlan">Créateur 14.99$</span></div>
+          <div>Plan public : <span id="dashboardPublicPlan">Public 1.99$</span></div>
+          <div>Statut du contenu : <span id="dashboardStatus">En circulation</span></div>
+          <div>Version d’amélioration : <span id="dashboardVersion">1</span></div>
+        </div>
+
+        <button id="submitVersionBtn" type="button" class="w-full mt-5 py-4 bg-orange-500 text-black font-semibold rounded-xl hover:scale-[1.01] transition">
+          Submit nouvelle version de votre contenu
+        </button>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Lien stratégique</h2>
+
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Audience</div>
+            <div id="linkAudience" class="font-semibold mt-1">International</div>
+          </div>
+
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Performance</div>
+            <div id="linkPerformance" class="font-semibold mt-1">78</div>
+          </div>
+
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Coins</div>
+            <div id="linkCoins" class="font-semibold mt-1 text-yellow-400">148</div>
+          </div>
+
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Amélioration</div>
+            <div id="linkImprovement" class="font-semibold mt-1">Version 1</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUBSCRIPTIONS -->
+    <section class="grid gap-6 lg:grid-cols-2 mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Abonnements créateur</h2>
+        <div id="creatorPlansGrid" class="grid gap-4"></div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Abonnements public</h2>
+        <div id="publicPlansGrid" class="grid gap-4"></div>
+      </div>
+    </section>
+
+    <!-- SIM PLAN BY PLAN -->
+    <section class="grid gap-6 lg:grid-cols-2 mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution d’abonnement créateur</h2>
+        <div class="mb-4 text-sm text-white/70">
+          Capacité, accès, revenu mensuel par abonné, projection annuelle, part mise en provision 1/3 et lecture investisseur.
+        </div>
+        <div id="creatorSimulationGrid" class="grid gap-4"></div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution d’abonnement public</h2>
+        <div class="mb-4 text-sm text-white/70">
+          Accès, revenu mensuel par abonné, projection annuelle, part mise en provision 1/3 et lecture investisseur.
+        </div>
+        <div id="publicSimulationGrid" class="grid gap-4"></div>
+      </div>
+    </section>
+
+    <!-- WOW INVESTOR -->
+    <section class="rounded-2xl border border-white/10 bg-white/5 p-6 mb-10">
+      <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
         <div>
-          <h3>Fusion intégrale</h3>
-          <p class="muted">Le moteur garde maintenant la présentation haute gamme de la v17 tout en retrouvant la sensation démonstrative et les commandes fortes de la v14.</p>
+          <h2 class="text-2xl font-semibold">Projection 24 mois — croissance Meyden</h2>
+          <p class="text-sm text-white/70 mt-2">
+            Simulation dynamique de la croissance abonnés, revenus et bénéfice net sur 2 ans.
+          </p>
         </div>
-        <div class="mini-grid">
-          <div class="mini"><label>Analyse</label><strong>2 h</strong><small>Cycle intelligent</small></div>
-          <div class="mini"><label>Fenêtre</label><strong>72 h</strong><small>Contenu frais en priorité</small></div>
-          <div class="mini"><label>Projection</label><strong>24 mois</strong><small>8 trimestres suivis</small></div>
-          <div class="mini"><label>Mode</label><strong>Auto + Manuel</strong><small>Démo pilotable en direct</small></div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="card toolbar">
-      <div class="status"><div class="dot" id="liveDot"></div><div><span>Moteur</span><strong id="engineState">Actif</strong></div></div>
-      <div class="status"><div><span>Niveau d’accélération</span><strong id="growthLabel">Standard</strong></div></div>
-      <div class="status"><div><span>Cycle simulé</span><strong id="cycleCount">0</strong></div></div>
-      <div class="status"><div><span>Trimestre visible</span><strong id="currentQuarterLabel">Q1 2026</strong></div></div>
-      <div class="status"><div><span>Rotation de boucle</span><strong id="loopLabel">Bloc 1</strong></div></div>
-      <div class="status"><div><span>Auto-évolution</span><strong id="autoLabel">ON</strong></div></div>
-    </section>
-
-    <section class="grid">
-      <div class="card section">
-        <h2>Performance globale</h2>
-        <p>Revenus, dépenses, profit, coins et trajectoire sur 8 trimestres.</p>
-        <div class="stats">
-          <div class="stat"><div class="label">Revenus projetés</div><div class="value" id="revenueValue">0 $</div><div class="sub" id="revenueSub">Projection trimestrielle</div></div>
-          <div class="stat"><div class="label">Dépenses projetées</div><div class="value" id="expenseValue">0 $</div><div class="sub">Production, diffusion, optimisation</div></div>
-          <div class="stat"><div class="label">Profit net</div><div class="value" id="profitValue">0 $</div><div class="sub">Calcul en direct</div></div>
-          <div class="stat"><div class="label">Meyden Coins simulés</div><div class="value" id="coinsValue">0</div><div class="sub">Récompenses réseau</div></div>
-        </div>
-        <div class="chart-wrap tall"><canvas id="financeChart"></canvas></div>
-        <div class="quarter-cards" id="quarterCards"></div>
+        <button id="simulateGrowthBtn" class="bg-orange-500 text-black px-4 py-3 rounded-xl font-semibold hover:scale-[1.01] transition">
+          Simuler croissance
+        </button>
       </div>
 
-      <div class="card section">
-        <h2>Réglage du moteur</h2>
-        <p>Contrôle de croissance, stabilité, monétisation et comportement global.</p>
-        <div class="kpi-list">
-          <div class="kpi-item"><div><strong>Intensité de croissance</strong><div class="muted">Influence la portée, la monétisation et la vitesse de montée.</div></div><div style="width:180px;"><input id="growthRange" type="range" min="70" max="180" step="1" value="100" /></div></div>
-          <div class="kpi-item"><div><strong>Automatisation active</strong><div class="muted">La machine continue même sans intervention.</div></div><div class="progress"><span id="autoProgress" style="width:100%;"></span></div></div>
-          <div class="kpi-item"><div><strong>Qualité moyenne du réseau</strong><div class="muted">Plus elle monte, plus les contenus deviennent Tuned On.</div></div><div class="progress"><span id="qualityBar" style="width:58%;"></span></div></div>
-          <div class="kpi-item"><div><strong>Puissance monétisation</strong><div class="muted">Ajustée automatiquement selon la performance.</div></div><div class="progress"><span id="monetizationBar" style="width:48%;"></span></div></div>
+      <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+        <canvas id="growthChart" height="100"></canvas>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-3 mt-6 text-sm">
+        <div class="bg-black/30 p-4 rounded-xl border border-white/10">
+          <div class="text-white/50">Revenu mensuel final</div>
+          <div id="finalRevenue" class="text-green-400 text-xl font-bold mt-1">$0</div>
         </div>
-        <div class="scenario">
-          <div class="mini"><label>Mode actuel</label><strong id="scenarioTitle">Équilibre intelligent</strong><small id="scenarioText">Croissance régulière, dépenses contrôlées, amélioration organique.</small></div>
-          <div class="mini"><label>Projection fin de cycle</label><strong id="projectionText">Montée saine sur 24 mois</strong><small id="projectionSub">Lecture crédible pour présentation.</small></div>
+        <div class="bg-black/30 p-4 rounded-xl border border-white/10">
+          <div class="text-white/50">Profit net final</div>
+          <div id="finalProfit" class="text-green-300 text-xl font-bold mt-1">$0</div>
         </div>
-        <div class="footer-note">
-          Là on est plus proche de ce que tu voulais réellement : une machine qui a du style, mais qui a aussi du comportement. La v14 seule était forte en sensation. La v17 seule était forte en présentation. La fusion des deux est plus vendable.
+        <div class="bg-black/30 p-4 rounded-xl border border-white/10">
+          <div class="text-white/50">Abonnés payants totaux</div>
+          <div id="finalSubs" class="text-orange-300 text-xl font-bold mt-1">0</div>
         </div>
       </div>
     </section>
 
-    <section class="grid-3">
-      <div class="card section">
-        <h2>Loop de diffusion v14</h2>
-        <p>Lecture séquentielle de la chaîne Meyden, avec rotation continue.</p>
-        <div class="loop-card">
-          <h3 id="activeLoopTitle">Bloc 1 — Découverte</h3>
-          <div class="loop-list" id="loopList"></div>
+    <!-- FINANCIAL QC -->
+    <section class="rounded-2xl border border-white/10 bg-white/5 p-6 mb-10">
+      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
+        <div>
+          <h2 class="text-2xl font-semibold">Simulation financière Québec</h2>
+          <p class="text-white/70 mt-2 text-sm leading-6">
+            Hypothèses de marché pour démontrer la probabilité économique du modèle.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-black/30 p-4 text-sm text-white/70">
+          <div>Population Québec utilisée : <span id="simPopulation" class="text-white font-semibold">9 000 000</span></div>
+          <div>Public vidéo potentiel : <span id="simConsumers" class="text-white font-semibold">6 480 000</span></div>
+          <div>Artistes Québec estimés : <span id="simArtists" class="text-white font-semibold">43 100</span></div>
         </div>
       </div>
 
-      <div class="card section">
-        <h2>Timeline d’une boucle</h2>
-        <p>Répartition simple pour montrer comment le contenu tourne dans le temps.</p>
-        <div class="timeline" id="timeline"></div>
+      <div class="grid gap-6 lg:grid-cols-3" id="marketScenarioGrid"></div>
+    </section>
+
+    <!-- COINS + RULE -->
+    <section class="grid gap-6 lg:grid-cols-2 mb-10">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Meyden Coins visibles</h2>
+
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Coins accumulés</div>
+            <div id="coinVisibleTotal" class="text-2xl font-bold text-yellow-400 mt-1">148</div>
+          </div>
+
+          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/50">Valeur estimée</div>
+            <div id="coinVisibleMoney" class="text-2xl font-bold mt-1">22.20$ CAD</div>
+          </div>
+        </div>
       </div>
 
-      <div class="card section">
-        <h2>Console moteur</h2>
-        <p>Vision démonstrative inspirée de la v14 pour rendre le système vivant.</p>
-        <div class="console" id="consoleBox"></div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-semibold mb-4">Règle économique + sécurité</h2>
+        <div class="text-sm text-white/75 leading-7 space-y-2">
+          <p><strong>1/3 des revenus mensuels d’abonnement</strong> est mis en provision pour soutenir l’échange trimestriel des Meyden Coins.</p>
+          <p><strong>Sécurité :</strong></p>
+          <p>• plafond trimestriel global</p>
+          <p>• ajustement dynamique si nécessaire</p>
+          <p>• contrôle anti-abus</p>
+          <p>• limitation des sorties selon le coussin actif</p>
+        </div>
       </div>
     </section>
 
-    <section class="grid">
-      <div class="card section">
-        <h2>Évolution automatique du contenu</h2>
-        <p>Les contenus montent, baissent, changent de statut et génèrent de la valeur.</p>
-        <div class="content-table" id="contentTable"></div>
+    <!-- INTERACTIVE MODEL -->
+    <section class="rounded-2xl border border-white/10 bg-white/5 p-6 mb-10">
+      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
+        <div>
+          <h2 class="text-2xl font-semibold">Simulation interactive — abonnements, coins et bénéfices</h2>
+          <p class="text-white/70 mt-2 text-sm leading-6">
+            Cette section simule la croissance progressive des abonnements, les revenus qui entrent,
+            les retraits de Meyden Coins et le bénéfice net estimé.
+          </p>
+        </div>
+
+        <button id="growthTickBtn" type="button" class="rounded-xl bg-orange-500 px-4 py-3 font-semibold text-black hover:scale-[1.01] transition">
+          Simuler 1 cycle
+        </button>
       </div>
-      <div class="card section">
-        <h2>Répartition des contenus</h2>
-        <p>Vue instantanée du nombre de contenus Tuned On, Boosting et Recyclage.</p>
-        <div class="chart-wrap"><canvas id="contentChart"></canvas></div>
+
+      <div class="grid gap-6 lg:grid-cols-3 mb-6">
+        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/50">Créateurs abonnés</div>
+          <div id="simCreatorTotal" class="mt-2 text-3xl font-bold text-orange-300">410</div>
+          <div id="simCreatorMix" class="mt-2 text-sm text-white/70">Gratuit 260 • 14.99$ 110 • 65.99$ 40</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/50">Public abonné</div>
+          <div id="simPublicTotal" class="mt-2 text-3xl font-bold text-orange-300">5200</div>
+          <div id="simPublicMix" class="mt-2 text-sm text-white/70">Gratuit 4800 • 1.99$ 400</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/50">Bénéfice net simulé</div>
+          <div id="simNetProfit" class="mt-2 text-3xl font-bold text-green-300">$0</div>
+          <div class="mt-2 text-sm text-white/70">Après provision, retraits de coins et coussin de sécurité</div>
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-semibold mb-4">Entrées financières</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-white/50 border-b border-white/10">
+                  <th class="py-2 pr-3">Source</th>
+                  <th class="py-2 pr-3">Abonnés</th>
+                  <th class="py-2 pr-3">Prix</th>
+                  <th class="py-2">Revenu mensuel</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 pr-3">Créateur 14.99$</td>
+                  <td id="revCreatorWeeklyCount" class="py-2 pr-3">110</td>
+                  <td class="py-2 pr-3">14.99$</td>
+                  <td id="revCreatorWeekly" class="py-2 text-green-300">$0</td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 pr-3">Créateur 65.99$</td>
+                  <td id="revCreatorDailyCount" class="py-2 pr-3">40</td>
+                  <td class="py-2 pr-3">65.99$</td>
+                  <td id="revCreatorDaily" class="py-2 text-green-300">$0</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3">Public 1.99$</td>
+                  <td id="revPublicPremiumCount" class="py-2 pr-3">400</td>
+                  <td class="py-2 pr-3">1.99$</td>
+                  <td id="revPublicPremium" class="py-2 text-green-300">$0</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="border-t border-white/10 font-semibold">
+                  <td class="py-3 pr-3">Total entrées</td>
+                  <td></td><td></td>
+                  <td id="revTotalIn" class="py-3 text-green-300">$0</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-semibold mb-4">Sorties et sécurité</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-white/50 border-b border-white/10">
+                  <th class="py-2 pr-3">Poste</th>
+                  <th class="py-2 pr-3">Valeur</th>
+                  <th class="py-2">Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 pr-3">Provision 1/3</td>
+                  <td id="outReserve" class="py-2 pr-3 text-yellow-300">$0</td>
+                  <td class="py-2">Réserve pour coins</td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 pr-3">Retraits coins trimestriels simulés</td>
+                  <td id="outCoinWithdrawals" class="py-2 pr-3 text-red-300">$0</td>
+                  <td class="py-2">Créateurs qui encaissent</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3">Coussin sécurité anti-abus</td>
+                  <td id="outSafety" class="py-2 pr-3 text-yellow-300">$0</td>
+                  <td class="py-2">Plafond / ajustement</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="border-t border-white/10 font-semibold">
+                  <td class="py-3 pr-3">Total sorties</td>
+                  <td id="outTotal" class="py-3 pr-3 text-red-300">$0</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2 mt-6">
+        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-semibold mb-4">Retraits de coins simulés</h3>
+          <div id="withdrawalList" class="space-y-3 text-sm"></div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-semibold mb-4">Lecture du modèle</h3>
+          <div id="profitConclusion" class="text-sm text-white/75 leading-7">
+            La simulation montre si les revenus d’abonnements couvrent la réserve, les retraits de coins
+            et la marge de sécurité tout en laissant un bénéfice net.
+          </div>
+        </div>
       </div>
     </section>
+
   </div>
 
   <script>
-    const state = {
-      running: true,
-      cycle: 0,
-      quarterIndex: 0,
-      growth: 100,
-      activeLoop: 0,
-      console: [],
-      quarters: [
-        { label: 'Q1 2026', revenue: 18000, expense: 9500, coins: 3200 },
-        { label: 'Q2 2026', revenue: 22000, expense: 11200, coins: 4700 },
-        { label: 'Q3 2026', revenue: 26500, expense: 12900, coins: 6100 },
-        { label: 'Q4 2026', revenue: 31800, expense: 14800, coins: 7600 },
-        { label: 'Q1 2027', revenue: 37200, expense: 17000, coins: 9200 },
-        { label: 'Q2 2027', revenue: 43000, expense: 19100, coins: 10800 },
-        { label: 'Q3 2027', revenue: 49500, expense: 21800, coins: 12600 },
-        { label: 'Q4 2027', revenue: 57000, expense: 24500, coins: 14800 }
-      ],
-      loops: [
-        { title: 'Bloc 1 — Découverte', items: ['Nouveau clip incubé', 'Teaser show', 'Capsule identité', 'Intro artiste'], weights: [22, 28, 18, 32] },
-        { title: 'Bloc 2 — Performance', items: ['Live session', 'Aftermovie', 'Best moments', 'Preuve de traction'], weights: [30, 24, 21, 25] },
-        { title: 'Bloc 3 — Monétisation', items: ['Contenu premium', 'Offre incubation', 'Appel à l’action', 'Meyden Coins'], weights: [20, 30, 26, 24] },
-        { title: 'Bloc 4 — Recyclage intelligent', items: ['Contenu à optimiser', 'Version recut', 'Relance visuelle', 'Nouvelle diffusion'], weights: [24, 23, 21, 32] }
-      ],
-      contents: [
-        { title: 'Live Cabaret des Curiosités', channel: 'Scène Meyden', score: 82, status: 'Tuned On', value: 1700 },
-        { title: 'Clip vertical artiste incubé', channel: 'Meyden Feed', score: 76, status: 'Boosting', value: 980 },
-        { title: 'Présentation band 30 mai', channel: 'Metal Loop', score: 68, status: 'Boosting', value: 760 },
-        { title: 'Aftermovie immersive', channel: 'Meyden Premium', score: 90, status: 'Tuned On', value: 2300 },
-        { title: 'Capsule branding artiste', channel: 'Incubation', score: 58, status: 'Recyclage', value: 280 },
-        { title: 'Entrevue studio Lujamko', channel: 'Studio Loop', score: 72, status: 'Boosting', value: 840 }
+    const monitors = [
+      { id: 1, name: 'International', audience: 'Audience large', reward: 3, rewardText: '3 coins / 24h' },
+      { id: 2, name: 'Grand Public', audience: 'Grand public', reward: 1.5, rewardText: '1.5 coin / 24h' },
+      { id: 3, name: 'Petit Public', audience: 'Audience restreinte', reward: 0.5, rewardText: '0.5 coin / 24h' },
+      { id: 4, name: 'Public Ciblé', audience: 'Public précis', reward: 0, rewardText: 'Optimisation audience' },
+      { id: 5, name: 'Fans', audience: 'Communauté engagée', reward: 0, rewardText: 'Validation communauté' },
+    ];
+
+    const creatorPlans = [
+      {
+        id: 'creator-free',
+        name: 'Créateur Gratuit',
+        price: 0,
+        label: '0$/mois',
+        monthlyUploads: 'Jusqu’à 5 cycles d’essai',
+        access: 'Accès limité',
+        investorText: 'Entrée massive dans le système. Acquisition de créateurs sans monétisation.',
+        features: [
+          'Accès sans monétisation',
+          'Aucun courriel avancé',
+          '1 seule boucle de 2h dans chacun des 5 monitors',
+          'Maximum 72h de circulation'
+        ]
+      },
+      {
+        id: 'creator-weekly',
+        name: 'Créateur 14.99$',
+        price: 14.99,
+        label: '14.99$/mois',
+        monthlyUploads: '4 contenus / mois',
+        access: 'Accès complet',
+        investorText: 'Base stable de récurrence. Le vrai moteur central du modèle.',
+        features: [
+          '1 contenu par semaine',
+          'Accès à tout le système',
+          'Courriels d’amélioration',
+          'Accès Meyden Coins'
+        ]
+      },
+      {
+        id: 'creator-daily',
+        name: 'Créateur 65.99$',
+        price: 65.99,
+        label: '65.99$/mois',
+        monthlyUploads: '30 contenus / mois',
+        access: 'Accès prioritaire',
+        investorText: 'Plan intensif pour créateurs actifs. Volume et rentabilité élevés.',
+        features: [
+          '1 contenu par jour',
+          'Accès complet',
+          'Suivi complet',
+          'Accès Meyden Coins'
+        ]
+      },
+    ];
+
+    const publicPlans = [
+      {
+        id: 'public-free',
+        name: 'Public Gratuit',
+        price: 0,
+        label: '0$/mois',
+        access: 'Accès partiel',
+        investorText: 'Base d’audience gratuite pour nourrir la plateforme et générer des données.',
+        features: ['Accès à toute diffusion sauf International et Grand Public']
+      },
+      {
+        id: 'public-premium',
+        name: 'Public 1.99$',
+        price: 1.99,
+        label: '1.99$/mois',
+        access: 'Accès total',
+        investorText: 'Micro-monnaie très scalable sur un grand volume d’utilisateurs.',
+        features: ['Accès à toute diffusion']
+      },
+    ];
+
+    const phases = [
+      'Upload',
+      'Monitor',
+      'Analyse',
+      'Monte ou chute',
+      'Recyclage',
+      'Email',
+      'Amélioration',
+      'Sortie ou retour'
+    ];
+
+    const flowDescriptions = [
+      'Le contenu entre dans le système et commence son analyse.',
+      'Le contenu circule dans le monitor correspondant à son audience.',
+      'Le comportement réel du public est analysé.',
+      'Le contenu monte ou chute selon sa performance réelle.',
+      'Le contenu est regroupé dans un environnement cohérent.',
+      'Un courriel de recommandation est généré pour le créateur.',
+      'Le créateur améliore le contenu et prépare une nouvelle version.',
+      'Le contenu sort ou revient au début du processus selon son évolution.'
+    ];
+
+    const marketAssumptions = {
+      populationQc: 9000000,
+      contentConsumersRate: 0.72,
+      artistsQc: 43100,
+      scenarios: [
+        { name: 'Conservateur', creatorAdoption: 0.005, publicAdoption: 0.002, note: 'Adoption faible, démarrage prudent.' },
+        { name: 'Réaliste', creatorAdoption: 0.02, publicAdoption: 0.01, note: 'Adoption modérée, produit compris par le marché.' },
+        { name: 'Ambitieux', creatorAdoption: 0.05, publicAdoption: 0.03, note: 'Adoption forte, traction réelle et bouche-à-oreille.' },
       ]
     };
 
-    const $ = id => document.getElementById(id);
-    const money = n => new Intl.NumberFormat('fr-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }).format(n);
+    let selectedMonitor = 0;
+    let selectedCreatorPlan = 1;
+    let selectedPublicPlan = 1;
+    let score = 78;
+    let tuned = 1200;
+    let coins = 148;
+    let version = 1;
+    let flowPhase = 0;
+    let currentStatus = 'En circulation';
 
-    const financeChart = new Chart($('financeChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: state.quarters.map(q => q.label),
-        datasets: [
-          { label: 'Revenus', data: [], borderWidth: 3, tension: .35, fill: false },
-          { label: 'Dépenses', data: [], borderWidth: 3, tension: .35, fill: false },
-          { label: 'Profit net', data: [], borderWidth: 3, tension: .35, fill: false }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: '#f5f7fa' } } },
-        scales: {
-          x: { ticks: { color: '#9fb0c3' }, grid: { color: 'rgba(255,255,255,.06)' } },
-          y: { ticks: { color: '#9fb0c3' }, grid: { color: 'rgba(255,255,255,.06)' } }
-        }
-      }
-    });
+    const simState = {
+      creatorFree: 260,
+      creatorWeekly: 110,
+      creatorDaily: 40,
+      publicFree: 4800,
+      publicPremium: 400,
+      quarterlyWithdrawCreators: 26,
+      avgWithdrawalCoins: 92,
+      safetyRate: 0.08,
+    };
 
-    const contentChart = new Chart($('contentChart').getContext('2d'), {
-      type: 'doughnut',
-      data: { labels: ['Tuned On', 'Boosting', 'Recyclage'], datasets: [{ data: [2, 3, 1], borderWidth: 0 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#f5f7fa' } } } }
-    });
+    let chart = null;
 
-    function pushConsole(text) {
-      const time = new Date().toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      state.console.unshift(`[${time}] ${text}`);
-      state.console = state.console.slice(0, 18);
-      $('consoleBox').innerHTML = state.console.map(line => `<div class="console-line">${line}</div>`).join('');
+    function moneyFromCoins(value) {
+      return (value * 0.15).toFixed(2) + '$ CAD';
     }
 
-    function growthLabel(value) {
-      if (value < 90) return 'Prudent';
-      if (value < 110) return 'Standard';
-      if (value < 140) return 'Offensif';
-      return 'Hyper croissance';
-    }
-
-    function scenarioCopy(value) {
-      if (value < 90) return { title: 'Mode consolidation', text: 'Dépenses serrées, progression plus lente, stabilité prioritaire.', proj: 'Croissance plus sobre mais crédible', sub: 'Idéal pour un discours prudent.' };
-      if (value < 110) return { title: 'Équilibre intelligent', text: 'Croissance régulière, dépenses contrôlées, amélioration organique.', proj: 'Montée saine sur 24 mois', sub: 'Lecture crédible pour présentation.' };
-      if (value < 140) return { title: 'Mode expansion', text: 'Le réseau pousse plus fort sur la diffusion et la conversion.', proj: 'Traction visible et monétisation accélérée', sub: 'Bon mode pour vendre le potentiel.' };
-      return { title: 'Mode conquête', text: 'Projection agressive qui maximise portée, revenus et visibilité.', proj: 'Hausse rapide à fort impact', sub: 'Fort visuel, mais à défendre méthodiquement.' };
-    }
-
-    function computeQuarter(base, index) {
-      const factor = state.growth / 100;
-      const autoBonus = state.running ? 1 + (state.cycle * 0.0035) : 1 + (state.cycle * 0.0014);
-      const momentum = 1 + (index * 0.045);
-      const revenue = Math.round(base.revenue * factor * autoBonus * momentum);
-      const expense = Math.round(base.expense * (0.86 + factor * 0.24) * (1 + index * 0.03));
-      const coins = Math.round(base.coins * factor * (state.running ? 1.08 : 1.02));
-      return { ...base, revenue, expense, coins };
-    }
-
-    function evolveContents(delta = 0) {
-      state.contents = state.contents.map((item, index) => {
-        const randomWave = Math.sin((state.cycle + index) * 0.9) * 3;
-        const growthPush = ((state.growth - 100) / 100) * 8;
-        let score = Math.max(35, Math.min(98, Math.round(item.score + randomWave + growthPush + delta)));
-        let status = 'Boosting';
-        if (score >= 80) status = 'Tuned On';
-        else if (score < 62) status = 'Recyclage';
-        const value = Math.max(140, Math.round((score * 26) + (state.growth * 3) + (state.cycle * 9)));
-        return { ...item, score, status, value };
+    function formatCurrency(value) {
+      return value.toLocaleString('fr-CA', {
+        style: 'currency',
+        currency: 'CAD',
+        maximumFractionDigits: 2
       });
     }
 
-    function renderQuarterCards() {
-      $('quarterCards').innerHTML = state.quarters.map((q, i) => {
-        const current = computeQuarter(q, i);
-        return `<div class="quarter"><small>${current.label}</small><strong>${money(current.revenue - current.expense)}</strong><div class="muted">Profit net</div></div>`;
-      }).join('');
+    function renderMonitors() {
+      const monitorGrid = document.getElementById('monitorGrid');
+      monitorGrid.innerHTML = '';
+
+      monitors.forEach((monitor, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className =
+          'rounded-2xl border p-4 text-left transition ' +
+          (index === selectedMonitor
+            ? 'border-orange-400 bg-orange-500/10'
+            : 'border-white/10 bg-white/5 hover:bg-white/10');
+
+        btn.innerHTML = `
+          <div class="font-semibold">${monitor.name}</div>
+          <div class="text-sm text-white/60 mt-2">${monitor.audience}</div>
+          <div class="text-sm text-yellow-400 mt-2">${monitor.rewardText}</div>
+        `;
+
+        btn.onclick = () => {
+          selectedMonitor = index;
+          updateUI();
+          renderMonitors();
+        };
+
+        monitorGrid.appendChild(btn);
+      });
     }
 
-    function renderContentTable() {
-      const rows = state.contents.map(item => {
-        const badgeClass = item.status === 'Tuned On' ? 'tuned-on' : item.status === 'Recyclage' ? 'recyclage' : 'boosting';
-        return `
-          <div class="content-row">
-            <div class="title-cell"><strong>${item.title}</strong><small>${item.channel}</small></div>
-            <div><span class="score-badge">Score ${item.score}</span></div>
-            <div><span class="status-badge ${badgeClass}">${item.status}</span></div>
-            <div><strong>${money(item.value)}</strong></div>
-            <div class="action-buttons">
-              <button class="small-btn" onclick="manualBoost('${item.title.replace(/'/g, "\\'")}')">Monter</button>
-              <button class="small-btn" onclick="manualDeboost('${item.title.replace(/'/g, "\\'")}')">Dégréser</button>
+    function renderFlow() {
+      const flowGrid = document.getElementById('flowGrid');
+      flowGrid.innerHTML = '';
+
+      phases.forEach((phaseLabel, index) => {
+        const div = document.createElement('div');
+        div.className =
+          'rounded-xl border p-3 text-sm transition ' +
+          (index === flowPhase
+            ? 'bg-orange-500 text-black border-orange-500'
+            : 'bg-black/30 border-white/10 text-white/70');
+
+        div.textContent = phaseLabel;
+        flowGrid.appendChild(div);
+      });
+
+      document.getElementById('flowText').textContent = flowDescriptions[flowPhase];
+      document.getElementById('emailBox').classList.toggle('hidden', flowPhase !== 5);
+    }
+
+    function renderCreatorPlans() {
+      const creatorPlansGrid = document.getElementById('creatorPlansGrid');
+      creatorPlansGrid.innerHTML = '';
+
+      creatorPlans.forEach((plan, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className =
+          'rounded-xl border p-4 text-left transition ' +
+          (index === selectedCreatorPlan
+            ? 'border-orange-400 bg-orange-500/10'
+            : 'border-white/10 bg-black/30 hover:bg-white/10');
+
+        btn.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div class="font-semibold">${plan.name}</div>
+            <div class="text-orange-400 font-bold">${plan.label}</div>
+          </div>
+          <div class="mt-3 space-y-1 text-sm text-white/70">
+            ${plan.features.map(f => `<div>• ${f}</div>`).join('')}
+          </div>
+        `;
+
+        btn.onclick = () => {
+          selectedCreatorPlan = index;
+          updateUI();
+          renderCreatorPlans();
+          renderCreatorSimulation();
+        };
+
+        creatorPlansGrid.appendChild(btn);
+      });
+    }
+
+    function renderPublicPlans() {
+      const publicPlansGrid = document.getElementById('publicPlansGrid');
+      publicPlansGrid.innerHTML = '';
+
+      publicPlans.forEach((plan, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className =
+          'rounded-xl border p-4 text-left transition ' +
+          (index === selectedPublicPlan
+            ? 'border-orange-400 bg-orange-500/10'
+            : 'border-white/10 bg-black/30 hover:bg-white/10');
+
+        btn.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div class="font-semibold">${plan.name}</div>
+            <div class="text-orange-400 font-bold">${plan.label}</div>
+          </div>
+          <div class="mt-3 space-y-1 text-sm text-white/70">
+            ${plan.features.map(f => `<div>• ${f}</div>`).join('')}
+          </div>
+        `;
+
+        btn.onclick = () => {
+          selectedPublicPlan = index;
+          updateUI();
+          renderPublicPlans();
+          renderPublicSimulation();
+        };
+
+        publicPlansGrid.appendChild(btn);
+      });
+    }
+
+    function renderCreatorSimulation() {
+      const creatorSimulationGrid = document.getElementById('creatorSimulationGrid');
+      creatorSimulationGrid.innerHTML = '';
+
+      creatorPlans.forEach((plan, index) => {
+        const annual = plan.price * 12;
+        const reserve = plan.price / 3;
+
+        const card = document.createElement('div');
+        card.className =
+          'rounded-xl border p-4 transition ' +
+          (index === selectedCreatorPlan
+            ? 'border-orange-400 bg-orange-500/10'
+            : 'border-white/10 bg-black/30');
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="font-semibold">${plan.name}</div>
+              <div class="text-sm text-white/60 mt-1">${plan.investorText}</div>
+            </div>
+            <div class="text-orange-400 font-bold">${plan.label}</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Capacité</div>
+              <div class="font-semibold mt-1">${plan.monthlyUploads}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Accès</div>
+              <div class="font-semibold mt-1">${plan.access}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Revenu mensuel / abonné</div>
+              <div class="font-semibold mt-1">${plan.price.toFixed(2)}$</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Projection annuelle / abonné</div>
+              <div class="font-semibold mt-1">${annual.toFixed(2)}$</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3 col-span-2">
+              <div class="text-white/50">Part mise en provision 1/3</div>
+              <div class="font-semibold mt-1">${reserve.toFixed(2)}$</div>
             </div>
           </div>
         `;
-      }).join('');
-      $('contentTable').innerHTML = `<div class="content-row header"><div>Contenu</div><div>Performance</div><div>Statut</div><div>Valeur</div><div>Actions</div></div>${rows}`;
+
+        creatorSimulationGrid.appendChild(card);
+      });
     }
 
-    function renderLoop() {
-      const loop = state.loops[state.activeLoop];
-      $('activeLoopTitle').textContent = loop.title;
-      $('loopLabel').textContent = `Bloc ${state.activeLoop + 1}`;
-      $('loopList').innerHTML = loop.items.map((item, i) => `<div class="loop-item"><span>${item}</span><span>${loop.weights[i]}%</span></div>`).join('');
-      $('timeline').innerHTML = loop.items.map((item, i) => `
-        <div class="timeline-row">
-          <div class="time">Segment ${i + 1}</div>
-          <div class="bar-shell"><span style="width:${loop.weights[i]}%"></span></div>
+    function renderPublicSimulation() {
+      const publicSimulationGrid = document.getElementById('publicSimulationGrid');
+      publicSimulationGrid.innerHTML = '';
+
+      publicPlans.forEach((plan, index) => {
+        const annual = plan.price * 12;
+        const reserve = plan.price / 3;
+
+        const card = document.createElement('div');
+        card.className =
+          'rounded-xl border p-4 transition ' +
+          (index === selectedPublicPlan
+            ? 'border-orange-400 bg-orange-500/10'
+            : 'border-white/10 bg-black/30');
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="font-semibold">${plan.name}</div>
+              <div class="text-sm text-white/60 mt-1">${plan.investorText}</div>
+            </div>
+            <div class="text-orange-400 font-bold">${plan.label}</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Accès</div>
+              <div class="font-semibold mt-1">${plan.access}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Revenu mensuel / abonné</div>
+              <div class="font-semibold mt-1">${plan.price.toFixed(2)}$</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Projection annuelle / abonné</div>
+              <div class="font-semibold mt-1">${annual.toFixed(2)}$</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Provision 1/3</div>
+              <div class="font-semibold mt-1">${reserve.toFixed(2)}$</div>
+            </div>
+          </div>
+        `;
+
+        publicSimulationGrid.appendChild(card);
+      });
+    }
+
+    function renderMarketScenarios() {
+      document.getElementById('simPopulation').textContent = marketAssumptions.populationQc.toLocaleString('fr-CA');
+      document.getElementById('simConsumers').textContent =
+        Math.round(marketAssumptions.populationQc * marketAssumptions.contentConsumersRate).toLocaleString('fr-CA');
+      document.getElementById('simArtists').textContent = marketAssumptions.artistsQc.toLocaleString('fr-CA');
+
+      const marketScenarioGrid = document.getElementById('marketScenarioGrid');
+      marketScenarioGrid.innerHTML = '';
+
+      marketAssumptions.scenarios.forEach((scenario) => {
+        const creators = Math.round(marketAssumptions.artistsQc * scenario.creatorAdoption);
+        const publicPremium = Math.round((marketAssumptions.populationQc * marketAssumptions.contentConsumersRate) * scenario.publicAdoption);
+        const creator14 = Math.round(creators * 0.7);
+        const creator65 = Math.round(creators * 0.3);
+
+        const revenue =
+          (creator14 * 14.99) +
+          (creator65 * 65.99) +
+          (publicPremium * 1.99);
+
+        const reserve = revenue / 3;
+        const estimatedNet = revenue - reserve - (revenue * 0.08) - (reserve * 0.6);
+
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl border border-white/10 bg-black/30 p-5';
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="text-xl font-semibold">${scenario.name}</div>
+              <div class="text-sm text-white/60 mt-1">${scenario.note}</div>
+            </div>
+            <div class="text-orange-400 font-bold">${creators.toLocaleString('fr-CA')} créateurs</div>
+          </div>
+
+          <div class="grid gap-3 mt-5 text-sm">
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Public premium estimé</div>
+              <div class="font-semibold mt-1">${publicPremium.toLocaleString('fr-CA')}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Revenu mensuel brut estimé</div>
+              <div class="font-semibold mt-1 text-green-300">${formatCurrency(revenue)}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Provision 1/3</div>
+              <div class="font-semibold mt-1 text-yellow-300">${formatCurrency(reserve)}</div>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+              <div class="text-white/50">Bénéfice net simulé</div>
+              <div class="font-semibold mt-1 text-green-300">${formatCurrency(estimatedNet)}</div>
+            </div>
+          </div>
+        `;
+        marketScenarioGrid.appendChild(card);
+      });
+    }
+
+    function updateUI() {
+      const monitor = monitors[selectedMonitor];
+      const creatorPlan = creatorPlans[selectedCreatorPlan];
+      const publicPlan = publicPlans[selectedPublicPlan];
+
+      document.getElementById('activeMonitorName').textContent = monitor.name;
+      document.getElementById('activeMonitorAudience').textContent = monitor.audience;
+
+      document.getElementById('topScore').textContent = Math.round(score);
+      document.getElementById('topCoins').textContent = Math.round(coins);
+      document.getElementById('topTuned').textContent = Math.round(tuned);
+      document.getElementById('moneyValue').textContent = 'Valeur : ' + moneyFromCoins(coins);
+
+      document.getElementById('videoTitle').textContent = 'Clip V' + version;
+      document.getElementById('videoAudience').textContent = monitor.name;
+      document.getElementById('videoScore').textContent = Math.round(score);
+      document.getElementById('videoCoins').textContent = Math.round(coins);
+      document.getElementById('videoStatus').textContent = currentStatus;
+
+      document.getElementById('dashboardAudience').textContent = monitor.name;
+      document.getElementById('dashboardPerformance').textContent = Math.round(score);
+      document.getElementById('dashboardCoins').textContent = Math.round(coins);
+      document.getElementById('dashboardCreatorPlan').textContent = creatorPlan.name;
+      document.getElementById('dashboardPublicPlan').textContent = publicPlan.name;
+      document.getElementById('dashboardStatus').textContent = currentStatus;
+      document.getElementById('dashboardVersion').textContent = version;
+
+      document.getElementById('linkAudience').textContent = monitor.name;
+      document.getElementById('linkPerformance').textContent = Math.round(score);
+      document.getElementById('linkCoins').textContent = Math.round(coins);
+      document.getElementById('linkImprovement').textContent = 'Version ' + version;
+
+      document.getElementById('coinVisibleTotal').textContent = Math.round(coins);
+      document.getElementById('coinVisibleMoney').textContent = moneyFromCoins(coins);
+
+      document.getElementById('tunedBtn').textContent = 'Tuned On (' + Math.round(tuned) + ')';
+      renderFlow();
+    }
+
+    function computeSimulation() {
+      const weeklyRevenue = simState.creatorWeekly * 14.99;
+      const dailyRevenue = simState.creatorDaily * 65.99;
+      const premiumRevenue = simState.publicPremium * 1.99;
+      const totalIn = weeklyRevenue + dailyRevenue + premiumRevenue;
+      const reserve = totalIn / 3;
+      const withdrawals = (simState.quarterlyWithdrawCreators * simState.avgWithdrawalCoins * 0.15);
+      const safety = totalIn * simState.safetyRate;
+      const totalOut = reserve + withdrawals + safety;
+      const net = totalIn - totalOut;
+
+      document.getElementById('simCreatorTotal').textContent =
+        (simState.creatorFree + simState.creatorWeekly + simState.creatorDaily).toLocaleString('fr-CA');
+      document.getElementById('simCreatorMix').textContent =
+        `Gratuit ${simState.creatorFree} • 14.99$ ${simState.creatorWeekly} • 65.99$ ${simState.creatorDaily}`;
+
+      document.getElementById('simPublicTotal').textContent =
+        (simState.publicFree + simState.publicPremium).toLocaleString('fr-CA');
+      document.getElementById('simPublicMix').textContent =
+        `Gratuit ${simState.publicFree} • 1.99$ ${simState.publicPremium}`;
+
+      document.getElementById('revCreatorWeeklyCount').textContent = simState.creatorWeekly;
+      document.getElementById('revCreatorDailyCount').textContent = simState.creatorDaily;
+      document.getElementById('revPublicPremiumCount').textContent = simState.publicPremium;
+
+      document.getElementById('revCreatorWeekly').textContent = formatCurrency(weeklyRevenue);
+      document.getElementById('revCreatorDaily').textContent = formatCurrency(dailyRevenue);
+      document.getElementById('revPublicPremium').textContent = formatCurrency(premiumRevenue);
+      document.getElementById('revTotalIn').textContent = formatCurrency(totalIn);
+
+      document.getElementById('outReserve').textContent = formatCurrency(reserve);
+      document.getElementById('outCoinWithdrawals').textContent = formatCurrency(withdrawals);
+      document.getElementById('outSafety').textContent = formatCurrency(safety);
+      document.getElementById('outTotal').textContent = formatCurrency(totalOut);
+
+      document.getElementById('simNetProfit').textContent = formatCurrency(net);
+
+      const withdrawalList = document.getElementById('withdrawalList');
+      withdrawalList.innerHTML = `
+        <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+          <div class="text-white/50">Créateurs qui encaissent</div>
+          <div class="font-semibold mt-1">${simState.quarterlyWithdrawCreators}</div>
         </div>
-      `).join('');
+        <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+          <div class="text-white/50">Coins moyens retirés / créateur</div>
+          <div class="font-semibold mt-1">${simState.avgWithdrawalCoins}</div>
+        </div>
+        <div class="rounded-lg border border-white/10 bg-black/20 p-3">
+          <div class="text-white/50">Valeur par coin</div>
+          <div class="font-semibold mt-1">0.15$ CAD</div>
+        </div>
+      `;
+
+      const conclusion = document.getElementById('profitConclusion');
+      if (net > 0) {
+        conclusion.innerHTML = `
+          La simulation montre un <strong>bénéfice net positif</strong> après provision, retraits de coins
+          et coussin de sécurité. Le modèle reste rentable tant que la croissance du premium et des créateurs
+          payants suit la trajectoire.
+        `;
+      } else {
+        conclusion.innerHTML = `
+          Le modèle devient fragile. Il faut augmenter la part d’abonnements payants, réduire les retraits
+          ou ajuster le coussin de sécurité.
+        `;
+      }
     }
 
-    function updateCharts() {
-      const computed = state.quarters.map((q, i) => computeQuarter(q, i));
-      financeChart.data.datasets[0].data = computed.map(q => q.revenue);
-      financeChart.data.datasets[1].data = computed.map(q => q.expense);
-      financeChart.data.datasets[2].data = computed.map(q => q.revenue - q.expense);
-      financeChart.update();
-      const tuned = state.contents.filter(c => c.status === 'Tuned On').length;
-      const boosting = state.contents.filter(c => c.status === 'Boosting').length;
-      const recyclage = state.contents.filter(c => c.status === 'Recyclage').length;
-      contentChart.data.datasets[0].data = [tuned, boosting, recyclage];
-      contentChart.update();
+    function simulateGrowth24Months() {
+      const months = [];
+      const revenue = [];
+      const profit = [];
+      const subs = [];
+
+      let creator14 = 110;
+      let creator65 = 40;
+      let publicPremium = 400;
+
+      for (let i = 1; i <= 24; i++) {
+        creator14 *= 1.08;
+        creator65 *= 1.10;
+        publicPremium *= 1.12;
+
+        const rev =
+          (creator14 * 14.99) +
+          (creator65 * 65.99) +
+          (publicPremium * 1.99);
+
+        const reserve = rev / 3;
+        const safety = rev * 0.08;
+        const withdrawals = reserve * 0.6;
+        const net = rev - reserve - safety - withdrawals;
+
+        months.push('M' + i);
+        revenue.push(Math.round(rev));
+        profit.push(Math.round(net));
+        subs.push(Math.round(creator14 + creator65 + publicPremium));
+      }
+
+      const ctx = document.getElementById('growthChart').getContext('2d');
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: 'Revenus',
+              data: revenue,
+              borderColor: '#f97316',
+              backgroundColor: 'rgba(249,115,22,0.15)',
+              borderWidth: 2,
+              tension: 0.35,
+              fill: true
+            },
+            {
+              label: 'Profit net',
+              data: profit,
+              borderColor: '#4ade80',
+              backgroundColor: 'rgba(74,222,128,0.12)',
+              borderWidth: 2,
+              tension: 0.35,
+              fill: true
+            },
+            {
+              label: 'Abonnés payants',
+              data: subs,
+              borderColor: '#facc15',
+              backgroundColor: 'rgba(250,204,21,0.12)',
+              borderWidth: 2,
+              tension: 0.35,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#ffffff'
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: '#ffffff'
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.08)'
+              }
+            },
+            y: {
+              ticks: {
+                color: '#ffffff'
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.08)'
+              }
+            }
+          }
+        }
+      });
+
+      document.getElementById('finalRevenue').textContent = revenue[23].toLocaleString('fr-CA') + '$';
+      document.getElementById('finalProfit').textContent = profit[23].toLocaleString('fr-CA') + '$';
+      document.getElementById('finalSubs').textContent = subs[23].toLocaleString('fr-CA');
     }
 
-    function renderKPIs() {
-      const current = computeQuarter(state.quarters[state.quarterIndex], state.quarterIndex);
-      $('revenueValue').textContent = money(current.revenue);
-      $('expenseValue').textContent = money(current.expense);
-      $('profitValue').textContent = money(current.revenue - current.expense);
-      $('coinsValue').textContent = current.coins.toLocaleString('fr-CA');
-      $('revenueSub').textContent = `Projection ${current.label}`;
-      $('cycleCount').textContent = state.cycle;
-      $('currentQuarterLabel').textContent = current.label;
-      $('growthLabel').textContent = growthLabel(state.growth);
-      $('engineState').textContent = state.running ? 'Actif' : 'En pause';
-      $('autoLabel').textContent = state.running ? 'ON' : 'OFF';
-      $('liveDot').style.background = state.running ? 'var(--green)' : 'var(--red)';
-      $('liveDot').style.boxShadow = state.running ? '0 0 0 6px rgba(34,197,94,.12)' : '0 0 0 6px rgba(239,68,68,.12)';
-      const avg = Math.round(state.contents.reduce((acc, c) => acc + c.score, 0) / state.contents.length);
-      const monetization = Math.min(100, Math.round(((current.revenue - current.expense) / 450) + (state.growth / 3)));
-      $('qualityBar').style.width = avg + '%';
-      $('monetizationBar').style.width = monetization + '%';
-      $('autoProgress').style.width = state.running ? '100%' : '18%';
-      const copy = scenarioCopy(state.growth);
-      $('scenarioTitle').textContent = copy.title;
-      $('scenarioText').textContent = copy.text;
-      $('projectionText').textContent = copy.proj;
-      $('projectionSub').textContent = copy.sub;
+    function initActions() {
+      document.getElementById('tunedBtn').addEventListener('click', () => {
+        tuned += 120;
+        score = Math.min(100, score + 2);
+        coins += monitors[selectedMonitor].reward > 0 ? monitors[selectedMonitor].reward * 4 : 1;
+        currentStatus = score >= 85 ? 'Monte' : 'Actif';
+        updateUI();
+      });
+
+      document.getElementById('submitVersionBtn').addEventListener('click', () => {
+        version += 1;
+        flowPhase = 0;
+        score = Math.min(100, score + 5);
+        coins += 12;
+        currentStatus = 'Nouvelle version déposée';
+        updateUI();
+      });
+
+      document.getElementById('growthTickBtn').addEventListener('click', () => {
+        simState.creatorFree += 12;
+        simState.creatorWeekly += 8;
+        simState.creatorDaily += 3;
+        simState.publicFree += 150;
+        simState.publicPremium += 22;
+        simState.quarterlyWithdrawCreators = Math.max(12, simState.quarterlyWithdrawCreators + 1);
+        computeSimulation();
+      });
+
+      document.getElementById('simulateGrowthBtn').addEventListener('click', simulateGrowth24Months);
     }
 
-    function refreshAll() {
-      renderQuarterCards();
-      renderContentTable();
-      renderLoop();
-      updateCharts();
-      renderKPIs();
+    function startFlowLoop() {
+      setInterval(() => {
+        flowPhase = (flowPhase + 1) % phases.length;
+
+        if (flowPhase === 2) {
+          score = Math.max(45, Math.min(100, score + (Math.random() * 8 - 3)));
+        }
+
+        if (flowPhase === 3) {
+          currentStatus = score >= 80 ? 'Monte' : 'Chute';
+        }
+
+        if (flowPhase === 4 && score < 72) {
+          currentStatus = 'Recyclage';
+        }
+
+        if (flowPhase === 6) {
+          currentStatus = 'Amélioration';
+        }
+
+        if (flowPhase === 7) {
+          currentStatus = score >= 75 ? 'Retour en circulation' : 'À retravailler';
+        }
+
+        updateUI();
+      }, 3500);
     }
 
-    function boostAll() {
-      state.growth = Math.min(180, state.growth + 8);
-      $('growthRange').value = state.growth;
-      evolveContents(4);
-      pushConsole('Montée manuelle appliquée au réseau.');
-      refreshAll();
+    function init() {
+      renderMonitors();
+      renderCreatorPlans();
+      renderPublicPlans();
+      renderCreatorSimulation();
+      renderPublicSimulation();
+      renderMarketScenarios();
+      updateUI();
+      computeSimulation();
+      simulateGrowth24Months();
+      initActions();
+      startFlowLoop();
     }
 
-    function deboostAll() {
-      state.growth = Math.max(70, state.growth - 8);
-      $('growthRange').value = state.growth;
-      evolveContents(-5);
-      pushConsole('Dégression manuelle appliquée au réseau.');
-      refreshAll();
-    }
-
-    function pulseV14() {
-      state.growth = Math.min(180, state.growth + 12);
-      $('growthRange').value = state.growth;
-      state.activeLoop = (state.activeLoop + 1) % state.loops.length;
-      evolveContents(6);
-      pushConsole('Impulsion v14 : rotation forcée de boucle + accélération réseau.');
-      refreshAll();
-    }
-
-    window.manualBoost = function(title) {
-      state.contents = state.contents.map(item => item.title === title ? { ...item, score: Math.min(98, item.score + 7) } : item);
-      evolveContents(2);
-      pushConsole(`Montée ciblée sur : ${title}`);
-      refreshAll();
-    }
-
-    window.manualDeboost = function(title) {
-      state.contents = state.contents.map(item => item.title === title ? { ...item, score: Math.max(35, item.score - 8) } : item);
-      evolveContents(-2);
-      pushConsole(`Dégression ciblée sur : ${title}`);
-      refreshAll();
-    }
-
-    function tick() {
-      if (!state.running) return;
-      state.cycle += 1;
-      if (state.cycle % 3 === 0) state.quarterIndex = (state.quarterIndex + 1) % state.quarters.length;
-      if (state.cycle % 2 === 0) state.activeLoop = (state.activeLoop + 1) % state.loops.length;
-      evolveContents(0);
-      pushConsole(`Cycle ${state.cycle} : analyse des contenus, réaffectation des statuts et recalcul des projections.`);
-      refreshAll();
-    }
-
-    $('playBtn').addEventListener('click', () => { state.running = true; pushConsole('Moteur relancé.'); refreshAll(); });
-    $('pauseBtn').addEventListener('click', () => { state.running = false; pushConsole('Moteur mis en pause.'); refreshAll(); });
-    $('boostBtn').addEventListener('click', boostAll);
-    $('deboostBtn').addEventListener('click', deboostAll);
-    $('pulseBtn').addEventListener('click', pulseV14);
-    $('growthRange').addEventListener('input', (e) => { state.growth = Number(e.target.value); pushConsole(`Croissance réglée manuellement à ${state.growth}%.`); refreshAll(); });
-
-    pushConsole('Fusion v17 + v14 initialisée.');
-    refreshAll();
-    setInterval(tick, 1600);
+    init();
   </script>
 </body>
 </html>
