@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meyden Monitor v17</title>
+  <title>Meyden Monitor v17 Fusion 14</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -26,15 +26,14 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; font-family: Inter, Arial, Helvetica, sans-serif; background: radial-gradient(circle at top, #18212e 0%, #0b0f14 45%, #080b10 100%); color: var(--text); }
     body { min-height: 100vh; }
-
     .wrap { width: min(1440px, calc(100% - 32px)); margin: 20px auto 60px; }
+
     .hero {
       display: grid;
       grid-template-columns: 1.35fr .85fr;
       gap: 18px;
       margin-bottom: 18px;
     }
-
     .card {
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
       border: 1px solid var(--line);
@@ -42,20 +41,18 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
-
     .hero-main { padding: 28px; position: relative; overflow: hidden; }
     .hero-main::after {
       content: "";
       position: absolute;
-      width: 420px;
-      height: 420px;
+      width: 460px;
+      height: 460px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(255,122,0,.22), rgba(255,122,0,0));
-      top: -120px;
-      right: -120px;
+      top: -140px;
+      right: -140px;
       pointer-events: none;
     }
-
     .topline {
       display: inline-flex;
       gap: 10px;
@@ -68,21 +65,17 @@
       font-size: 13px;
       margin-bottom: 14px;
     }
-
     h1 { font-size: clamp(32px, 4vw, 56px); line-height: .95; margin: 0 0 14px; letter-spacing: -.04em; }
     .accent { color: var(--orange); }
     .lead { color: var(--muted); font-size: 16px; line-height: 1.6; max-width: 900px; }
-
     .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-    button, .pill {
-      border: 0; cursor: pointer; color: white; font-weight: 700;
-      border-radius: 14px; padding: 14px 18px; transition: .2s ease;
-    }
+    button, .pill { border: 0; cursor: pointer; color: white; font-weight: 700; border-radius: 14px; padding: 14px 18px; transition: .2s ease; }
     button:hover { transform: translateY(-1px); }
     .primary { background: linear-gradient(135deg, var(--orange), #ff5a00); }
     .secondary { background: #1a2431; border: 1px solid var(--line); }
     .success { background: linear-gradient(135deg, #1f9d57, #22c55e); }
     .danger { background: linear-gradient(135deg, #d93b3b, #ef4444); }
+    .warning { background: linear-gradient(135deg, #d48a00, #f59e0b); }
 
     .hero-side { padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
     .hero-side h3 { margin: 0 0 10px; font-size: 18px; }
@@ -105,14 +98,13 @@
     .status strong { display: block; font-size: 15px; }
 
     .grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; margin-bottom: 18px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 18px; }
     .section { padding: 22px; }
     .section h2 { margin: 0 0 8px; font-size: 24px; letter-spacing: -.03em; }
     .section p { color: var(--muted); margin: 0 0 18px; }
 
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-    .stat {
-      padding: 16px; border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); border: 1px solid var(--line);
-    }
+    .stat { padding: 16px; border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); border: 1px solid var(--line); }
     .stat .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
     .stat .value { font-size: 28px; font-weight: 800; margin-top: 8px; }
     .stat .sub { color: var(--muted); font-size: 13px; margin-top: 6px; }
@@ -120,7 +112,7 @@
     .content-table { display: grid; gap: 12px; }
     .content-row {
       display: grid;
-      grid-template-columns: 1.1fr .85fr .7fr .55fr .65fr;
+      grid-template-columns: 1.1fr .85fr .7fr .55fr .75fr;
       gap: 12px;
       align-items: center;
       padding: 14px;
@@ -136,68 +128,59 @@
       min-width: 88px; padding: 8px 12px; border-radius: 999px; font-weight: 700;
       background: rgba(56,189,248,.12); color: var(--blue); border: 1px solid rgba(56,189,248,.25);
     }
-    .status-badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 120px; padding: 8px 12px; border-radius: 999px; font-weight: 800; font-size: 12px; letter-spacing: .04em; text-transform: uppercase;
-    }
+    .status-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 120px; padding: 8px 12px; border-radius: 999px; font-weight: 800; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
     .tuned-on { background: rgba(34,197,94,.12); color: #6ee7a2; border: 1px solid rgba(34,197,94,.22); }
     .recyclage { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.22); }
     .boosting { background: rgba(245,158,11,.12); color: #fcd34d; border: 1px solid rgba(245,158,11,.22); }
-
     .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-    .small-btn {
-      padding: 10px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; background: #192434; border: 1px solid var(--line);
-    }
+    .small-btn { padding: 10px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; background: #192434; border: 1px solid var(--line); }
 
     .kpi-list { display: grid; gap: 12px; }
-    .kpi-item {
-      padding: 16px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid var(--line);
-      display: flex; justify-content: space-between; align-items: center; gap: 16px;
-    }
+    .kpi-item { padding: 16px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
     .kpi-item strong { font-size: 18px; }
     .progress { width: 160px; height: 12px; border-radius: 999px; background: #1d2734; overflow: hidden; border: 1px solid var(--line); }
     .progress span { display: block; height: 100%; background: linear-gradient(90deg, var(--orange), #ffb066); }
-
     .chart-wrap { position: relative; height: 360px; }
     .chart-wrap.tall { height: 420px; }
 
-    .quarter-cards {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 18px;
-    }
-    .quarter {
-      padding: 16px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid var(--line);
-    }
+    .quarter-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 18px; }
+    .quarter { padding: 16px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid var(--line); }
     .quarter small { color: var(--muted); }
     .quarter strong { display: block; margin-top: 8px; font-size: 20px; }
 
-    .footer-note {
-      margin-top: 18px; padding: 18px; border-radius: 18px; background: rgba(255,122,0,.06); border: 1px solid rgba(255,122,0,.18); color: #ffd4af;
-      line-height: 1.6;
-    }
+    .footer-note { margin-top: 18px; padding: 18px; border-radius: 18px; background: rgba(255,122,0,.06); border: 1px solid rgba(255,122,0,.18); color: #ffd4af; line-height: 1.6; }
+    input[type="range"] { width: 100%; accent-color: var(--orange); }
+    .scenario { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 18px; }
 
-    input[type="range"] {
-      width: 100%; accent-color: var(--orange);
-    }
+    .loop-card { padding: 18px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid var(--line); }
+    .loop-card h3, .panel-title { margin: 0 0 10px; font-size: 18px; }
+    .loop-list { display: grid; gap: 10px; }
+    .loop-item { padding: 12px; border-radius: 14px; background: rgba(255,255,255,.03); border: 1px solid var(--line); display: flex; justify-content: space-between; gap: 10px; }
+    .loop-item span:last-child { color: var(--orange-2); font-weight: 700; }
 
-    .scenario {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 18px;
-    }
+    .console { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.5; background: #091019; border: 1px solid var(--line); border-radius: 16px; padding: 14px; height: 260px; overflow: auto; color: #cde2ff; }
+    .console-line { margin-bottom: 6px; }
+
+    .timeline { display: grid; gap: 10px; }
+    .timeline-row { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: center; }
+    .timeline-row .time { color: var(--orange-2); font-weight: 800; }
+    .bar-shell { height: 12px; border-radius: 999px; overflow: hidden; background: #182331; border: 1px solid var(--line); }
+    .bar-shell span { display: block; height: 100%; background: linear-gradient(90deg, var(--orange), #ffb066); }
 
     @media (max-width: 1180px) {
-      .hero, .grid { grid-template-columns: 1fr; }
+      .hero, .grid, .grid-3 { grid-template-columns: 1fr; }
       .toolbar { grid-template-columns: 1fr 1fr 1fr; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       .content-row { grid-template-columns: 1fr; }
       .quarter-cards { grid-template-columns: repeat(2, 1fr); }
       .scenario { grid-template-columns: 1fr; }
     }
-
     @media (max-width: 720px) {
       .wrap { width: min(100% - 20px, 1440px); }
-      .toolbar { grid-template-columns: 1fr; }
-      .stats, .mini-grid, .quarter-cards { grid-template-columns: 1fr; }
+      .toolbar, .stats, .mini-grid, .quarter-cards { grid-template-columns: 1fr; }
       .hero-main, .hero-side, .section { padding: 18px; }
       h1 { font-size: 34px; }
+      .timeline-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -205,199 +188,109 @@
   <div class="wrap">
     <section class="hero">
       <div class="card hero-main">
-        <div class="topline">Meyden Monitor • Version 17 • Simulation HTML GitHub x Vercel</div>
-        <h1><span class="accent">Meyden</span> Monitor v17</h1>
+        <div class="topline">Meyden Monitor • v17 Fusion intégrale avec logique v14</div>
+        <h1><span class="accent">Meyden</span> Monitor v17 + v14</h1>
         <div class="lead">
-          Tableau de bord stratégique qui simule une chaîne de diffusion intelligente sur 2 ans.
-          Le contenu continue d’évoluer automatiquement, les revenus et dépenses se recalculent en direct,
-          et les vidéos sont classées entre <strong>Tuned On</strong>, <strong>Boosting</strong> et <strong>Recyclage</strong>.
+          Cette fusion garde le visuel premium de la v17, mais récupère l’intégralité de la logique dynamique de la v14 : montée, dégression, boucle de diffusion, rotation automatique, simulation des trimestres, lecture opérationnelle et console vivante du moteur.
         </div>
         <div class="hero-actions">
           <button class="primary" id="playBtn">▶ Lancer l’évolution</button>
           <button class="secondary" id="pauseBtn">⏸ Pause</button>
           <button class="success" id="boostBtn">⬆ Monter</button>
           <button class="danger" id="deboostBtn">⬇ Dégréser</button>
+          <button class="warning" id="pulseBtn">⚡ Impulsion v14</button>
         </div>
       </div>
 
       <aside class="card hero-side">
         <div>
-          <h3>Commandes stratégiques</h3>
-          <p class="muted">Le moteur v17 garde la dynamique automatique tout en ajoutant les boutons de montée et de baisse pour démontrer la simulation en temps réel.</p>
+          <h3>Fusion intégrale</h3>
+          <p class="muted">Le moteur garde maintenant la présentation haute gamme de la v17 tout en retrouvant la sensation démonstrative et les commandes fortes de la v14.</p>
         </div>
         <div class="mini-grid">
-          <div class="mini">
-            <label>Cycle d’analyse</label>
-            <strong>2 h</strong>
-            <small>Réévaluation continue</small>
-          </div>
-          <div class="mini">
-            <label>Fenêtre active</label>
-            <strong>72 h</strong>
-            <small>Contenus les plus récents</small>
-          </div>
-          <div class="mini">
-            <label>Lecture annuelle</label>
-            <strong>8 trimestres</strong>
-            <small>Projection 24 mois</small>
-          </div>
-          <div class="mini">
-            <label>Mécanique</label>
-            <strong>Auto + Manuel</strong>
-            <small>Simulation pilotable</small>
-          </div>
+          <div class="mini"><label>Analyse</label><strong>2 h</strong><small>Cycle intelligent</small></div>
+          <div class="mini"><label>Fenêtre</label><strong>72 h</strong><small>Contenu frais en priorité</small></div>
+          <div class="mini"><label>Projection</label><strong>24 mois</strong><small>8 trimestres suivis</small></div>
+          <div class="mini"><label>Mode</label><strong>Auto + Manuel</strong><small>Démo pilotable en direct</small></div>
         </div>
       </aside>
     </section>
 
     <section class="card toolbar">
-      <div class="status">
-        <div class="dot" id="liveDot"></div>
-        <div>
-          <span>Moteur</span>
-          <strong id="engineState">Actif</strong>
-        </div>
-      </div>
-      <div class="status">
-        <div>
-          <span>Niveau d’accélération</span>
-          <strong id="growthLabel">Standard</strong>
-        </div>
-      </div>
-      <div class="status">
-        <div>
-          <span>Cycle simulé</span>
-          <strong id="cycleCount">0</strong>
-        </div>
-      </div>
-      <div class="status">
-        <div>
-          <span>Trimestre visible</span>
-          <strong id="currentQuarterLabel">Q1 2026</strong>
-        </div>
-      </div>
-      <div class="status">
-        <div>
-          <span>Durée animation</span>
-          <strong id="speedLabel">1.0x</strong>
-        </div>
-      </div>
-      <div class="status">
-        <div>
-          <span>Auto-évolution</span>
-          <strong id="autoLabel">ON</strong>
-        </div>
-      </div>
+      <div class="status"><div class="dot" id="liveDot"></div><div><span>Moteur</span><strong id="engineState">Actif</strong></div></div>
+      <div class="status"><div><span>Niveau d’accélération</span><strong id="growthLabel">Standard</strong></div></div>
+      <div class="status"><div><span>Cycle simulé</span><strong id="cycleCount">0</strong></div></div>
+      <div class="status"><div><span>Trimestre visible</span><strong id="currentQuarterLabel">Q1 2026</strong></div></div>
+      <div class="status"><div><span>Rotation de boucle</span><strong id="loopLabel">Bloc 1</strong></div></div>
+      <div class="status"><div><span>Auto-évolution</span><strong id="autoLabel">ON</strong></div></div>
     </section>
 
     <section class="grid">
       <div class="card section">
         <h2>Performance globale</h2>
-        <p>Vue principale des revenus, dépenses, actifs, contenus et score moyen du réseau.</p>
+        <p>Revenus, dépenses, profit, coins et trajectoire sur 8 trimestres.</p>
         <div class="stats">
-          <div class="stat">
-            <div class="label">Revenus projetés</div>
-            <div class="value" id="revenueValue">0 $</div>
-            <div class="sub" id="revenueSub">Projection trimestrielle</div>
-          </div>
-          <div class="stat">
-            <div class="label">Dépenses projetées</div>
-            <div class="value" id="expenseValue">0 $</div>
-            <div class="sub">Production, diffusion, optimisation</div>
-          </div>
-          <div class="stat">
-            <div class="label">Profit net</div>
-            <div class="value" id="profitValue">0 $</div>
-            <div class="sub">Calcul en direct</div>
-          </div>
-          <div class="stat">
-            <div class="label">Meyden Coins simulés</div>
-            <div class="value" id="coinsValue">0</div>
-            <div class="sub">Récompenses réseau</div>
-          </div>
+          <div class="stat"><div class="label">Revenus projetés</div><div class="value" id="revenueValue">0 $</div><div class="sub" id="revenueSub">Projection trimestrielle</div></div>
+          <div class="stat"><div class="label">Dépenses projetées</div><div class="value" id="expenseValue">0 $</div><div class="sub">Production, diffusion, optimisation</div></div>
+          <div class="stat"><div class="label">Profit net</div><div class="value" id="profitValue">0 $</div><div class="sub">Calcul en direct</div></div>
+          <div class="stat"><div class="label">Meyden Coins simulés</div><div class="value" id="coinsValue">0</div><div class="sub">Récompenses réseau</div></div>
         </div>
-
-        <div class="chart-wrap tall">
-          <canvas id="financeChart"></canvas>
-        </div>
-
+        <div class="chart-wrap tall"><canvas id="financeChart"></canvas></div>
         <div class="quarter-cards" id="quarterCards"></div>
       </div>
 
       <div class="card section">
         <h2>Réglage du moteur</h2>
-        <p>Tu peux pousser la machine vers le haut ou la ralentir pour montrer différents scénarios.</p>
-
+        <p>Contrôle de croissance, stabilité, monétisation et comportement global.</p>
         <div class="kpi-list">
-          <div class="kpi-item">
-            <div>
-              <strong>Intensité de croissance</strong>
-              <div class="muted">Influence la portée, la monétisation et la rapidité de montée.</div>
-            </div>
-            <div style="width: 180px;">
-              <input id="growthRange" type="range" min="70" max="170" step="1" value="100" />
-            </div>
-          </div>
-
-          <div class="kpi-item">
-            <div>
-              <strong>Automatisation active</strong>
-              <div class="muted">Le contenu continue d’évoluer sans intervention.</div>
-            </div>
-            <div class="progress"><span id="autoProgress" style="width: 100%;"></span></div>
-          </div>
-
-          <div class="kpi-item">
-            <div>
-              <strong>Qualité moyenne du réseau</strong>
-              <div class="muted">Plus elle monte, plus la majorité des contenus basculent Tuned On.</div>
-            </div>
-            <div class="progress"><span id="qualityBar" style="width: 58%;"></span></div>
-          </div>
-
-          <div class="kpi-item">
-            <div>
-              <strong>Puissance monétisation</strong>
-              <div class="muted">Ajustée automatiquement selon la performance globale.</div>
-            </div>
-            <div class="progress"><span id="monetizationBar" style="width: 48%;"></span></div>
-          </div>
+          <div class="kpi-item"><div><strong>Intensité de croissance</strong><div class="muted">Influence la portée, la monétisation et la vitesse de montée.</div></div><div style="width:180px;"><input id="growthRange" type="range" min="70" max="180" step="1" value="100" /></div></div>
+          <div class="kpi-item"><div><strong>Automatisation active</strong><div class="muted">La machine continue même sans intervention.</div></div><div class="progress"><span id="autoProgress" style="width:100%;"></span></div></div>
+          <div class="kpi-item"><div><strong>Qualité moyenne du réseau</strong><div class="muted">Plus elle monte, plus les contenus deviennent Tuned On.</div></div><div class="progress"><span id="qualityBar" style="width:58%;"></span></div></div>
+          <div class="kpi-item"><div><strong>Puissance monétisation</strong><div class="muted">Ajustée automatiquement selon la performance.</div></div><div class="progress"><span id="monetizationBar" style="width:48%;"></span></div></div>
         </div>
-
         <div class="scenario">
-          <div class="mini">
-            <label>Mode actuel</label>
-            <strong id="scenarioTitle">Équilibre intelligent</strong>
-            <small id="scenarioText">Croissance régulière, dépenses contrôlées, amélioration organique.</small>
-          </div>
-          <div class="mini">
-            <label>Projection fin de cycle</label>
-            <strong id="projectionText">Montée saine sur 24 mois</strong>
-            <small id="projectionSub">Le moteur garde une stabilité crédible pour présentation.</small>
-          </div>
+          <div class="mini"><label>Mode actuel</label><strong id="scenarioTitle">Équilibre intelligent</strong><small id="scenarioText">Croissance régulière, dépenses contrôlées, amélioration organique.</small></div>
+          <div class="mini"><label>Projection fin de cycle</label><strong id="projectionText">Montée saine sur 24 mois</strong><small id="projectionSub">Lecture crédible pour présentation.</small></div>
         </div>
-
         <div class="footer-note">
-          Conseil stratégique : la force de cette v17 n’est pas juste visuelle. Elle explique clairement le système Meyden,
-          montre la logique d’analyse continue et rend le modèle vendable. Le vrai danger serait de surcharger l’interface avec trop de chiffres inutiles.
-          Ici, la lecture reste claire, premium et démonstrative.
+          Là on est plus proche de ce que tu voulais réellement : une machine qui a du style, mais qui a aussi du comportement. La v14 seule était forte en sensation. La v17 seule était forte en présentation. La fusion des deux est plus vendable.
         </div>
+      </div>
+    </section>
+
+    <section class="grid-3">
+      <div class="card section">
+        <h2>Loop de diffusion v14</h2>
+        <p>Lecture séquentielle de la chaîne Meyden, avec rotation continue.</p>
+        <div class="loop-card">
+          <h3 id="activeLoopTitle">Bloc 1 — Découverte</h3>
+          <div class="loop-list" id="loopList"></div>
+        </div>
+      </div>
+
+      <div class="card section">
+        <h2>Timeline d’une boucle</h2>
+        <p>Répartition simple pour montrer comment le contenu tourne dans le temps.</p>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <div class="card section">
+        <h2>Console moteur</h2>
+        <p>Vision démonstrative inspirée de la v14 pour rendre le système vivant.</p>
+        <div class="console" id="consoleBox"></div>
       </div>
     </section>
 
     <section class="grid">
       <div class="card section">
         <h2>Évolution automatique du contenu</h2>
-        <p>Les contenus sont analysés, reclassés et monétisés à chaque cycle.</p>
+        <p>Les contenus montent, baissent, changent de statut et génèrent de la valeur.</p>
         <div class="content-table" id="contentTable"></div>
       </div>
-
       <div class="card section">
         <h2>Répartition des contenus</h2>
         <p>Vue instantanée du nombre de contenus Tuned On, Boosting et Recyclage.</p>
-        <div class="chart-wrap">
-          <canvas id="contentChart"></canvas>
-        </div>
+        <div class="chart-wrap"><canvas id="contentChart"></canvas></div>
       </div>
     </section>
   </div>
@@ -407,8 +300,9 @@
       running: true,
       cycle: 0,
       quarterIndex: 0,
-      speed: 1,
       growth: 100,
+      activeLoop: 0,
+      console: [],
       quarters: [
         { label: 'Q1 2026', revenue: 18000, expense: 9500, coins: 3200 },
         { label: 'Q2 2026', revenue: 22000, expense: 11200, coins: 4700 },
@@ -418,6 +312,12 @@
         { label: 'Q2 2027', revenue: 43000, expense: 19100, coins: 10800 },
         { label: 'Q3 2027', revenue: 49500, expense: 21800, coins: 12600 },
         { label: 'Q4 2027', revenue: 57000, expense: 24500, coins: 14800 }
+      ],
+      loops: [
+        { title: 'Bloc 1 — Découverte', items: ['Nouveau clip incubé', 'Teaser show', 'Capsule identité', 'Intro artiste'], weights: [22, 28, 18, 32] },
+        { title: 'Bloc 2 — Performance', items: ['Live session', 'Aftermovie', 'Best moments', 'Preuve de traction'], weights: [30, 24, 21, 25] },
+        { title: 'Bloc 3 — Monétisation', items: ['Contenu premium', 'Offre incubation', 'Appel à l’action', 'Meyden Coins'], weights: [20, 30, 26, 24] },
+        { title: 'Bloc 4 — Recyclage intelligent', items: ['Contenu à optimiser', 'Version recut', 'Relance visuelle', 'Nouvelle diffusion'], weights: [24, 23, 21, 32] }
       ],
       contents: [
         { title: 'Live Cabaret des Curiosités', channel: 'Scène Meyden', score: 82, status: 'Tuned On', value: 1700 },
@@ -429,46 +329,23 @@
       ]
     };
 
-    const $ = (id) => document.getElementById(id);
-    const money = (n) => new Intl.NumberFormat('fr-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }).format(n);
+    const $ = id => document.getElementById(id);
+    const money = n => new Intl.NumberFormat('fr-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }).format(n);
 
-    const financeCtx = $('financeChart').getContext('2d');
-    const contentCtx = $('contentChart').getContext('2d');
-
-    const financeChart = new Chart(financeCtx, {
+    const financeChart = new Chart($('financeChart').getContext('2d'), {
       type: 'line',
       data: {
         labels: state.quarters.map(q => q.label),
         datasets: [
-          {
-            label: 'Revenus',
-            data: state.quarters.map(q => q.revenue),
-            borderWidth: 3,
-            tension: .35,
-            fill: false
-          },
-          {
-            label: 'Dépenses',
-            data: state.quarters.map(q => q.expense),
-            borderWidth: 3,
-            tension: .35,
-            fill: false
-          },
-          {
-            label: 'Profit net',
-            data: state.quarters.map(q => q.revenue - q.expense),
-            borderWidth: 3,
-            tension: .35,
-            fill: false
-          }
+          { label: 'Revenus', data: [], borderWidth: 3, tension: .35, fill: false },
+          { label: 'Dépenses', data: [], borderWidth: 3, tension: .35, fill: false },
+          { label: 'Profit net', data: [], borderWidth: 3, tension: .35, fill: false }
         ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: { labels: { color: '#f5f7fa' } }
-        },
+        plugins: { legend: { labels: { color: '#f5f7fa' } } },
         scales: {
           x: { ticks: { color: '#9fb0c3' }, grid: { color: 'rgba(255,255,255,.06)' } },
           y: { ticks: { color: '#9fb0c3' }, grid: { color: 'rgba(255,255,255,.06)' } }
@@ -476,67 +353,39 @@
       }
     });
 
-    const contentChart = new Chart(contentCtx, {
+    const contentChart = new Chart($('contentChart').getContext('2d'), {
       type: 'doughnut',
-      data: {
-        labels: ['Tuned On', 'Boosting', 'Recyclage'],
-        datasets: [{ data: [2, 3, 1], borderWidth: 0 }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { labels: { color: '#f5f7fa' } }
-        }
-      }
+      data: { labels: ['Tuned On', 'Boosting', 'Recyclage'], datasets: [{ data: [2, 3, 1], borderWidth: 0 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#f5f7fa' } } } }
     });
+
+    function pushConsole(text) {
+      const time = new Date().toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      state.console.unshift(`[${time}] ${text}`);
+      state.console = state.console.slice(0, 18);
+      $('consoleBox').innerHTML = state.console.map(line => `<div class="console-line">${line}</div>`).join('');
+    }
 
     function growthLabel(value) {
       if (value < 90) return 'Prudent';
       if (value < 110) return 'Standard';
-      if (value < 135) return 'Offensif';
+      if (value < 140) return 'Offensif';
       return 'Hyper croissance';
     }
 
     function scenarioCopy(value) {
-      if (value < 90) {
-        return {
-          title: 'Mode consolidation',
-          text: 'Dépenses serrées, progression plus lente, stabilité prioritaire.',
-          proj: 'Croissance plus sobre mais très crédible',
-          sub: 'Parfait pour montrer une gestion prudente du modèle.'
-        };
-      }
-      if (value < 110) {
-        return {
-          title: 'Équilibre intelligent',
-          text: 'Croissance régulière, dépenses contrôlées, amélioration organique.',
-          proj: 'Montée saine sur 24 mois',
-          sub: 'Le moteur garde une stabilité crédible pour présentation.'
-        };
-      }
-      if (value < 135) {
-        return {
-          title: 'Mode expansion',
-          text: 'Le réseau pousse plus fort sur la diffusion et la conversion.',
-          proj: 'Traction visible et monétisation accélérée',
-          sub: 'Bon mode pour vendre le potentiel commercial.'
-        };
-      }
-      return {
-        title: 'Mode conquête',
-        text: 'Projection agressive qui maximise portée, revenus et visibilité.',
-        proj: 'Hausse rapide à fort impact visuel',
-        sub: 'À utiliser pour impressionner, mais à défendre avec méthode.'
-      };
+      if (value < 90) return { title: 'Mode consolidation', text: 'Dépenses serrées, progression plus lente, stabilité prioritaire.', proj: 'Croissance plus sobre mais crédible', sub: 'Idéal pour un discours prudent.' };
+      if (value < 110) return { title: 'Équilibre intelligent', text: 'Croissance régulière, dépenses contrôlées, amélioration organique.', proj: 'Montée saine sur 24 mois', sub: 'Lecture crédible pour présentation.' };
+      if (value < 140) return { title: 'Mode expansion', text: 'Le réseau pousse plus fort sur la diffusion et la conversion.', proj: 'Traction visible et monétisation accélérée', sub: 'Bon mode pour vendre le potentiel.' };
+      return { title: 'Mode conquête', text: 'Projection agressive qui maximise portée, revenus et visibilité.', proj: 'Hausse rapide à fort impact', sub: 'Fort visuel, mais à défendre méthodiquement.' };
     }
 
     function computeQuarter(base, index) {
       const factor = state.growth / 100;
-      const autoBonus = state.running ? 1 + (state.cycle * 0.0035) : 1 + (state.cycle * 0.0015);
-      const quarterMomentum = 1 + (index * 0.045);
-      const revenue = Math.round(base.revenue * factor * autoBonus * quarterMomentum);
-      const expense = Math.round(base.expense * (0.86 + factor * 0.22) * (1 + index * 0.03));
+      const autoBonus = state.running ? 1 + (state.cycle * 0.0035) : 1 + (state.cycle * 0.0014);
+      const momentum = 1 + (index * 0.045);
+      const revenue = Math.round(base.revenue * factor * autoBonus * momentum);
+      const expense = Math.round(base.expense * (0.86 + factor * 0.24) * (1 + index * 0.03));
       const coins = Math.round(base.coins * factor * (state.running ? 1.08 : 1.02));
       return { ...base, revenue, expense, coins };
     }
@@ -557,13 +406,7 @@
     function renderQuarterCards() {
       $('quarterCards').innerHTML = state.quarters.map((q, i) => {
         const current = computeQuarter(q, i);
-        return `
-          <div class="quarter">
-            <small>${current.label}</small>
-            <strong>${money(current.revenue - current.expense)}</strong>
-            <div class="muted">Profit net</div>
-          </div>
-        `;
+        return `<div class="quarter"><small>${current.label}</small><strong>${money(current.revenue - current.expense)}</strong><div class="muted">Profit net</div></div>`;
       }).join('');
     }
 
@@ -572,10 +415,7 @@
         const badgeClass = item.status === 'Tuned On' ? 'tuned-on' : item.status === 'Recyclage' ? 'recyclage' : 'boosting';
         return `
           <div class="content-row">
-            <div class="title-cell">
-              <strong>${item.title}</strong>
-              <small>${item.channel}</small>
-            </div>
+            <div class="title-cell"><strong>${item.title}</strong><small>${item.channel}</small></div>
             <div><span class="score-badge">Score ${item.score}</span></div>
             <div><span class="status-badge ${badgeClass}">${item.status}</span></div>
             <div><strong>${money(item.value)}</strong></div>
@@ -586,17 +426,20 @@
           </div>
         `;
       }).join('');
+      $('contentTable').innerHTML = `<div class="content-row header"><div>Contenu</div><div>Performance</div><div>Statut</div><div>Valeur</div><div>Actions</div></div>${rows}`;
+    }
 
-      $('contentTable').innerHTML = `
-        <div class="content-row header">
-          <div>Contenu</div>
-          <div>Performance</div>
-          <div>Statut</div>
-          <div>Valeur</div>
-          <div>Actions</div>
+    function renderLoop() {
+      const loop = state.loops[state.activeLoop];
+      $('activeLoopTitle').textContent = loop.title;
+      $('loopLabel').textContent = `Bloc ${state.activeLoop + 1}`;
+      $('loopList').innerHTML = loop.items.map((item, i) => `<div class="loop-item"><span>${item}</span><span>${loop.weights[i]}%</span></div>`).join('');
+      $('timeline').innerHTML = loop.items.map((item, i) => `
+        <div class="timeline-row">
+          <div class="time">Segment ${i + 1}</div>
+          <div class="bar-shell"><span style="width:${loop.weights[i]}%"></span></div>
         </div>
-        ${rows}
-      `;
+      `).join('');
     }
 
     function updateCharts() {
@@ -605,7 +448,6 @@
       financeChart.data.datasets[1].data = computed.map(q => q.expense);
       financeChart.data.datasets[2].data = computed.map(q => q.revenue - q.expense);
       financeChart.update();
-
       const tuned = state.contents.filter(c => c.status === 'Tuned On').length;
       const boosting = state.contents.filter(c => c.status === 'Boosting').length;
       const recyclage = state.contents.filter(c => c.status === 'Recyclage').length;
@@ -623,18 +465,15 @@
       $('cycleCount').textContent = state.cycle;
       $('currentQuarterLabel').textContent = current.label;
       $('growthLabel').textContent = growthLabel(state.growth);
-      $('speedLabel').textContent = state.speed.toFixed(1) + 'x';
       $('engineState').textContent = state.running ? 'Actif' : 'En pause';
       $('autoLabel').textContent = state.running ? 'ON' : 'OFF';
       $('liveDot').style.background = state.running ? 'var(--green)' : 'var(--red)';
       $('liveDot').style.boxShadow = state.running ? '0 0 0 6px rgba(34,197,94,.12)' : '0 0 0 6px rgba(239,68,68,.12)';
-
       const avg = Math.round(state.contents.reduce((acc, c) => acc + c.score, 0) / state.contents.length);
       const monetization = Math.min(100, Math.round(((current.revenue - current.expense) / 450) + (state.growth / 3)));
       $('qualityBar').style.width = avg + '%';
       $('monetizationBar').style.width = monetization + '%';
       $('autoProgress').style.width = state.running ? '100%' : '18%';
-
       const copy = scenarioCopy(state.growth);
       $('scenarioTitle').textContent = copy.title;
       $('scenarioText').textContent = copy.text;
@@ -642,24 +481,19 @@
       $('projectionSub').textContent = copy.sub;
     }
 
-    function tick() {
-      if (state.running) {
-        state.cycle += 1;
-        if (state.cycle % 3 === 0) {
-          state.quarterIndex = (state.quarterIndex + 1) % state.quarters.length;
-        }
-        evolveContents(0);
-        renderContentTable();
-        renderQuarterCards();
-        updateCharts();
-        renderKPIs();
-      }
+    function refreshAll() {
+      renderQuarterCards();
+      renderContentTable();
+      renderLoop();
+      updateCharts();
+      renderKPIs();
     }
 
     function boostAll() {
-      state.growth = Math.min(170, state.growth + 8);
+      state.growth = Math.min(180, state.growth + 8);
       $('growthRange').value = state.growth;
       evolveContents(4);
+      pushConsole('Montée manuelle appliquée au réseau.');
       refreshAll();
     }
 
@@ -667,52 +501,51 @@
       state.growth = Math.max(70, state.growth - 8);
       $('growthRange').value = state.growth;
       evolveContents(-5);
+      pushConsole('Dégression manuelle appliquée au réseau.');
       refreshAll();
     }
 
-    function refreshAll() {
-      renderContentTable();
-      renderQuarterCards();
-      updateCharts();
-      renderKPIs();
+    function pulseV14() {
+      state.growth = Math.min(180, state.growth + 12);
+      $('growthRange').value = state.growth;
+      state.activeLoop = (state.activeLoop + 1) % state.loops.length;
+      evolveContents(6);
+      pushConsole('Impulsion v14 : rotation forcée de boucle + accélération réseau.');
+      refreshAll();
     }
 
     window.manualBoost = function(title) {
-      state.contents = state.contents.map(item => item.title === title
-        ? { ...item, score: Math.min(98, item.score + 7) }
-        : item
-      );
+      state.contents = state.contents.map(item => item.title === title ? { ...item, score: Math.min(98, item.score + 7) } : item);
       evolveContents(2);
+      pushConsole(`Montée ciblée sur : ${title}`);
       refreshAll();
     }
 
     window.manualDeboost = function(title) {
-      state.contents = state.contents.map(item => item.title === title
-        ? { ...item, score: Math.max(35, item.score - 8) }
-        : item
-      );
+      state.contents = state.contents.map(item => item.title === title ? { ...item, score: Math.max(35, item.score - 8) } : item);
       evolveContents(-2);
+      pushConsole(`Dégression ciblée sur : ${title}`);
       refreshAll();
     }
 
-    $('playBtn').addEventListener('click', () => {
-      state.running = true;
+    function tick() {
+      if (!state.running) return;
+      state.cycle += 1;
+      if (state.cycle % 3 === 0) state.quarterIndex = (state.quarterIndex + 1) % state.quarters.length;
+      if (state.cycle % 2 === 0) state.activeLoop = (state.activeLoop + 1) % state.loops.length;
+      evolveContents(0);
+      pushConsole(`Cycle ${state.cycle} : analyse des contenus, réaffectation des statuts et recalcul des projections.`);
       refreshAll();
-    });
+    }
 
-    $('pauseBtn').addEventListener('click', () => {
-      state.running = false;
-      refreshAll();
-    });
-
+    $('playBtn').addEventListener('click', () => { state.running = true; pushConsole('Moteur relancé.'); refreshAll(); });
+    $('pauseBtn').addEventListener('click', () => { state.running = false; pushConsole('Moteur mis en pause.'); refreshAll(); });
     $('boostBtn').addEventListener('click', boostAll);
     $('deboostBtn').addEventListener('click', deboostAll);
+    $('pulseBtn').addEventListener('click', pulseV14);
+    $('growthRange').addEventListener('input', (e) => { state.growth = Number(e.target.value); pushConsole(`Croissance réglée manuellement à ${state.growth}%.`); refreshAll(); });
 
-    $('growthRange').addEventListener('input', (e) => {
-      state.growth = Number(e.target.value);
-      refreshAll();
-    });
-
+    pushConsole('Fusion v17 + v14 initialisée.');
     refreshAll();
     setInterval(tick, 1600);
   </script>
