@@ -3,282 +3,526 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meyden Monitor — Version 14.75</title>
+  <title>Meyden Monitor — Version 15</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          boxShadow: {
+            glow: "0 0 0 1px rgba(249,115,22,0.25), 0 0 40px rgba(249,115,22,0.12)",
+          },
+          backgroundImage: {
+            grid: "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body class="bg-black text-white min-h-screen">
-  <div class="max-w-7xl mx-auto px-6 py-8">
+<body class="bg-black text-white min-h-screen selection:bg-orange-500 selection:text-black">
+  <div class="fixed inset-0 pointer-events-none opacity-40">
+    <div class="absolute inset-0 bg-grid bg-[size:36px_36px]"></div>
+    <div class="absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-orange-500/10 blur-3xl"></div>
+    <div class="absolute top-96 right-0 h-80 w-80 rounded-full bg-yellow-500/10 blur-3xl"></div>
+    <div class="absolute bottom-20 left-0 h-80 w-80 rounded-full bg-orange-500/10 blur-3xl"></div>
+  </div>
 
-    <header class="mb-10">
-      <h1 class="text-4xl font-bold tracking-tight">Meyden Monitor — Version 14.75</h1>
-      <p class="text-white/60 mt-2">
-        Version investisseur : diffusion, évolution, abonnements, Meyden Coins, sécurité économique,
-        projection 24 mois et lecture du modèle.
-      </p>
-    </header>
+  <main class="relative max-w-7xl mx-auto px-5 py-8 lg:px-8">
 
-    <section class="grid gap-6 lg:grid-cols-4 mb-8">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
-        <div class="text-sm text-white/50">Monitor actif</div>
-        <div id="activeMonitorName" class="text-2xl font-bold text-orange-400 mt-2">International</div>
-        <div id="activeMonitorAudience" class="text-sm text-white/70 mt-2">Audience large</div>
-      </div>
+    <section class="rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-sm shadow-glow overflow-hidden mb-8">
+      <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-0">
+        <div class="p-7 lg:p-10">
+          <div class="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-orange-300">
+            Meyden Monitor
+            <span class="text-white/50">Version 15</span>
+          </div>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
-        <div class="text-sm text-white/50">Score performance</div>
-        <div id="topScore" class="text-2xl font-bold text-green-400 mt-2">78</div>
-        <div class="text-sm text-white/70 mt-2">Lecture comportementale réelle</div>
-      </div>
+          <h1 class="mt-5 text-4xl md:text-5xl font-black tracking-tight leading-tight">
+            La plateforme qui relie
+            <span class="text-orange-400"> audience</span>,
+            <span class="text-yellow-300"> performance</span>,
+            <span class="text-green-400"> revenus</span>
+            et évolution du contenu
+          </h1>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
-        <div class="text-sm text-white/50">Meyden Coins</div>
-        <div id="topCoins" class="text-2xl font-bold text-yellow-400 mt-2">148</div>
-        <div id="moneyValue" class="text-sm text-white/70 mt-2">Valeur : 22.20$ CAD</div>
-      </div>
+          <p class="mt-5 max-w-2xl text-white/70 leading-7">
+            Version premium pensée pour lecture investisseur et sponsor. Le système montre comment un contenu circule, est analysé, amélioré, monétisé et sécurisé par une logique d’abonnement, de provision et de Meyden Coins.
+          </p>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
-        <div class="text-sm text-white/50">Signal public</div>
-        <div id="topTuned" class="text-2xl font-bold text-green-400 mt-2">1200</div>
-        <div class="text-sm text-white/70 mt-2">Tuned On cumulés</div>
-      </div>
-    </section>
-
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4">Les 5 Meyden Monitors</h2>
-      <div id="monitorGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
-    </section>
-
-    <section class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] mb-10">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Simulation de vidéo</h2>
-
-        <div class="rounded-2xl border border-white/10 bg-black/40 p-6">
-          <div class="text-sm text-white/50">Now Playing</div>
-          <div id="videoTitle" class="text-2xl font-bold mt-2">Clip V1</div>
-
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
-            <div>
-              <div class="text-xs text-white/50">Audience</div>
-              <div id="videoAudience" class="font-semibold mt-1">International</div>
+          <div class="grid sm:grid-cols-3 gap-4 mt-8">
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-xs uppercase tracking-wide text-white/40">Thèse</div>
+              <div class="mt-2 text-lg font-bold">Diffusion intelligente</div>
+              <div class="mt-2 text-sm text-white/60">Le contenu ne dort pas, il tourne, il apprend, il évolue.</div>
             </div>
-            <div>
-              <div class="text-xs text-white/50">Performance</div>
-              <div id="videoScore" class="font-semibold mt-1 text-green-400">78</div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-xs uppercase tracking-wide text-white/40">Modèle</div>
+              <div class="mt-2 text-lg font-bold">Abonnement + Coins</div>
+              <div class="mt-2 text-sm text-white/60">Croissance récurrente avec réserve et sécurité intégrées.</div>
             </div>
-            <div>
-              <div class="text-xs text-white/50">Coins</div>
-              <div id="videoCoins" class="font-semibold mt-1 text-yellow-400">148</div>
-            </div>
-            <div>
-              <div class="text-xs text-white/50">Statut</div>
-              <div id="videoStatus" class="font-semibold mt-1">Actif</div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-xs uppercase tracking-wide text-white/40">Lecture</div>
+              <div class="mt-2 text-lg font-bold">Investisseur + Sponsor</div>
+              <div class="mt-2 text-sm text-white/60">Compréhension rapide du potentiel et de la valeur.</div>
             </div>
           </div>
         </div>
 
-        <button id="tunedBtn" type="button" class="w-full mt-5 py-4 bg-orange-500 text-black font-bold text-xl rounded-xl hover:scale-[1.01] transition">
+        <div class="p-7 lg:p-10 border-t lg:border-t-0 lg:border-l border-white/10 bg-gradient-to-br from-orange-500/10 via-transparent to-yellow-500/10">
+          <div class="text-sm uppercase tracking-[0.18em] text-white/50">Résumé stratégique</div>
+
+          <div class="grid gap-4 mt-6">
+            <div class="rounded-2xl border border-white/10 bg-black/40 p-5">
+              <div class="text-sm text-white/50">Positionnement</div>
+              <div class="mt-2 text-2xl font-bold text-orange-300">Écosystème de diffusion créative</div>
+              <div class="mt-2 text-sm text-white/65">Un environnement où la performance réelle déclenche visibilité, recommandation et amélioration.</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="rounded-2xl border border-white/10 bg-black/40 p-5">
+                <div class="text-sm text-white/50">Provision</div>
+                <div class="mt-2 text-3xl font-black text-yellow-300">1/3</div>
+                <div class="mt-1 text-sm text-white/60">des revenus d’abonnement</div>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-black/40 p-5">
+                <div class="text-sm text-white/50">Monitors</div>
+                <div class="mt-2 text-3xl font-black text-orange-400">5</div>
+                <div class="mt-1 text-sm text-white/60">niveaux de circulation</div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-orange-500/30 bg-orange-500/10 p-5">
+              <div class="text-sm text-orange-200/80">Lecture directe</div>
+              <div class="mt-2 text-lg font-bold">Plus le contenu performe, plus il gagne en portée, en coins et en pouvoir d’amélioration.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-4 mb-8">
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/45">Monitor actif</div>
+        <div id="activeMonitorName" class="mt-2 text-3xl font-black text-orange-400">International</div>
+        <div id="activeMonitorAudience" class="mt-2 text-sm text-white/70">Audience large</div>
+      </div>
+
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/45">Score performance</div>
+        <div id="topScore" class="mt-2 text-3xl font-black text-green-400">78</div>
+        <div class="mt-2 text-sm text-white/70">Lecture comportementale réelle</div>
+      </div>
+
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/45">Meyden Coins</div>
+        <div id="topCoins" class="mt-2 text-3xl font-black text-yellow-300">148</div>
+        <div id="moneyValue" class="mt-2 text-sm text-white/70">Valeur : 22.20$ CAD</div>
+      </div>
+
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+        <div class="text-sm text-white/45">Signal public</div>
+        <div id="topTuned" class="mt-2 text-3xl font-black text-orange-300">1200</div>
+        <div class="mt-2 text-sm text-white/70">Tuned On cumulés</div>
+      </div>
+    </section>
+
+    <section class="mb-8 rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div class="flex items-center justify-between gap-4 flex-wrap mb-5">
+        <div>
+          <h2 class="text-2xl font-bold">Les 5 Meyden Monitors</h2>
+          <p class="mt-2 text-sm text-white/65">Chaque monitor représente un niveau de circulation et une logique de lecture différente.</p>
+        </div>
+        <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">
+          Navigation de diffusion intelligente
+        </div>
+      </div>
+      <div id="monitorGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
+    </section>
+
+    <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr] mb-8">
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Simulation de vidéo</h2>
+            <p class="mt-2 text-sm text-white/65">Exemple de contenu qui circule dans le système.</p>
+          </div>
+          <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">Now Playing</div>
+        </div>
+
+        <div class="rounded-[26px] border border-white/10 bg-black/50 p-6">
+          <div class="aspect-video rounded-[24px] border border-white/10 bg-gradient-to-br from-orange-500/10 via-black to-yellow-500/5 flex items-center justify-center text-center px-6">
+            <div>
+              <div class="text-xs uppercase tracking-[0.2em] text-white/40">Contenu en diffusion</div>
+              <div id="videoTitle" class="mt-3 text-3xl font-black">Clip V1</div>
+              <div id="videoStatusHero" class="mt-2 text-sm text-orange-300">Actif</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div class="text-xs text-white/45">Audience</div>
+              <div id="videoAudience" class="mt-2 font-semibold">International</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div class="text-xs text-white/45">Performance</div>
+              <div id="videoScore" class="mt-2 font-semibold text-green-400">78</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div class="text-xs text-white/45">Coins</div>
+              <div id="videoCoins" class="mt-2 font-semibold text-yellow-300">148</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div class="text-xs text-white/45">Statut</div>
+              <div id="videoStatus" class="mt-2 font-semibold">Actif</div>
+            </div>
+          </div>
+        </div>
+
+        <button id="tunedBtn" type="button" class="w-full mt-5 rounded-2xl bg-orange-500 py-4 text-xl font-black text-black transition hover:scale-[1.01]">
           Tuned On (1200)
         </button>
       </div>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution du contenu</h2>
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Flow d’évolution du contenu</h2>
+            <p class="mt-2 text-sm text-white/65">Chemin complet du contenu dans le système.</p>
+          </div>
+          <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">Automatisé</div>
+        </div>
+
         <div id="flowGrid" class="grid grid-cols-2 gap-3"></div>
-        <div id="flowText" class="mt-4 text-sm text-white/70 leading-6">
+        <div id="flowText" class="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm leading-7 text-white/75">
           Le contenu entre dans le système et commence son analyse.
         </div>
 
-        <div id="emailBox" class="hidden mt-4 rounded-xl border border-orange-500 bg-orange-500/10 p-4">
-          <div class="font-semibold">📧 Courriel de recommandation</div>
-          <div class="text-sm mt-2 text-white/80">
-            Ton contenu manque d’impact dans les premières secondes. Coupe l’intro, clarifie le hook
-            et vise mieux le public.
+        <div id="emailBox" class="hidden mt-4 rounded-2xl border border-orange-500 bg-orange-500/10 p-4">
+          <div class="font-bold">📧 Courriel de recommandation</div>
+          <div class="mt-2 text-sm text-white/80">
+            Ton contenu manque d’impact dans les premières secondes. Coupe l’intro, renforce le hook et clarifie immédiatement l’audience.
+          </div>
+        </div>
+
+        <div class="mt-5 rounded-2xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/50">Lecture système</div>
+          <div class="mt-2 text-sm leading-7 text-white/70">
+            Si le contenu monte, il gagne en validation et en potentiel économique. S’il chute, il génère une boucle de correction et de relance.
           </div>
         </div>
       </div>
     </section>
 
-    <section class="grid gap-6 lg:grid-cols-2 mb-10">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Dashboard créateur</h2>
+    <section class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr] mb-8">
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Dashboard créateur</h2>
+            <p class="mt-2 text-sm text-white/65">Champs remplissables + état stratégique du contenu.</p>
+          </div>
+          <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">Créateur</div>
+        </div>
 
-        <div class="grid gap-3 mb-5">
+        <div class="grid gap-3">
           <label class="block text-sm">
             Nom du créateur
-            <input id="creatorNameInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Nom du créateur" />
+            <input id="creatorNameInput" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Nom du créateur" />
           </label>
 
           <label class="block text-sm">
             Courriel
-            <input id="creatorEmailInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="courriel@exemple.com" />
+            <input id="creatorEmailInput" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="courriel@exemple.com" />
           </label>
 
           <label class="block text-sm">
             Nom du contenu
-            <input id="contentNameInput" class="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Titre du contenu" />
+            <input id="contentNameInput" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Titre du contenu" />
           </label>
         </div>
 
-        <div class="space-y-2 text-sm text-white/80">
-          <div>Audience actuelle : <span id="dashboardAudience" class="text-orange-300">International</span></div>
-          <div>Performance : <span id="dashboardPerformance">78</span></div>
-          <div>Meyden Coins : <span id="dashboardCoins">148</span></div>
-          <div>Plan créateur : <span id="dashboardCreatorPlan">Créateur 14.99$</span></div>
-          <div>Plan public : <span id="dashboardPublicPlan">Public 1.99$</span></div>
-          <div>Statut du contenu : <span id="dashboardStatus">En circulation</span></div>
-          <div>Version d’amélioration : <span id="dashboardVersion">1</span></div>
+        <div class="grid gap-3 mt-5">
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm">Audience actuelle : <span id="dashboardAudience" class="text-orange-300 font-semibold">International</span></div>
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm">Performance : <span id="dashboardPerformance" class="font-semibold">78</span></div>
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm">Meyden Coins : <span id="dashboardCoins" class="font-semibold">148</span></div>
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm">Plan créateur : <span id="dashboardCreatorPlan" class="font-semibold">Créateur 14.99$</span></div>
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm">Plan public : <span id="dashboardPublicPlan" class="font-semibold">Public 1.99$</span></div>
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm">Statut du contenu : <span id="dashboardStatus" class="font-semibold">En circulation</span></div>
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm">Version d’amélioration : <span id="dashboardVersion" class="font-semibold">1</span></div>
         </div>
 
-        <button id="submitVersionBtn" type="button" class="w-full mt-5 py-4 bg-orange-500 text-black font-semibold rounded-xl hover:scale-[1.01] transition">
+        <button id="submitVersionBtn" type="button" class="w-full mt-5 rounded-2xl bg-orange-500 py-4 font-black text-black transition hover:scale-[1.01]">
           Submit nouvelle version de votre contenu
         </button>
       </div>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Lien stratégique</h2>
-
-        <div class="grid grid-cols-2 gap-3 text-sm">
-          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-            <div class="text-white/50">Audience</div>
-            <div id="linkAudience" class="font-semibold mt-1">International</div>
+      <div class="space-y-6">
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+            <div>
+              <h2 class="text-2xl font-bold">Lien stratégique</h2>
+              <p class="mt-2 text-sm text-white/65">Comment audience, performance, coins et amélioration se connectent.</p>
+            </div>
+            <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">Mécanique centrale</div>
           </div>
 
-          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-            <div class="text-white/50">Performance</div>
-            <div id="linkPerformance" class="font-semibold mt-1">78</div>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm">
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-white/45">Audience</div>
+              <div id="linkAudience" class="mt-2 text-lg font-bold">International</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-white/45">Performance</div>
+              <div id="linkPerformance" class="mt-2 text-lg font-bold">78</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-white/45">Coins</div>
+              <div id="linkCoins" class="mt-2 text-lg font-bold text-yellow-300">148</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-white/45">Amélioration</div>
+              <div id="linkImprovement" class="mt-2 text-lg font-bold">Version 1</div>
+            </div>
           </div>
 
-          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-            <div class="text-white/50">Coins</div>
-            <div id="linkCoins" class="font-semibold mt-1 text-yellow-400">148</div>
+          <div class="mt-4 rounded-2xl border border-orange-500/30 bg-orange-500/10 p-4 text-sm leading-7 text-white/75">
+            Le système récompense la clarté, la rétention et la pertinence. Les coins ne sont pas décoratifs : ils deviennent un signal économique et comportemental.
           </div>
+        </div>
 
-          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-            <div class="text-white/50">Amélioration</div>
-            <div id="linkImprovement" class="font-semibold mt-1">Version 1</div>
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <h2 class="text-2xl font-bold">Lecture sponsor</h2>
+          <p class="mt-2 text-sm text-white/65">Pourquoi une marque voudrait s’associer à Meyden.</p>
+
+          <div class="grid sm:grid-cols-2 gap-4 mt-4">
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-white/45 text-sm">Visibilité</div>
+              <div class="mt-2 font-bold">Plateforme + scène + contenu</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-white/45 text-sm">Positionnement</div>
+              <div class="mt-2 font-bold">Culture + innovation</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-white/45 text-sm">Audience</div>
+              <div class="mt-2 font-bold">Québec + expansion</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-white/45 text-sm">Activation</div>
+              <div class="mt-2 font-bold">Partenariats mesurables</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="grid gap-6 lg:grid-cols-2 mb-10">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Abonnements créateur</h2>
+    <section class="grid gap-6 lg:grid-cols-2 mb-8">
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Abonnements créateur</h2>
+            <p class="mt-2 text-sm text-white/65">Trois niveaux pour structurer l’entrée, la cadence et l’intensité.</p>
+          </div>
+          <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">Créateurs</div>
+        </div>
         <div id="creatorPlansGrid" class="grid gap-4"></div>
       </div>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Abonnements public</h2>
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Abonnements public</h2>
+            <p class="mt-2 text-sm text-white/65">Une base gratuite et un premium simple à scaler.</p>
+          </div>
+          <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">Public</div>
+        </div>
         <div id="publicPlansGrid" class="grid gap-4"></div>
       </div>
     </section>
 
-    <section class="grid gap-6 lg:grid-cols-2 mb-10">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution d’abonnement créateur</h2>
-        <div class="mb-4 text-sm text-white/70">
-          Capacité, accès, revenu mensuel par abonné, projection annuelle, part mise en provision 1/3 et lecture investisseur.
-        </div>
+    <section class="grid gap-6 lg:grid-cols-2 mb-8">
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-bold mb-2">Simulation d’évolution d’abonnement créateur</h2>
+        <p class="text-sm text-white/65 mb-4">
+          Capacité, accès, revenu mensuel par abonné, projection annuelle, provision 1/3 et rôle investisseur.
+        </p>
         <div id="creatorSimulationGrid" class="grid gap-4"></div>
       </div>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Simulation d’évolution d’abonnement public</h2>
-        <div class="mb-4 text-sm text-white/70">
-          Accès, revenu mensuel par abonné, projection annuelle, part mise en provision 1/3 et lecture investisseur.
-        </div>
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-bold mb-2">Simulation d’évolution d’abonnement public</h2>
+        <p class="text-sm text-white/65 mb-4">
+          Accès, revenu mensuel par abonné, projection annuelle, provision 1/3 et lecture du rôle du plan.
+        </p>
         <div id="publicSimulationGrid" class="grid gap-4"></div>
       </div>
     </section>
 
-    <section class="rounded-2xl border border-white/10 bg-white/5 p-6 mb-10">
+    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
       <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
         <div>
-          <h2 class="text-2xl font-semibold">Projection 24 mois — croissance Meyden</h2>
-          <p class="text-sm text-white/70 mt-2">
-            Trois scénarios pour visualiser la croissance abonnés, revenus et bénéfice net sur 2 ans.
-          </p>
+          <h2 class="text-2xl font-bold">Projection 24 mois — croissance Meyden</h2>
+          <p class="mt-2 text-sm text-white/65">Scénarios investisseur pour visualiser revenus, bénéfice net et abonnés payants sur 2 ans.</p>
         </div>
 
         <div class="flex flex-wrap gap-3">
-          <button id="scenarioConservativeBtn" class="bg-white/10 border border-white/10 px-4 py-3 rounded-xl font-semibold hover:bg-white/20 transition">
-            Conservateur
-          </button>
-          <button id="scenarioRealisticBtn" class="bg-orange-500 text-black px-4 py-3 rounded-xl font-semibold hover:scale-[1.01] transition">
-            Réaliste
-          </button>
-          <button id="scenarioAmbitiousBtn" class="bg-white/10 border border-white/10 px-4 py-3 rounded-xl font-semibold hover:bg-white/20 transition">
-            Ambitieux
-          </button>
+          <button id="scenarioConservativeBtn" class="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 font-bold transition hover:bg-white/20">Conservateur</button>
+          <button id="scenarioRealisticBtn" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black transition hover:scale-[1.01]">Réaliste</button>
+          <button id="scenarioAmbitiousBtn" class="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 font-bold transition hover:bg-white/20">Ambitieux</button>
         </div>
       </div>
 
-      <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+      <div class="rounded-[28px] border border-white/10 bg-black/40 p-4">
         <canvas id="growthChart" height="100"></canvas>
       </div>
 
-      <div class="grid gap-4 md:grid-cols-4 mt-6 text-sm">
-        <div class="bg-black/30 p-4 rounded-xl border border-white/10">
-          <div class="text-white/50">Scénario actif</div>
-          <div id="activeScenarioLabel" class="text-orange-300 text-xl font-bold mt-1">Réaliste</div>
+      <div class="grid gap-4 md:grid-cols-4 mt-6">
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/45">Scénario actif</div>
+          <div id="activeScenarioLabel" class="mt-2 text-2xl font-black text-orange-300">Réaliste</div>
         </div>
-        <div class="bg-black/30 p-4 rounded-xl border border-white/10">
-          <div class="text-white/50">Revenu mensuel final</div>
-          <div id="finalRevenue" class="text-green-400 text-xl font-bold mt-1">$0</div>
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/45">Revenu mensuel final</div>
+          <div id="finalRevenue" class="mt-2 text-2xl font-black text-green-400">$0</div>
         </div>
-        <div class="bg-black/30 p-4 rounded-xl border border-white/10">
-          <div class="text-white/50">Profit net final</div>
-          <div id="finalProfit" class="text-green-300 text-xl font-bold mt-1">$0</div>
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/45">Profit net final</div>
+          <div id="finalProfit" class="mt-2 text-2xl font-black text-green-300">$0</div>
         </div>
-        <div class="bg-black/30 p-4 rounded-xl border border-white/10">
-          <div class="text-white/50">Abonnés payants totaux</div>
-          <div id="finalSubs" class="text-orange-300 text-xl font-bold mt-1">0</div>
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <div class="text-sm text-white/45">Abonnés payants totaux</div>
+          <div id="finalSubs" class="mt-2 text-2xl font-black text-yellow-300">0</div>
         </div>
       </div>
     </section>
 
-    <section class="rounded-2xl border border-white/10 bg-white/5 p-6 mb-10">
+    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
       <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
         <div>
-          <h2 class="text-2xl font-semibold">Simulation financière Québec</h2>
-          <p class="text-white/70 mt-2 text-sm leading-6">
-            Hypothèses de marché pour démontrer la probabilité économique du modèle.
-          </p>
+          <h2 class="text-2xl font-bold">Espace sponsors</h2>
+          <p class="mt-2 text-sm text-white/65">Zone conçue pour projeter une valeur commerciale réelle aux partenaires et commanditaires.</p>
+        </div>
+        <button class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
+          Devenir sponsor
+        </button>
+      </div>
+
+      <div class="grid gap-4 lg:grid-cols-3 mb-6">
+        <div class="rounded-[26px] border border-orange-500/35 bg-orange-500/10 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-orange-300">Sponsor principal</div>
+          <div class="mt-3 text-2xl font-black">Votre marque ici</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Présence premium sur la plateforme, visibilité majeure et intégration forte dans la stratégie Meyden.
+          </div>
+          <div class="mt-4 space-y-2 text-sm text-white/80">
+            <div>• Visibilité page d’accueil</div>
+            <div>• Association diffusion + scène</div>
+            <div>• Présence contenu promotionnel</div>
+            <div>• Positionnement haut de gamme</div>
+          </div>
         </div>
 
-        <div class="rounded-xl border border-white/10 bg-black/30 p-4 text-sm text-white/70">
-          <div>Population Québec utilisée : <span id="simPopulation" class="text-white font-semibold">9 000 000</span></div>
-          <div>Public vidéo potentiel : <span id="simConsumers" class="text-white font-semibold">6 480 000</span></div>
-          <div>Artistes Québec estimés : <span id="simArtists" class="text-white font-semibold">43 100</span></div>
+        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Partenaire officiel</div>
+          <div class="mt-3 text-2xl font-black">Votre marque ici</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Positionnement crédible dans l’écosystème créatif et proximité avec le public ciblé.
+          </div>
+          <div class="mt-4 space-y-2 text-sm text-white/80">
+            <div>• Intégration marque</div>
+            <div>• Mention dans campagnes</div>
+            <div>• Présence événements</div>
+            <div>• Activation mesurable</div>
+          </div>
+        </div>
+
+        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Sponsor soutien</div>
+          <div class="mt-3 text-2xl font-black">Votre marque ici</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Entrée accessible pour soutenir la croissance, la scène et la diffusion du mouvement.
+          </div>
+          <div class="mt-4 space-y-2 text-sm text-white/80">
+            <div>• Logo affiché</div>
+            <div>• Visibilité réseau</div>
+            <div>• Soutien à la mission</div>
+            <div>• Signal d’appui culturel</div>
+          </div>
         </div>
       </div>
 
-      <div class="grid gap-6 lg:grid-cols-3" id="marketScenarioGrid"></div>
+      <div class="grid gap-4 lg:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold">Pourquoi commanditer Meyden</h3>
+          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
+            <p>• Accès à une audience artistique et culturelle ciblée</p>
+            <p>• Association directe à un mouvement structuré</p>
+            <p>• Visibilité sur diffusion, contenu et événements</p>
+            <p>• Intégration naturelle dans un écosystème en croissance</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold">Valeur sponsor</h3>
+          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Visibilité</div>
+              <div class="mt-2 font-bold">Plateforme + scène + contenu</div>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Positionnement</div>
+              <div class="mt-2 font-bold">Culture + innovation</div>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Audience</div>
+              <div class="mt-2 font-bold">Québec + expansion</div>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Activation</div>
+              <div class="mt-2 font-bold">Partenariats mesurables</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="grid gap-6 lg:grid-cols-2 mb-10">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Meyden Coins visibles</h2>
+    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
+      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
+        <div>
+          <h2 class="text-2xl font-bold">Simulation financière Québec</h2>
+          <p class="mt-2 text-sm text-white/65">Hypothèses de marché utilisées pour illustrer la probabilité économique du modèle.</p>
+        </div>
 
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/70">
+          <div>Population Québec utilisée : <span id="simPopulation" class="font-semibold text-white">9 000 000</span></div>
+          <div>Public vidéo potentiel : <span id="simConsumers" class="font-semibold text-white">6 480 000</span></div>
+          <div>Artistes Québec estimés : <span id="simArtists" class="font-semibold text-white">43 100</span></div>
+        </div>
+      </div>
+
+      <div id="marketScenarioGrid" class="grid gap-5 lg:grid-cols-3"></div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-2 mb-8">
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-bold mb-4">Meyden Coins visibles</h2>
         <div class="grid grid-cols-2 gap-4 text-sm">
-          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-            <div class="text-white/50">Coins accumulés</div>
-            <div id="coinVisibleTotal" class="text-2xl font-bold text-yellow-400 mt-1">148</div>
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/45">Coins accumulés</div>
+            <div id="coinVisibleTotal" class="mt-2 text-3xl font-black text-yellow-300">148</div>
           </div>
-
-          <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-            <div class="text-white/50">Valeur estimée</div>
-            <div id="coinVisibleMoney" class="text-2xl font-bold mt-1">22.20$ CAD</div>
+          <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+            <div class="text-white/45">Valeur estimée</div>
+            <div id="coinVisibleMoney" class="mt-2 text-3xl font-black">22.20$ CAD</div>
           </div>
         </div>
       </div>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-semibold mb-4">Règle économique + sécurité</h2>
-        <div class="text-sm text-white/75 leading-7 space-y-2">
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <h2 class="text-2xl font-bold mb-4">Règle économique + sécurité</h2>
+        <div class="space-y-3 text-sm leading-7 text-white/75">
           <p><strong>1/3 des revenus mensuels d’abonnement</strong> est mis en provision pour soutenir l’échange trimestriel des Meyden Coins.</p>
-          <p><strong>Sécurité :</strong></p>
           <p>• plafond trimestriel global</p>
           <p>• ajustement dynamique si nécessaire</p>
           <p>• contrôle anti-abus</p>
@@ -287,48 +531,47 @@
       </div>
     </section>
 
-    <section class="rounded-2xl border border-white/10 bg-white/5 p-6 mb-10">
+    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
       <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
         <div>
-          <h2 class="text-2xl font-semibold">Simulation interactive — abonnements, coins et bénéfices</h2>
-          <p class="text-white/70 mt-2 text-sm leading-6">
-            Cette section simule la croissance progressive des abonnements, les revenus qui entrent,
-            les retraits de Meyden Coins et le bénéfice net estimé.
+          <h2 class="text-2xl font-bold">Simulation interactive — abonnements, coins et bénéfices</h2>
+          <p class="mt-2 text-sm text-white/65">
+            Cette section simule la croissance progressive des abonnements, les revenus, les retraits de Meyden Coins et le bénéfice net.
           </p>
         </div>
 
-        <button id="growthTickBtn" type="button" class="rounded-xl bg-orange-500 px-4 py-3 font-semibold text-black hover:scale-[1.01] transition">
+        <button id="growthTickBtn" type="button" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
           Simuler 1 cycle
         </button>
       </div>
 
-      <div class="grid gap-6 lg:grid-cols-3 mb-6">
-        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-          <div class="text-sm text-white/50">Créateurs abonnés</div>
-          <div id="simCreatorTotal" class="mt-2 text-3xl font-bold text-orange-300">410</div>
+      <div class="grid gap-5 xl:grid-cols-3 mb-6">
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <div class="text-sm text-white/45">Créateurs abonnés</div>
+          <div id="simCreatorTotal" class="mt-2 text-3xl font-black text-orange-300">410</div>
           <div id="simCreatorMix" class="mt-2 text-sm text-white/70">Gratuit 260 • 14.99$ 110 • 65.99$ 40</div>
         </div>
 
-        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-          <div class="text-sm text-white/50">Public abonné</div>
-          <div id="simPublicTotal" class="mt-2 text-3xl font-bold text-orange-300">5200</div>
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <div class="text-sm text-white/45">Public abonné</div>
+          <div id="simPublicTotal" class="mt-2 text-3xl font-black text-orange-300">5200</div>
           <div id="simPublicMix" class="mt-2 text-sm text-white/70">Gratuit 4800 • 1.99$ 400</div>
         </div>
 
-        <div class="rounded-xl border border-white/10 bg-black/30 p-4">
-          <div class="text-sm text-white/50">Bénéfice net simulé</div>
-          <div id="simNetProfit" class="mt-2 text-3xl font-bold text-green-300">$0</div>
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <div class="text-sm text-white/45">Bénéfice net simulé</div>
+          <div id="simNetProfit" class="mt-2 text-3xl font-black text-green-300">$0</div>
           <div class="mt-2 text-sm text-white/70">Après provision, retraits de coins et coussin de sécurité</div>
         </div>
       </div>
 
-      <div class="grid gap-6 lg:grid-cols-2">
-        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-semibold mb-4">Entrées financières</h3>
+      <div class="grid gap-6 xl:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold mb-4">Entrées financières</h3>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
-                <tr class="text-left text-white/50 border-b border-white/10">
+                <tr class="border-b border-white/10 text-left text-white/45">
                   <th class="py-2 pr-3">Source</th>
                   <th class="py-2 pr-3">Abonnés</th>
                   <th class="py-2 pr-3">Prix</th>
@@ -356,7 +599,7 @@
                 </tr>
               </tbody>
               <tfoot>
-                <tr class="border-t border-white/10 font-semibold">
+                <tr class="border-t border-white/10 font-bold">
                   <td class="py-3 pr-3">Total entrées</td>
                   <td></td><td></td>
                   <td id="revTotalIn" class="py-3 text-green-300">$0</td>
@@ -366,12 +609,12 @@
           </div>
         </div>
 
-        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-semibold mb-4">Sorties et sécurité</h3>
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold mb-4">Sorties et sécurité</h3>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
-                <tr class="text-left text-white/50 border-b border-white/10">
+                <tr class="border-b border-white/10 text-left text-white/45">
                   <th class="py-2 pr-3">Poste</th>
                   <th class="py-2 pr-3">Valeur</th>
                   <th class="py-2">Note</th>
@@ -395,7 +638,7 @@
                 </tr>
               </tbody>
               <tfoot>
-                <tr class="border-t border-white/10 font-semibold">
+                <tr class="border-t border-white/10 font-bold">
                   <td class="py-3 pr-3">Total sorties</td>
                   <td id="outTotal" class="py-3 pr-3 text-red-300">$0</td>
                   <td></td>
@@ -406,23 +649,22 @@
         </div>
       </div>
 
-      <div class="grid gap-6 lg:grid-cols-2 mt-6">
-        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-semibold mb-4">Retraits de coins simulés</h3>
+      <div class="grid gap-6 xl:grid-cols-2 mt-6">
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold mb-4">Retraits de coins simulés</h3>
           <div id="withdrawalList" class="space-y-3 text-sm"></div>
         </div>
 
-        <div class="rounded-xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-semibold mb-4">Lecture du modèle</h3>
-          <div id="profitConclusion" class="text-sm text-white/75 leading-7">
-            La simulation montre si les revenus d’abonnements couvrent la réserve, les retraits de coins
-            et la marge de sécurité tout en laissant un bénéfice net.
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold mb-4">Lecture du modèle</h3>
+          <div id="profitConclusion" class="text-sm leading-7 text-white/75">
+            La simulation montre si les revenus d’abonnements couvrent la réserve, les retraits de coins et la marge de sécurité tout en laissant un bénéfice net.
           </div>
         </div>
       </div>
     </section>
 
-  </div>
+  </main>
 
   <script>
     const monitors = [
@@ -445,7 +687,7 @@
         features: [
           'Accès sans monétisation',
           'Aucun courriel avancé',
-          '1 seule boucle de 2h dans chacun des 5 monitors',
+          '1 boucle de 2h dans chacun des 5 monitors',
           'Maximum 72h de circulation'
         ]
       },
@@ -578,15 +820,15 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className =
-          'rounded-2xl border p-4 text-left transition ' +
+          'rounded-[24px] border p-4 text-left transition ' +
           (index === selectedMonitor
-            ? 'border-orange-400 bg-orange-500/10'
-            : 'border-white/10 bg-white/5 hover:bg-white/10');
+            ? 'border-orange-400 bg-orange-500/10 shadow-glow'
+            : 'border-white/10 bg-black/30 hover:bg-white/10');
 
         btn.innerHTML = `
-          <div class="font-semibold">${monitor.name}</div>
+          <div class="font-bold">${monitor.name}</div>
           <div class="text-sm text-white/60 mt-2">${monitor.audience}</div>
-          <div class="text-sm text-yellow-400 mt-2">${monitor.rewardText}</div>
+          <div class="text-sm text-yellow-300 mt-2">${monitor.rewardText}</div>
         `;
 
         btn.onclick = () => {
@@ -606,9 +848,9 @@
       phases.forEach((phaseLabel, index) => {
         const div = document.createElement('div');
         div.className =
-          'rounded-xl border p-3 text-sm transition ' +
+          'rounded-2xl border p-3 text-sm transition ' +
           (index === flowPhase
-            ? 'bg-orange-500 text-black border-orange-500'
+            ? 'bg-orange-500 text-black border-orange-500 font-bold'
             : 'bg-black/30 border-white/10 text-white/70');
 
         div.textContent = phaseLabel;
@@ -627,15 +869,15 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className =
-          'rounded-xl border p-4 text-left transition ' +
+          'rounded-[24px] border p-5 text-left transition ' +
           (index === selectedCreatorPlan
-            ? 'border-orange-400 bg-orange-500/10'
+            ? 'border-orange-400 bg-orange-500/10 shadow-glow'
             : 'border-white/10 bg-black/30 hover:bg-white/10');
 
         btn.innerHTML = `
           <div class="flex items-start justify-between gap-4">
-            <div class="font-semibold">${plan.name}</div>
-            <div class="text-orange-400 font-bold">${plan.label}</div>
+            <div class="font-bold text-lg">${plan.name}</div>
+            <div class="text-orange-300 font-black">${plan.label}</div>
           </div>
           <div class="mt-3 space-y-1 text-sm text-white/70">
             ${plan.features.map(f => `<div>• ${f}</div>`).join('')}
@@ -661,15 +903,15 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className =
-          'rounded-xl border p-4 text-left transition ' +
+          'rounded-[24px] border p-5 text-left transition ' +
           (index === selectedPublicPlan
-            ? 'border-orange-400 bg-orange-500/10'
+            ? 'border-orange-400 bg-orange-500/10 shadow-glow'
             : 'border-white/10 bg-black/30 hover:bg-white/10');
 
         btn.innerHTML = `
           <div class="flex items-start justify-between gap-4">
-            <div class="font-semibold">${plan.name}</div>
-            <div class="text-orange-400 font-bold">${plan.label}</div>
+            <div class="font-bold text-lg">${plan.name}</div>
+            <div class="text-orange-300 font-black">${plan.label}</div>
           </div>
           <div class="mt-3 space-y-1 text-sm text-white/70">
             ${plan.features.map(f => `<div>• ${f}</div>`).join('')}
@@ -697,7 +939,7 @@
 
         const card = document.createElement('div');
         card.className =
-          'rounded-xl border p-4 transition ' +
+          'rounded-[24px] border p-5 transition ' +
           (index === selectedCreatorPlan
             ? 'border-orange-400 bg-orange-500/10'
             : 'border-white/10 bg-black/30');
@@ -705,32 +947,32 @@
         card.innerHTML = `
           <div class="flex items-start justify-between gap-4">
             <div>
-              <div class="font-semibold">${plan.name}</div>
+              <div class="font-bold text-lg">${plan.name}</div>
               <div class="text-sm text-white/60 mt-1">${plan.investorText}</div>
             </div>
-            <div class="text-orange-400 font-bold">${plan.label}</div>
+            <div class="text-orange-300 font-black">${plan.label}</div>
           </div>
 
           <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Capacité</div>
-              <div class="font-semibold mt-1">${plan.monthlyUploads}</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Capacité</div>
+              <div class="mt-1 font-bold">${plan.monthlyUploads}</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Accès</div>
-              <div class="font-semibold mt-1">${plan.access}</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Accès</div>
+              <div class="mt-1 font-bold">${plan.access}</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Revenu mensuel / abonné</div>
-              <div class="font-semibold mt-1">${plan.price.toFixed(2)}$</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Revenu mensuel / abonné</div>
+              <div class="mt-1 font-bold">${plan.price.toFixed(2)}$</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Projection annuelle / abonné</div>
-              <div class="font-semibold mt-1">${annual.toFixed(2)}$</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Projection annuelle / abonné</div>
+              <div class="mt-1 font-bold">${annual.toFixed(2)}$</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3 col-span-2">
-              <div class="text-white/50">Part mise en provision 1/3</div>
-              <div class="font-semibold mt-1">${reserve.toFixed(2)}$</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3 col-span-2">
+              <div class="text-white/45">Part mise en provision 1/3</div>
+              <div class="mt-1 font-bold">${reserve.toFixed(2)}$</div>
             </div>
           </div>
         `;
@@ -749,7 +991,7 @@
 
         const card = document.createElement('div');
         card.className =
-          'rounded-xl border p-4 transition ' +
+          'rounded-[24px] border p-5 transition ' +
           (index === selectedPublicPlan
             ? 'border-orange-400 bg-orange-500/10'
             : 'border-white/10 bg-black/30');
@@ -757,28 +999,28 @@
         card.innerHTML = `
           <div class="flex items-start justify-between gap-4">
             <div>
-              <div class="font-semibold">${plan.name}</div>
+              <div class="font-bold text-lg">${plan.name}</div>
               <div class="text-sm text-white/60 mt-1">${plan.investorText}</div>
             </div>
-            <div class="text-orange-400 font-bold">${plan.label}</div>
+            <div class="text-orange-300 font-black">${plan.label}</div>
           </div>
 
           <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Accès</div>
-              <div class="font-semibold mt-1">${plan.access}</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Accès</div>
+              <div class="mt-1 font-bold">${plan.access}</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Revenu mensuel / abonné</div>
-              <div class="font-semibold mt-1">${plan.price.toFixed(2)}$</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Revenu mensuel / abonné</div>
+              <div class="mt-1 font-bold">${plan.price.toFixed(2)}$</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Projection annuelle / abonné</div>
-              <div class="font-semibold mt-1">${annual.toFixed(2)}$</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Projection annuelle / abonné</div>
+              <div class="mt-1 font-bold">${annual.toFixed(2)}$</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Provision 1/3</div>
-              <div class="font-semibold mt-1">${reserve.toFixed(2)}$</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Provision 1/3</div>
+              <div class="mt-1 font-bold">${reserve.toFixed(2)}$</div>
             </div>
           </div>
         `;
@@ -802,41 +1044,37 @@
         const creator14 = Math.round(creators * 0.7);
         const creator65 = Math.round(creators * 0.3);
 
-        const revenue =
-          (creator14 * 14.99) +
-          (creator65 * 65.99) +
-          (publicPremium * 1.99);
-
+        const revenue = (creator14 * 14.99) + (creator65 * 65.99) + (publicPremium * 1.99);
         const reserve = revenue / 3;
         const estimatedNet = revenue - reserve - (revenue * 0.08) - (reserve * 0.6);
 
         const card = document.createElement('div');
-        card.className = 'rounded-2xl border border-white/10 bg-black/30 p-5';
+        card.className = 'rounded-[26px] border border-white/10 bg-black/30 p-5';
         card.innerHTML = `
           <div class="flex items-start justify-between gap-4">
             <div>
-              <div class="text-xl font-semibold">${scenario.name}</div>
-              <div class="text-sm text-white/60 mt-1">${scenario.note}</div>
+              <div class="text-2xl font-black">${scenario.name}</div>
+              <div class="mt-1 text-sm text-white/60">${scenario.note}</div>
             </div>
-            <div class="text-orange-400 font-bold">${creators.toLocaleString('fr-CA')} créateurs</div>
+            <div class="text-orange-300 font-black">${creators.toLocaleString('fr-CA')} créateurs</div>
           </div>
 
           <div class="grid gap-3 mt-5 text-sm">
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Public premium estimé</div>
-              <div class="font-semibold mt-1">${publicPremium.toLocaleString('fr-CA')}</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Public premium estimé</div>
+              <div class="mt-1 font-bold">${publicPremium.toLocaleString('fr-CA')}</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Revenu mensuel brut estimé</div>
-              <div class="font-semibold mt-1 text-green-300">${formatCurrency(revenue)}</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Revenu mensuel brut estimé</div>
+              <div class="mt-1 font-bold text-green-300">${formatCurrency(revenue)}</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Provision 1/3</div>
-              <div class="font-semibold mt-1 text-yellow-300">${formatCurrency(reserve)}</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Provision 1/3</div>
+              <div class="mt-1 font-bold text-yellow-300">${formatCurrency(reserve)}</div>
             </div>
-            <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-              <div class="text-white/50">Bénéfice net simulé</div>
-              <div class="font-semibold mt-1 text-green-300">${formatCurrency(estimatedNet)}</div>
+            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+              <div class="text-white/45">Bénéfice net simulé</div>
+              <div class="mt-1 font-bold text-green-300">${formatCurrency(estimatedNet)}</div>
             </div>
           </div>
         `;
@@ -862,6 +1100,7 @@
       document.getElementById('videoScore').textContent = Math.round(score);
       document.getElementById('videoCoins').textContent = Math.round(coins);
       document.getElementById('videoStatus').textContent = currentStatus;
+      document.getElementById('videoStatusHero').textContent = currentStatus;
 
       document.getElementById('dashboardAudience').textContent = monitor.name;
       document.getElementById('dashboardPerformance').textContent = Math.round(score);
@@ -878,8 +1117,8 @@
 
       document.getElementById('coinVisibleTotal').textContent = Math.round(coins);
       document.getElementById('coinVisibleMoney').textContent = moneyFromCoins(coins);
-
       document.getElementById('tunedBtn').textContent = 'Tuned On (' + Math.round(tuned) + ')';
+
       renderFlow();
     }
 
@@ -889,7 +1128,7 @@
       const premiumRevenue = simState.publicPremium * 1.99;
       const totalIn = weeklyRevenue + dailyRevenue + premiumRevenue;
       const reserve = totalIn / 3;
-      const withdrawals = (simState.quarterlyWithdrawCreators * simState.avgWithdrawalCoins * 0.15);
+      const withdrawals = simState.quarterlyWithdrawCreators * simState.avgWithdrawalCoins * 0.15;
       const safety = totalIn * simState.safetyRate;
       const totalOut = reserve + withdrawals + safety;
       const net = totalIn - totalOut;
@@ -920,53 +1159,34 @@
 
       document.getElementById('simNetProfit').textContent = formatCurrency(net);
 
-      const withdrawalList = document.getElementById('withdrawalList');
-      withdrawalList.innerHTML = `
-        <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-          <div class="text-white/50">Créateurs qui encaissent</div>
-          <div class="font-semibold mt-1">${simState.quarterlyWithdrawCreators}</div>
+      document.getElementById('withdrawalList').innerHTML = `
+        <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+          <div class="text-white/45">Créateurs qui encaissent</div>
+          <div class="mt-1 font-bold">${simState.quarterlyWithdrawCreators}</div>
         </div>
-        <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-          <div class="text-white/50">Coins moyens retirés / créateur</div>
-          <div class="font-semibold mt-1">${simState.avgWithdrawalCoins}</div>
+        <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+          <div class="text-white/45">Coins moyens retirés / créateur</div>
+          <div class="mt-1 font-bold">${simState.avgWithdrawalCoins}</div>
         </div>
-        <div class="rounded-lg border border-white/10 bg-black/20 p-3">
-          <div class="text-white/50">Valeur par coin</div>
-          <div class="font-semibold mt-1">0.15$ CAD</div>
+        <div class="rounded-xl border border-white/10 bg-black/20 p-3">
+          <div class="text-white/45">Valeur par coin</div>
+          <div class="mt-1 font-bold">0.15$ CAD</div>
         </div>
       `;
 
-      const conclusion = document.getElementById('profitConclusion');
-      if (net > 0) {
-        conclusion.innerHTML = `
-          La simulation montre un <strong>bénéfice net positif</strong> après provision, retraits de coins
-          et coussin de sécurité. Le modèle reste rentable tant que la croissance du premium et des créateurs
-          payants suit la trajectoire.
-        `;
-      } else {
-        conclusion.innerHTML = `
-          Le modèle devient fragile. Il faut augmenter la part d’abonnements payants, réduire les retraits
-          ou ajuster le coussin de sécurité.
-        `;
-      }
+      document.getElementById('profitConclusion').innerHTML = net > 0
+        ? `La simulation montre un <strong>bénéfice net positif</strong> après provision, retraits de coins et coussin de sécurité. Le modèle reste rentable si la croissance premium et créateur payant continue.`
+        : `Le modèle devient fragile. Il faut augmenter la part d’abonnements payants, réduire les retraits ou ajuster la sécurité.`;
     }
 
     function applyScenarioButtonStyles(activeId) {
-      const ids = [
-        'scenarioConservativeBtn',
-        'scenarioRealisticBtn',
-        'scenarioAmbitiousBtn'
-      ];
-
-      ids.forEach(id => {
+      ['scenarioConservativeBtn', 'scenarioRealisticBtn', 'scenarioAmbitiousBtn'].forEach((id) => {
         const btn = document.getElementById(id);
         if (!btn) return;
 
-        if (id === activeId) {
-          btn.className = 'bg-orange-500 text-black px-4 py-3 rounded-xl font-semibold hover:scale-[1.01] transition';
-        } else {
-          btn.className = 'bg-white/10 border border-white/10 px-4 py-3 rounded-xl font-semibold hover:bg-white/20 transition';
-        }
+        btn.className = id === activeId
+          ? 'rounded-2xl bg-orange-500 px-4 py-3 font-black text-black transition hover:scale-[1.01]'
+          : 'rounded-2xl border border-white/10 bg-white/10 px-4 py-3 font-bold transition hover:bg-white/20';
       });
     }
 
@@ -979,7 +1199,6 @@
       let creator14;
       let creator65;
       let publicPremium;
-
       let growth14;
       let growth65;
       let growthPublic;
@@ -1018,11 +1237,7 @@
         creator65 *= growth65;
         publicPremium *= growthPublic;
 
-        const rev =
-          (creator14 * 14.99) +
-          (creator65 * 65.99) +
-          (publicPremium * 1.99);
-
+        const rev = (creator14 * 14.99) + (creator65 * 65.99) + (publicPremium * 1.99);
         const reserve = rev / 3;
         const safety = rev * 0.08;
         const withdrawals = reserve * 0.6;
@@ -1035,7 +1250,6 @@
       }
 
       const ctx = document.getElementById('growthChart').getContext('2d');
-
       if (chart) chart.destroy();
 
       chart = new Chart(ctx, {
@@ -1065,7 +1279,7 @@
               label: 'Abonnés payants',
               data: subs,
               borderColor: '#facc15',
-              backgroundColor: 'rgba(250,204,21,0.10)',
+              backgroundColor: 'rgba(250,204,21,0.08)',
               borderWidth: 3,
               tension: 0.35,
               fill: false
@@ -1074,32 +1288,20 @@
         },
         options: {
           responsive: true,
-          animation: {
-            duration: 1100
-          },
+          animation: { duration: 1000 },
           plugins: {
             legend: {
-              labels: {
-                color: '#ffffff'
-              }
+              labels: { color: '#ffffff' }
             }
           },
           scales: {
             x: {
-              ticks: {
-                color: '#ffffff'
-              },
-              grid: {
-                color: 'rgba(255,255,255,0.08)'
-              }
+              ticks: { color: '#ffffff' },
+              grid: { color: 'rgba(255,255,255,0.08)' }
             },
             y: {
-              ticks: {
-                color: '#ffffff'
-              },
-              grid: {
-                color: 'rgba(255,255,255,0.08)'
-              }
+              ticks: { color: '#ffffff' },
+              grid: { color: 'rgba(255,255,255,0.08)' }
             }
           }
         }
@@ -1142,11 +1344,9 @@
       document.getElementById('scenarioConservativeBtn').addEventListener('click', () => {
         simulateGrowth24Months('conservative');
       });
-
       document.getElementById('scenarioRealisticBtn').addEventListener('click', () => {
         simulateGrowth24Months('realistic');
       });
-
       document.getElementById('scenarioAmbitiousBtn').addEventListener('click', () => {
         simulateGrowth24Months('ambitious');
       });
