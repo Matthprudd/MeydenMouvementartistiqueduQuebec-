@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meyden Monitor — Version 15.2</title>
+  <title>Meyden Monitor — Version 15.2 Fusion</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
@@ -11,15 +11,20 @@
       theme: {
         extend: {
           boxShadow: {
-            glow: "0 0 0 1px rgba(249,115,22,0.25), 0 0 40px rgba(249,115,22,0.12)",
+            glow: '0 0 0 1px rgba(249,115,22,0.25), 0 0 40px rgba(249,115,22,0.12)',
+            glowxl: '0 0 0 1px rgba(249,115,22,0.35), 0 0 60px rgba(249,115,22,0.18)',
           },
           backgroundImage: {
-            grid: "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
+            grid: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
           }
         }
       }
     };
   </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .viewer-open { overflow: hidden; }
+  </style>
 </head>
 <body class="bg-black text-white min-h-screen selection:bg-orange-500 selection:text-black">
   <div class="fixed inset-0 pointer-events-none opacity-40">
@@ -31,13 +36,12 @@
 
   <main class="relative max-w-7xl mx-auto px-5 py-8 lg:px-8">
 
-    <!-- HERO -->
     <section class="rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-sm shadow-glow overflow-hidden mb-8">
       <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-0">
         <div class="p-7 lg:p-10">
           <div class="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-orange-300">
             Meyden Monitor
-            <span class="text-white/50">Version 15.2</span>
+            <span class="text-white/50">Version 15.2 Fusion</span>
           </div>
 
           <h1 class="mt-5 text-4xl md:text-5xl font-black tracking-tight leading-tight">
@@ -50,7 +54,7 @@
           </h1>
 
           <p class="mt-5 max-w-2xl text-white/70 leading-7">
-            Version premium pensée pour lecture investisseur, sponsor, scène et circulation de valeur. Le système montre comment un contenu circule, est analysé, amélioré, monétisé et sécurisé par une logique d’abonnement, de provision, de guichet trimestriel et de Meyden Coins.
+            Version fusionnée du site Meyden avec une démo produit plus crédible : monitors interactifs, mini vidéos, rotation automatique, ouverture grand format, score dynamique, coins, flow et lecture investisseur.
           </p>
 
           <div class="grid sm:grid-cols-3 gap-4 mt-8">
@@ -104,7 +108,6 @@
       </div>
     </section>
 
-    <!-- TOP KPIs -->
     <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-4 mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
         <div class="text-sm text-white/45">Monitor actif</div>
@@ -131,22 +134,22 @@
       </div>
     </section>
 
-    <!-- MONITORS -->
-    <section class="mb-8 rounded-3xl border border-white/10 bg-white/5 p-6">
-      <div class="flex items-center justify-between gap-4 flex-wrap mb-5">
+    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
+      <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
         <div>
-          <h2 class="text-2xl font-bold">Les 5 Meyden Monitors</h2>
-          <p class="mt-2 text-sm text-white/65">Chaque monitor représente un niveau de circulation et une logique de lecture différente.</p>
+          <h2 class="text-2xl font-bold">Navigation de diffusion intelligente</h2>
+          <p class="mt-2 text-sm text-white/65">Mini vidéos par monitor, rotation automatique et lecture produit crédible.</p>
         </div>
-        <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">
-          Navigation de diffusion intelligente
+        <div class="flex flex-wrap gap-3 items-center">
+          <div id="rotationStatus" class="rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-2 text-sm text-orange-200">Rotation auto · active</div>
+          <div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">Now Playing · <span id="nowPlayingLabel">International</span></div>
         </div>
       </div>
-      <div id="monitorGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
+
+      <div id="monitorGrid" class="grid gap-4"></div>
     </section>
 
-    <!-- VIDEO + FLOW -->
-    <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr] mb-8">
+    <section class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr] mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
         <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
           <div>
@@ -157,10 +160,13 @@
         </div>
 
         <div class="rounded-[26px] border border-white/10 bg-black/50 p-6">
-          <div class="aspect-video rounded-[24px] border border-white/10 bg-gradient-to-br from-orange-500/10 via-black to-yellow-500/5 flex items-center justify-center text-center px-6">
-            <div>
-              <div class="text-xs uppercase tracking-[0.2em] text-white/40">Contenu en diffusion</div>
-              <div id="videoTitle" class="mt-3 text-3xl font-black">Clip V1</div>
+          <div class="relative aspect-video overflow-hidden rounded-[24px] border border-white/10 bg-black">
+            <video id="heroVideo" class="h-full w-full object-cover" autoplay muted loop playsinline></video>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div class="absolute top-4 right-4 rounded-full bg-red-500 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white">Live</div>
+            <div class="absolute bottom-5 left-5">
+              <div class="text-xs uppercase tracking-[0.2em] text-white/50">Contenu en diffusion</div>
+              <div id="videoTitle" class="mt-2 text-3xl font-black">Clip V1</div>
               <div id="videoStatusHero" class="mt-2 text-sm text-orange-300">Actif</div>
             </div>
           </div>
@@ -205,7 +211,7 @@
         </div>
 
         <div id="emailBox" class="hidden mt-4 rounded-2xl border border-orange-500 bg-orange-500/10 p-4">
-          <div class="font-bold">📧 Courriel de recommandation</div>
+          <div class="font-bold">Courriel de recommandation</div>
           <div class="mt-2 text-sm text-white/80">
             Ton contenu manque d’impact dans les premières secondes. Coupe l’intro, renforce le hook et clarifie immédiatement l’audience.
           </div>
@@ -220,7 +226,6 @@
       </div>
     </section>
 
-    <!-- DASHBOARD + STRATEGIC -->
     <section class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr] mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
         <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
@@ -323,7 +328,6 @@
       </div>
     </section>
 
-    <!-- SUBSCRIPTIONS -->
     <section class="grid gap-6 lg:grid-cols-2 mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
         <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
@@ -348,33 +352,12 @@
       </div>
     </section>
 
-    <!-- SUBSCRIPTION SIM -->
-    <section class="grid gap-6 lg:grid-cols-2 mb-8">
-      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-bold mb-2">Simulation d’évolution d’abonnement créateur</h2>
-        <p class="text-sm text-white/65 mb-4">
-          Capacité, accès, revenu mensuel par abonné, projection annuelle, provision 1/3 et rôle investisseur.
-        </p>
-        <div id="creatorSimulationGrid" class="grid gap-4"></div>
-      </div>
-
-      <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-bold mb-2">Simulation d’évolution d’abonnement public</h2>
-        <p class="text-sm text-white/65 mb-4">
-          Accès, revenu mensuel par abonné, projection annuelle, provision 1/3 et lecture du rôle du plan.
-        </p>
-        <div id="publicSimulationGrid" class="grid gap-4"></div>
-      </div>
-    </section>
-
-    <!-- GROWTH -->
     <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
       <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
         <div>
           <h2 class="text-2xl font-bold">Projection 24 mois — croissance Meyden</h2>
           <p class="mt-2 text-sm text-white/65">Scénarios investisseur pour visualiser revenus, bénéfice net et abonnés payants sur 2 ans.</p>
         </div>
-
         <div class="flex flex-wrap gap-3">
           <button id="scenarioConservativeBtn" class="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 font-bold transition hover:bg-white/20">Conservateur</button>
           <button id="scenarioRealisticBtn" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black transition hover:scale-[1.01]">Réaliste</button>
@@ -383,7 +366,7 @@
       </div>
 
       <div class="rounded-[28px] border border-white/10 bg-black/40 p-4">
-        <canvas id="growthChart" height="100"></canvas>
+        <canvas id="growthChart" height="110"></canvas>
       </div>
 
       <div class="grid gap-4 md:grid-cols-4 mt-6">
@@ -393,11 +376,11 @@
         </div>
         <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
           <div class="text-sm text-white/45">Revenu mensuel final</div>
-          <div id="finalRevenue" class="mt-2 text-2xl font-black text-green-400">$0</div>
+          <div id="finalRevenue" class="mt-2 text-2xl font-black text-green-400">0 $</div>
         </div>
         <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
           <div class="text-sm text-white/45">Profit net final</div>
-          <div id="finalProfit" class="mt-2 text-2xl font-black text-green-300">$0</div>
+          <div id="finalProfit" class="mt-2 text-2xl font-black text-green-300">0 $</div>
         </div>
         <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
           <div class="text-sm text-white/45">Abonnés payants totaux</div>
@@ -406,800 +389,259 @@
       </div>
     </section>
 
-    <!-- SPONSORS -->
-    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
-      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
-        <div>
-          <h2 class="text-2xl font-bold">Espace sponsors</h2>
-          <p class="mt-2 text-sm text-white/65">Zone conçue pour projeter une valeur commerciale réelle aux partenaires et commanditaires.</p>
-        </div>
-        <button id="openSponsorModalBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
-          Devenir sponsor
-        </button>
-      </div>
-
-      <div class="grid gap-4 lg:grid-cols-3 mb-6">
-        <div class="rounded-[26px] border border-orange-500/35 bg-orange-500/10 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-orange-300">Sponsor principal</div>
-          <div class="mt-3 text-2xl font-black">Votre marque ici</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Présence premium sur la plateforme, visibilité majeure et intégration forte dans la stratégie Meyden.
-          </div>
-          <div class="mt-4 space-y-2 text-sm text-white/80">
-            <div>• Visibilité page d’accueil</div>
-            <div>• Association diffusion + scène</div>
-            <div>• Présence contenu promotionnel</div>
-            <div>• Positionnement haut de gamme</div>
-          </div>
-        </div>
-
-        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Partenaire officiel</div>
-          <div class="mt-3 text-2xl font-black">Votre marque ici</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Positionnement crédible dans l’écosystème créatif et proximité avec le public ciblé.
-          </div>
-          <div class="mt-4 space-y-2 text-sm text-white/80">
-            <div>• Intégration marque</div>
-            <div>• Mention dans campagnes</div>
-            <div>• Présence événements</div>
-            <div>• Activation mesurable</div>
-          </div>
-        </div>
-
-        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Sponsor soutien</div>
-          <div class="mt-3 text-2xl font-black">Votre marque ici</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Entrée accessible pour soutenir la croissance, la scène et la diffusion du mouvement.
-          </div>
-          <div class="mt-4 space-y-2 text-sm text-white/80">
-            <div>• Logo affiché</div>
-            <div>• Visibilité réseau</div>
-            <div>• Soutien à la mission</div>
-            <div>• Signal d’appui culturel</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid gap-4 lg:grid-cols-2">
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold">Pourquoi commanditer Meyden</h3>
-          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
-            <p>• Accès à une audience artistique et culturelle ciblée</p>
-            <p>• Association directe à un mouvement structuré</p>
-            <p>• Visibilité sur diffusion, contenu et événements</p>
-            <p>• Intégration naturelle dans un écosystème en croissance</p>
-          </div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold">Valeur sponsor</h3>
-          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Visibilité</div>
-              <div class="mt-2 font-bold">Plateforme + scène + contenu</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Positionnement</div>
-              <div class="mt-2 font-bold">Culture + innovation</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Audience</div>
-              <div class="mt-2 font-bold">Québec + expansion</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Activation</div>
-              <div class="mt-2 font-bold">Partenariats mesurables</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SCENE -->
-    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
-      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
-        <div>
-          <h2 class="text-2xl font-bold">Scène Meyden ici</h2>
-          <p class="mt-2 text-sm text-white/65">Section dédiée aux demandes de booking, aux salles, aux artistes et au public qui veut assister à un show.</p>
-        </div>
-        <div class="flex flex-wrap gap-3">
-          <button id="openSceneBookModalBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
-            Booker un show
-          </button>
-          <button id="openSceneAttendModalBtn" class="rounded-2xl border border-white/10 bg-white/10 px-5 py-3 font-bold transition hover:bg-white/20">
-            Assister à un show
-          </button>
-        </div>
-      </div>
-
-      <div class="grid gap-4 lg:grid-cols-3 mb-6">
-        <div class="rounded-[26px] border border-orange-500/35 bg-orange-500/10 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-orange-300">Booking</div>
-          <div class="mt-3 text-2xl font-black">Faire venir la Scène Meyden</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Pour salles, diffuseurs, événements, festivals, partenaires et lieux qui veulent accueillir une programmation Meyden.
-          </div>
-        </div>
-
-        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Public</div>
-          <div class="mt-3 text-2xl font-black">Assister à un show</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Inscription d’intérêt pour spectateurs, fans, collaborateurs ou gens qui veulent être avisés des prochains événements.
-          </div>
-        </div>
-
-        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Mission</div>
-          <div class="mt-3 text-2xl font-black">Créer des retombées réelles</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Relier scène, captation, diffusion, visibilité, commandite et retombées culturelles mesurables.
-          </div>
-        </div>
-      </div>
-
-      <div class="grid gap-4 lg:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold">Événements</h3>
-          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
-            <p>• Shows live</p>
-            <p>• Lancements</p>
-            <p>• Soirées thématiques</p>
-            <p>• Scène Meyden mobile</p>
-          </div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold">Retombées</h3>
-          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
-            <p>• Visibilité pour les artistes</p>
-            <p>• Captation et contenu</p>
-            <p>• Achalandage et engagement</p>
-            <p>• Valeur pour partenaires et salles</p>
-          </div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold">Activation</h3>
-          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
-            <p>• Booking de salles</p>
-            <p>• Présence sponsor</p>
-            <p>• Diffusion numérique</p>
-            <p>• Croissance de marque Meyden</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- COINS WINDOW -->
-    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
-      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
-        <div>
-          <h2 class="text-2xl font-bold">Guichet Meyden Coins</h2>
-          <p class="mt-2 text-sm text-white/65">
-            Guichet trimestriel pour les demandes d’échange de Meyden Coins. Le retrait est soumis à validation, au coussin de sécurité et aux règles du trimestre en cours.
-          </p>
-        </div>
-        <button id="openCoinsModalBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
-          Ouvrir le guichet trimestriel
-        </button>
-      </div>
-
-      <div class="grid gap-4 lg:grid-cols-3 mb-6">
-        <div class="rounded-[26px] border border-orange-500/35 bg-orange-500/10 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-orange-300">Statut</div>
-          <div id="coinsWindowStatus" class="mt-3 text-2xl font-black">Ouvert</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Le guichet peut recevoir les demandes d’échange du trimestre actif.
-          </div>
-        </div>
-
-        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Règle</div>
-          <div class="mt-3 text-2xl font-black">1/3 en provision</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Les sorties sont limitées par la réserve, la sécurité et l’évaluation de la demande.
-          </div>
-        </div>
-
-        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
-          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Cycle</div>
-          <div id="coinsQuarterLabel" class="mt-3 text-2xl font-black">T2</div>
-          <div class="mt-3 text-sm leading-7 text-white/70">
-            Le guichet opère par trimestre pour protéger la stabilité du système.
-          </div>
-        </div>
-      </div>
-
-      <div class="grid gap-4 lg:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold">Conditions</h3>
-          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
-            <p>• Validation manuelle ou semi-automatique</p>
-            <p>• Respect du plafond trimestriel</p>
-            <p>• Ajustement selon le coussin actif</p>
-          </div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold">Lecture créateur</h3>
-          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
-            <p>• Déposer une demande d’échange</p>
-            <p>• Déclarer le nombre de coins</p>
-            <p>• Attendre l’approbation du trimestre</p>
-          </div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold">Lecture système</h3>
-          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
-            <p>• Réserve protégée</p>
-            <p>• Anti-abus</p>
-            <p>• Sortie économique contrôlée</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MARKET -->
-    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
-      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
-        <div>
-          <h2 class="text-2xl font-bold">Simulation financière Québec</h2>
-          <p class="mt-2 text-sm text-white/65">Hypothèses de marché utilisées pour illustrer la probabilité économique du modèle.</p>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/70">
-          <div>Population Québec utilisée : <span id="simPopulation" class="font-semibold text-white">9 000 000</span></div>
-          <div>Public vidéo potentiel : <span id="simConsumers" class="font-semibold text-white">6 480 000</span></div>
-          <div>Artistes Québec estimés : <span id="simArtists" class="font-semibold text-white">43 100</span></div>
-        </div>
-      </div>
-
-      <div id="marketScenarioGrid" class="grid gap-5 lg:grid-cols-3"></div>
-    </section>
-
-    <!-- COINS + RULE -->
     <section class="grid gap-6 lg:grid-cols-2 mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-bold mb-4">Meyden Coins visibles</h2>
-        <div class="grid grid-cols-2 gap-4 text-sm">
-          <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
-            <div class="text-white/45">Coins accumulés</div>
-            <div id="coinVisibleTotal" class="mt-2 text-3xl font-black text-yellow-300">148</div>
+        <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Espace sponsors</h2>
+            <p class="mt-2 text-sm text-white/65">Zone conçue pour projeter une valeur commerciale réelle aux partenaires et commanditaires.</p>
           </div>
-          <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
-            <div class="text-white/45">Valeur estimée</div>
-            <div id="coinVisibleMoney" class="mt-2 text-3xl font-black">22.20$ CAD</div>
+          <button id="openSponsorModalBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">Devenir sponsor</button>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="rounded-[26px] border border-orange-500/35 bg-orange-500/10 p-5">
+            <div class="text-xs uppercase tracking-[0.2em] text-orange-300">Sponsor principal</div>
+            <div class="mt-3 text-2xl font-black">Votre marque ici</div>
+            <div class="mt-3 text-sm leading-7 text-white/70">Présence premium sur la plateforme, visibilité majeure et intégration forte dans la stratégie Meyden.</div>
+          </div>
+          <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+            <div class="text-xs uppercase tracking-[0.2em] text-white/45">Partenaire officiel</div>
+            <div class="mt-3 text-2xl font-black">Votre marque ici</div>
+            <div class="mt-3 text-sm leading-7 text-white/70">Positionnement crédible dans l’écosystème créatif et proximité avec le public ciblé.</div>
+          </div>
+          <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+            <div class="text-xs uppercase tracking-[0.2em] text-white/45">Sponsor soutien</div>
+            <div class="mt-3 text-2xl font-black">Votre marque ici</div>
+            <div class="mt-3 text-sm leading-7 text-white/70">Entrée accessible pour soutenir la croissance, la scène et la diffusion du mouvement.</div>
           </div>
         </div>
       </div>
 
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-        <h2 class="text-2xl font-bold mb-4">Règle économique + sécurité</h2>
-        <div class="space-y-3 text-sm leading-7 text-white/75">
-          <p><strong>1/3 des revenus mensuels d’abonnement</strong> est mis en provision pour soutenir l’échange trimestriel des Meyden Coins.</p>
-          <p>• plafond trimestriel global</p>
-          <p>• ajustement dynamique si nécessaire</p>
-          <p>• contrôle anti-abus</p>
-          <p>• limitation des sorties selon le coussin actif</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- INTERACTIVE -->
-    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-16">
-      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
-        <div>
-          <h2 class="text-2xl font-bold">Simulation interactive — abonnements, coins et bénéfices</h2>
-          <p class="mt-2 text-sm text-white/65">
-            Cette section simule la croissance progressive des abonnements, les revenus, les retraits de Meyden Coins et le bénéfice net.
-          </p>
-        </div>
-
-        <button id="growthTickBtn" type="button" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
-          Simuler 1 cycle
-        </button>
-      </div>
-
-      <div class="grid gap-5 xl:grid-cols-3 mb-6">
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <div class="text-sm text-white/45">Créateurs abonnés</div>
-          <div id="simCreatorTotal" class="mt-2 text-3xl font-black text-orange-300">410</div>
-          <div id="simCreatorMix" class="mt-2 text-sm text-white/70">Gratuit 260 • 14.99$ 110 • 65.99$ 40</div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <div class="text-sm text-white/45">Public abonné</div>
-          <div id="simPublicTotal" class="mt-2 text-3xl font-black text-orange-300">5200</div>
-          <div id="simPublicMix" class="mt-2 text-sm text-white/70">Gratuit 4800 • 1.99$ 400</div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <div class="text-sm text-white/45">Bénéfice net simulé</div>
-          <div id="simNetProfit" class="mt-2 text-3xl font-black text-green-300">$0</div>
-          <div class="mt-2 text-sm text-white/70">Après provision, retraits de coins et coussin de sécurité</div>
-        </div>
-      </div>
-
-      <div class="grid gap-6 xl:grid-cols-2">
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold mb-4">Entrées financières</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead>
-                <tr class="border-b border-white/10 text-left text-white/45">
-                  <th class="py-2 pr-3">Source</th>
-                  <th class="py-2 pr-3">Abonnés</th>
-                  <th class="py-2 pr-3">Prix</th>
-                  <th class="py-2">Revenu mensuel</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b border-white/5">
-                  <td class="py-2 pr-3">Créateur 14.99$</td>
-                  <td id="revCreatorWeeklyCount" class="py-2 pr-3">110</td>
-                  <td class="py-2 pr-3">14.99$</td>
-                  <td id="revCreatorWeekly" class="py-2 text-green-300">$0</td>
-                </tr>
-                <tr class="border-b border-white/5">
-                  <td class="py-2 pr-3">Créateur 65.99$</td>
-                  <td id="revCreatorDailyCount" class="py-2 pr-3">40</td>
-                  <td class="py-2 pr-3">65.99$</td>
-                  <td id="revCreatorDaily" class="py-2 text-green-300">$0</td>
-                </tr>
-                <tr>
-                  <td class="py-2 pr-3">Public 1.99$</td>
-                  <td id="revPublicPremiumCount" class="py-2 pr-3">400</td>
-                  <td class="py-2 pr-3">1.99$</td>
-                  <td id="revPublicPremium" class="py-2 text-green-300">$0</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr class="border-t border-white/10 font-bold">
-                  <td class="py-3 pr-3">Total entrées</td>
-                  <td></td><td></td>
-                  <td id="revTotalIn" class="py-3 text-green-300">$0</td>
-                </tr>
-              </tfoot>
-            </table>
+        <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Scène Meyden ici</h2>
+            <p class="mt-2 text-sm text-white/65">Section dédiée aux demandes de booking, aux salles, aux artistes et au public.</p>
+          </div>
+          <div class="flex gap-3">
+            <button id="openSceneBookModalBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">Booker un show</button>
+            <button id="openSceneAttendModalBtn" class="rounded-2xl border border-white/10 bg-white/10 px-5 py-3 font-bold transition hover:bg-white/20">Assister à un show</button>
           </div>
         </div>
 
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold mb-4">Sorties et sécurité</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead>
-                <tr class="border-b border-white/10 text-left text-white/45">
-                  <th class="py-2 pr-3">Poste</th>
-                  <th class="py-2 pr-3">Valeur</th>
-                  <th class="py-2">Note</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b border-white/5">
-                  <td class="py-2 pr-3">Provision 1/3</td>
-                  <td id="outReserve" class="py-2 pr-3 text-yellow-300">$0</td>
-                  <td class="py-2">Réserve pour coins</td>
-                </tr>
-                <tr class="border-b border-white/5">
-                  <td class="py-2 pr-3">Retraits coins trimestriels simulés</td>
-                  <td id="outCoinWithdrawals" class="py-2 pr-3 text-red-300">$0</td>
-                  <td class="py-2">Créateurs qui encaissent</td>
-                </tr>
-                <tr>
-                  <td class="py-2 pr-3">Coussin sécurité anti-abus</td>
-                  <td id="outSafety" class="py-2 pr-3 text-yellow-300">$0</td>
-                  <td class="py-2">Plafond / ajustement</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr class="border-t border-white/10 font-bold">
-                  <td class="py-3 pr-3">Total sorties</td>
-                  <td id="outTotal" class="py-3 pr-3 text-red-300">$0</td>
-                  <td></td>
-                </tr>
-              </tfoot>
-            </table>
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="rounded-[26px] border border-orange-500/35 bg-orange-500/10 p-5">
+            <div class="text-xs uppercase tracking-[0.2em] text-orange-300">Booking</div>
+            <div class="mt-3 text-2xl font-black">Faire venir la Scène Meyden</div>
+            <div class="mt-3 text-sm leading-7 text-white/70">Pour salles, diffuseurs, événements et lieux qui veulent accueillir une programmation Meyden.</div>
           </div>
-        </div>
-      </div>
-
-      <div class="grid gap-6 xl:grid-cols-2 mt-6">
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold mb-4">Retraits de coins simulés</h3>
-          <div id="withdrawalList" class="space-y-3 text-sm"></div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h3 class="text-xl font-bold mb-4">Lecture du modèle</h3>
-          <div id="profitConclusion" class="text-sm leading-7 text-white/75">
-            La simulation montre si les revenus d’abonnements couvrent la réserve, les retraits de coins et la marge de sécurité tout en laissant un bénéfice net.
+          <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+            <div class="text-xs uppercase tracking-[0.2em] text-white/45">Public</div>
+            <div class="mt-3 text-2xl font-black">Assister à un show</div>
+            <div class="mt-3 text-sm leading-7 text-white/70">Inscription d’intérêt pour spectateurs, fans, collaborateurs et public ciblé.</div>
+          </div>
+          <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+            <div class="text-xs uppercase tracking-[0.2em] text-white/45">Mission</div>
+            <div class="mt-3 text-2xl font-black">Créer des retombées</div>
+            <div class="mt-3 text-sm leading-7 text-white/70">Unir scène, diffusion, contenu, visibilité et valeur économique autour d’un système cohérent.</div>
           </div>
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- SPONSOR MODAL -->
-  <div id="sponsorModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
-    <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-neutral-950 shadow-glow">
-      <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
+  <div id="viewer" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/95 p-5">
+    <div class="w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/10 bg-neutral-950 shadow-glowxl">
+      <div class="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-4">
         <div>
-          <h3 class="text-2xl font-black">Formulaire sponsor</h3>
-          <p class="mt-1 text-sm text-white/60">Proposition de partenariat, commandite ou activation de marque.</p>
+          <div id="viewerTitle" class="text-2xl font-black">International</div>
+          <div id="viewerDesc" class="mt-2 text-sm text-white/60">Diffusion large, portée maximale, validation de potentiel global.</div>
         </div>
-        <button data-close-modal="sponsorModal" class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Fermer</button>
+        <button id="closeViewerBtn" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-bold hover:bg-white/10">Fermer</button>
       </div>
-
-      <form id="sponsorForm" class="p-6 space-y-4">
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Nom complet
-            <input required name="name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Entreprise / marque
-            <input required name="company" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
+      <video id="mainVideo" class="w-full bg-black" controls autoplay playsinline></video>
+      <div class="grid gap-4 md:grid-cols-3 p-6">
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <div class="text-xs text-white/45">Audience active</div>
+          <div id="viewerAudience" class="mt-2 text-2xl font-black">5 400</div>
         </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Courriel
-            <input required type="email" name="email" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Téléphone
-            <input name="phone" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <div class="text-xs text-white/45">Coins / 24h</div>
+          <div id="viewerCoins" class="mt-2 text-2xl font-black text-yellow-300">18</div>
         </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Type de partenariat
-            <select required name="sponsor_type" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
-              <option value="">Choisir</option>
-              <option>Sponsor principal</option>
-              <option>Partenaire officiel</option>
-              <option>Sponsor soutien</option>
-              <option>Partenariat média</option>
-              <option>Activation événementielle</option>
-            </select>
-          </label>
-
-          <label class="block text-sm">
-            Budget approximatif
-            <select name="budget" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
-              <option value="">Choisir</option>
-              <option>Moins de 500$</option>
-              <option>500$ à 1500$</option>
-              <option>1500$ à 5000$</option>
-              <option>5000$ à 10000$</option>
-              <option>10000$ et plus</option>
-            </select>
-          </label>
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <div class="text-xs text-white/45">Projection</div>
+          <div id="viewerRevenue" class="mt-2 text-2xl font-black text-green-400">3 000$</div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <label class="block text-sm">
-          Objectif / intérêt
-          <textarea required name="message" rows="5" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Décrivez votre intérêt, votre objectif, le type de visibilité recherchée ou la campagne souhaitée."></textarea>
-        </label>
-
-        <div class="flex flex-wrap gap-3 pt-2">
-          <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
-            Envoyer la demande sponsor
-          </button>
-          <button type="button" data-close-modal="sponsorModal" class="rounded-2xl border border-white/10 px-5 py-3 font-bold hover:bg-white/10">
-            Annuler
-          </button>
-        </div>
-
-        <div id="sponsorSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">
-          Demande sponsor envoyée localement avec succès.
-        </div>
+  <div id="sponsorModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/80 p-5">
+    <div class="w-full max-w-xl rounded-[28px] border border-white/10 bg-neutral-950 p-6">
+      <div class="flex items-center justify-between gap-4 mb-5">
+        <h3 class="text-2xl font-black">Demande sponsor</h3>
+        <button data-close-modal="sponsorModal" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-bold">Fermer</button>
+      </div>
+      <form id="sponsorForm" class="grid gap-3">
+        <input required name="name" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Nom" />
+        <input required name="email" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Courriel" />
+        <textarea required name="message" rows="5" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Votre intérêt"></textarea>
+        <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Déposer la demande</button>
+        <div id="sponsorSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">Demande sponsor envoyée localement avec succès.</div>
       </form>
     </div>
   </div>
 
-  <!-- BOOK MODAL -->
-  <div id="sceneBookModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
-    <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-neutral-950 shadow-glow">
-      <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
-        <div>
-          <h3 class="text-2xl font-black">Formulaire booking — Scène Meyden</h3>
-          <p class="mt-1 text-sm text-white/60">Pour salles, festivals, diffuseurs, bars, partenaires et événements.</p>
-        </div>
-        <button data-close-modal="sceneBookModal" class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Fermer</button>
+  <div id="sceneBookModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/80 p-5">
+    <div class="w-full max-w-xl rounded-[28px] border border-white/10 bg-neutral-950 p-6">
+      <div class="flex items-center justify-between gap-4 mb-5">
+        <h3 class="text-2xl font-black">Booker un show</h3>
+        <button data-close-modal="sceneBookModal" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-bold">Fermer</button>
       </div>
-
-      <form id="sceneBookForm" class="p-6 space-y-4">
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Nom complet
-            <input required name="name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Organisation / lieu
-            <input required name="venue" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Courriel
-            <input required type="email" name="email" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Téléphone
-            <input name="phone" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Type de demande
-            <select required name="request_type" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
-              <option value="">Choisir</option>
-              <option>Booker un show</option>
-              <option>Booker plusieurs shows</option>
-              <option>Programmer une soirée Meyden</option>
-              <option>Inviter un band</option>
-              <option>Partenariat de scène</option>
-            </select>
-          </label>
-
-          <label class="block text-sm">
-            Date souhaitée
-            <input type="date" name="date" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Ville
-            <input name="city" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Capacité du lieu
-            <input name="capacity" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Ex. 80, 150, 300" />
-          </label>
-        </div>
-
-        <label class="block text-sm">
-          Détails du projet / show
-          <textarea required name="message" rows="5" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Décrivez le type d’événement, la programmation souhaitée, le contexte et vos besoins."></textarea>
-        </label>
-
-        <div class="flex flex-wrap gap-3 pt-2">
-          <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
-            Envoyer la demande de booking
-          </button>
-          <button type="button" data-close-modal="sceneBookModal" class="rounded-2xl border border-white/10 px-5 py-3 font-bold hover:bg-white/10">
-            Annuler
-          </button>
-        </div>
-
-        <div id="sceneBookSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">
-          Demande de booking envoyée localement avec succès.
-        </div>
+      <form id="sceneBookForm" class="grid gap-3">
+        <input required name="name" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Nom" />
+        <input required name="email" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Courriel" />
+        <textarea required name="message" rows="5" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Détails de la demande"></textarea>
+        <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Déposer la demande</button>
+        <div id="sceneBookSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">Demande de booking envoyée localement avec succès.</div>
       </form>
     </div>
   </div>
 
-  <!-- ATTEND MODAL -->
-  <div id="sceneAttendModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
-    <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-neutral-950 shadow-glow">
-      <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
-        <div>
-          <h3 class="text-2xl font-black">Formulaire — Assister à un show</h3>
-          <p class="mt-1 text-sm text-white/60">Pour être contacté ou avisé des prochains événements Meyden.</p>
-        </div>
-        <button data-close-modal="sceneAttendModal" class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Fermer</button>
+  <div id="sceneAttendModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/80 p-5">
+    <div class="w-full max-w-xl rounded-[28px] border border-white/10 bg-neutral-950 p-6">
+      <div class="flex items-center justify-between gap-4 mb-5">
+        <h3 class="text-2xl font-black">Assister à un show</h3>
+        <button data-close-modal="sceneAttendModal" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-bold">Fermer</button>
       </div>
-
-      <form id="sceneAttendForm" class="p-6 space-y-4">
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Nom complet
-            <input required name="name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Courriel
-            <input required type="email" name="email" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Ville
-            <input name="city" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Type d’intérêt
-            <select required name="interest" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
-              <option value="">Choisir</option>
-              <option>Être avisé des prochains shows</option>
-              <option>Réserver pour un show précis</option>
-              <option>Suivre la scène metal</option>
-              <option>Participer comme collaborateur</option>
-            </select>
-          </label>
-        </div>
-
-        <label class="block text-sm">
-          Message / préférence
-          <textarea name="message" rows="5" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Indiquez vos préférences, votre ville, le type de show ou les artistes qui vous intéressent."></textarea>
-        </label>
-
-        <div class="flex flex-wrap gap-3 pt-2">
-          <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
-            Envoyer la demande public
-          </button>
-          <button type="button" data-close-modal="sceneAttendModal" class="rounded-2xl border border-white/10 px-5 py-3 font-bold hover:bg-white/10">
-            Annuler
-          </button>
-        </div>
-
-        <div id="sceneAttendSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">
-          Demande public envoyée localement avec succès.
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- COINS MODAL -->
-  <div id="coinsModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
-    <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-neutral-950 shadow-glow">
-      <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
-        <div>
-          <h3 class="text-2xl font-black">Guichet Meyden Coins — demande trimestrielle</h3>
-          <p class="mt-1 text-sm text-white/60">Déposez une demande d’échange de coins pour le trimestre en cours.</p>
-        </div>
-        <button data-close-modal="coinsModal" class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Fermer</button>
-      </div>
-
-      <form id="coinsForm" class="p-6 space-y-4">
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Nom complet
-            <input required name="name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Courriel
-            <input required type="email" name="email" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Nom d’artiste / créateur
-            <input required name="creator_name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Trimestre
-            <select required name="quarter" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
-              <option value="">Choisir</option>
-              <option>T1</option>
-              <option>T2</option>
-              <option>T3</option>
-              <option>T4</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <label class="block text-sm">
-            Nombre de Meyden Coins demandés
-            <input required type="number" min="1" name="coins_requested" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
-          </label>
-          <label class="block text-sm">
-            Valeur estimée souhaitée
-            <input name="estimated_value" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Ex. 45$ CAD" />
-          </label>
-        </div>
-
-        <label class="block text-sm">
-          Justification / notes
-          <textarea required name="message" rows="5" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Précisez votre demande, votre activité, votre contenu ou toute information utile."></textarea>
-        </label>
-
-        <div class="flex flex-wrap gap-3 pt-2">
-          <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
-            Déposer la demande
-          </button>
-          <button type="button" data-close-modal="coinsModal" class="rounded-2xl border border-white/10 px-5 py-3 font-bold hover:bg-white/10">
-            Annuler
-          </button>
-        </div>
-
-        <div id="coinsSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">
-          Demande de guichet Meyden Coins envoyée localement avec succès.
-        </div>
+      <form id="sceneAttendForm" class="grid gap-3">
+        <input required name="name" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Nom" />
+        <input required name="email" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Courriel" />
+        <textarea required name="message" rows="5" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3" placeholder="Votre intérêt"></textarea>
+        <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Déposer la demande</button>
+        <div id="sceneAttendSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">Demande de participation envoyée localement avec succès.</div>
       </form>
     </div>
   </div>
 
   <script>
     const monitors = [
-      { id: 1, name: 'International', audience: 'Audience large', reward: 3, rewardText: '3 coins / 24h' },
-      { id: 2, name: 'Grand Public', audience: 'Grand public', reward: 1.5, rewardText: '1.5 coin / 24h' },
-      { id: 3, name: 'Petit Public', audience: 'Audience restreinte', reward: 0.5, rewardText: '0.5 coin / 24h' },
-      { id: 4, name: 'Public Ciblé', audience: 'Public précis', reward: 0, rewardText: 'Optimisation audience' },
-      { id: 5, name: 'Fans', audience: 'Communauté engagée', reward: 0, rewardText: 'Validation communauté' },
+      {
+        id: 1,
+        name: 'International',
+        audience: 'Audience large',
+        reward: 3,
+        rewardText: '3 coins / 24h',
+        description: 'Diffusion large. Le contenu dépasse sa zone d’origine et entre dans une logique de portée globale.',
+        audienceValue: 5400,
+        status: 'Actif',
+        performance: 78,
+        projection: '3 000$',
+        video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        tags: ['Portée maximale', 'Validation marché', 'Lecture investisseur']
+      },
+      {
+        id: 2,
+        name: 'Grand Public',
+        audience: 'Grand public',
+        reward: 1.5,
+        rewardText: '1.5 coin / 24h',
+        description: 'Contenu accessible, circulation large, logique de croissance stable et monétisation ouverte.',
+        audienceValue: 3200,
+        status: 'Actif',
+        performance: 73,
+        projection: '2 200$',
+        video: 'https://www.w3schools.com/html/movie.mp4',
+        tags: ['Audience large', 'Conversion élargie', 'Visibilité stable']
+      },
+      {
+        id: 3,
+        name: 'Petit Public',
+        audience: 'Audience restreinte',
+        reward: 0.5,
+        rewardText: '0.5 coin / 24h',
+        description: 'Audience plus intime. Le contenu garde une forte densité émotionnelle et communautaire.',
+        audienceValue: 980,
+        status: 'Stable',
+        performance: 68,
+        projection: '1 100$',
+        video: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+        tags: ['Engagement intime', 'Rétention élevée', 'Noyau actif']
+      },
+      {
+        id: 4,
+        name: 'Public Ciblé',
+        audience: 'Public précis',
+        reward: 0,
+        rewardText: 'Optimisation audience',
+        description: 'Le contenu est poussé vers une niche précise. Ici, l’algorithme naturel devient le plus stratégique.',
+        audienceValue: 1450,
+        status: 'Optimisé',
+        performance: 81,
+        projection: '1 700$',
+        video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        tags: ['Audience précise', 'Optimisation', 'Conversion ciblée']
+      },
+      {
+        id: 5,
+        name: 'Fans',
+        audience: 'Communauté engagée',
+        reward: 0,
+        rewardText: 'Validation communauté',
+        description: 'Le noyau engagé. Le contenu est porté, partagé et défendu par la communauté.',
+        audienceValue: 620,
+        status: 'Loyal',
+        performance: 76,
+        projection: '1 400$',
+        video: 'https://www.w3schools.com/html/movie.mp4',
+        tags: ['Communauté', 'Récurrence forte', 'Signal de loyauté']
+      }
     ];
 
     const creatorPlans = [
       {
-        id: 'creator-free',
         name: 'Créateur Gratuit',
-        price: 0,
         label: '0$/mois',
         monthlyUploads: 'Jusqu’à 5 cycles d’essai',
         access: 'Accès limité',
         investorText: 'Entrée massive dans le système. Acquisition de créateurs sans monétisation.',
-        features: [
-          'Accès sans monétisation',
-          'Aucun courriel avancé',
-          '1 boucle de 2h dans chacun des 5 monitors',
-          'Maximum 72h de circulation'
-        ]
+        features: ['Accès sans monétisation', '1 boucle de 2h dans chacun des 5 monitors', 'Maximum 72h de circulation']
       },
       {
-        id: 'creator-weekly',
         name: 'Créateur 14.99$',
-        price: 14.99,
         label: '14.99$/mois',
         monthlyUploads: '4 contenus / mois',
         access: 'Accès complet',
         investorText: 'Base stable de récurrence. Le vrai moteur central du modèle.',
-        features: [
-          '1 contenu par semaine',
-          'Accès à tout le système',
-          'Courriels d’amélioration',
-          'Accès Meyden Coins'
-        ]
+        features: ['Accès complet', 'Analyse avancée', 'Courriel de recommandation', 'Accès Meyden Coins']
       },
       {
-        id: 'creator-daily',
         name: 'Créateur 65.99$',
-        price: 65.99,
         label: '65.99$/mois',
-        monthlyUploads: '30 contenus / mois',
-        access: 'Accès prioritaire',
-        investorText: 'Plan intensif pour créateurs actifs. Volume et rentabilité élevés.',
-        features: [
-          '1 contenu par jour',
-          'Accès complet',
-          'Suivi complet',
-          'Accès Meyden Coins'
-        ]
-      },
+        monthlyUploads: '1 contenu / jour',
+        access: 'Accès premium',
+        investorText: 'Volume et rentabilité élevés.',
+        features: ['1 contenu par jour', 'Suivi complet', 'Priorité d’évolution', 'Accès Meyden Coins']
+      }
     ];
 
     const publicPlans = [
       {
-        id: 'public-free',
         name: 'Public Gratuit',
-        price: 0,
         label: '0$/mois',
         access: 'Accès partiel',
         investorText: 'Base d’audience gratuite pour nourrir la plateforme et générer des données.',
-        features: ['Accès à toute diffusion sauf International et Grand Public']
+        features: ['Accès à une partie de la diffusion']
       },
       {
-        id: 'public-premium',
         name: 'Public 1.99$',
-        price: 1.99,
         label: '1.99$/mois',
         access: 'Accès total',
         investorText: 'Micro-monnaie très scalable sur un grand volume d’utilisateurs.',
         features: ['Accès à toute diffusion']
-      },
+      }
     ];
 
     const phases = [
@@ -1224,17 +666,6 @@
       'Le contenu sort ou revient au début du processus selon son évolution.'
     ];
 
-    const marketAssumptions = {
-      populationQc: 9000000,
-      contentConsumersRate: 0.72,
-      artistsQc: 43100,
-      scenarios: [
-        { name: 'Conservateur', creatorAdoption: 0.005, publicAdoption: 0.002, note: 'Adoption faible, démarrage prudent.' },
-        { name: 'Réaliste', creatorAdoption: 0.02, publicAdoption: 0.01, note: 'Adoption modérée, produit compris par le marché.' },
-        { name: 'Ambitieux', creatorAdoption: 0.05, publicAdoption: 0.03, note: 'Adoption forte, traction réelle et bouche-à-oreille.' },
-      ]
-    };
-
     let selectedMonitor = 0;
     let selectedCreatorPlan = 1;
     let selectedPublicPlan = 1;
@@ -1244,531 +675,23 @@
     let version = 1;
     let flowPhase = 0;
     let currentStatus = 'En circulation';
-    let chart = null;
     let activeScenarioName = 'Réaliste';
+    let growthChart = null;
+    let autoRotate = true;
+    let rotationInterval = null;
 
-    const simState = {
-      creatorFree: 260,
-      creatorWeekly: 110,
-      creatorDaily: 40,
-      publicFree: 4800,
-      publicPremium: 400,
-      quarterlyWithdrawCreators: 26,
-      avgWithdrawalCoins: 92,
-      safetyRate: 0.08,
+    const scenarios = {
+      conservative: { label: 'Conservateur', creator: 120, public: 800, revenue: 6200, profit: 2100 },
+      realistic: { label: 'Réaliste', creator: 340, public: 2600, revenue: 19800, profit: 9100 },
+      ambitious: { label: 'Ambitieux', creator: 780, public: 6200, revenue: 49600, profit: 26400 }
     };
+
+    function formatCurrency(value) {
+      return value.toLocaleString('fr-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 });
+    }
 
     function moneyFromCoins(value) {
       return (value * 0.15).toFixed(2) + '$ CAD';
-    }
-
-    function formatCurrency(value) {
-      return value.toLocaleString('fr-CA', {
-        style: 'currency',
-        currency: 'CAD',
-        maximumFractionDigits: 2
-      });
-    }
-
-    function renderMonitors() {
-      const monitorGrid = document.getElementById('monitorGrid');
-      monitorGrid.innerHTML = '';
-
-      monitors.forEach((monitor, index) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className =
-          'rounded-[24px] border p-4 text-left transition ' +
-          (index === selectedMonitor
-            ? 'border-orange-400 bg-orange-500/10 shadow-glow'
-            : 'border-white/10 bg-black/30 hover:bg-white/10');
-
-        btn.innerHTML = `
-          <div class="font-bold">${monitor.name}</div>
-          <div class="text-sm text-white/60 mt-2">${monitor.audience}</div>
-          <div class="text-sm text-yellow-300 mt-2">${monitor.rewardText}</div>
-        `;
-
-        btn.onclick = () => {
-          selectedMonitor = index;
-          updateUI();
-          renderMonitors();
-        };
-
-        monitorGrid.appendChild(btn);
-      });
-    }
-
-    function renderFlow() {
-      const flowGrid = document.getElementById('flowGrid');
-      flowGrid.innerHTML = '';
-
-      phases.forEach((phaseLabel, index) => {
-        const div = document.createElement('div');
-        div.className =
-          'rounded-2xl border p-3 text-sm transition ' +
-          (index === flowPhase
-            ? 'bg-orange-500 text-black border-orange-500 font-bold'
-            : 'bg-black/30 border-white/10 text-white/70');
-
-        div.textContent = phaseLabel;
-        flowGrid.appendChild(div);
-      });
-
-      document.getElementById('flowText').textContent = flowDescriptions[flowPhase];
-      document.getElementById('emailBox').classList.toggle('hidden', flowPhase !== 5);
-    }
-
-    function renderCreatorPlans() {
-      const creatorPlansGrid = document.getElementById('creatorPlansGrid');
-      creatorPlansGrid.innerHTML = '';
-
-      creatorPlans.forEach((plan, index) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className =
-          'rounded-[24px] border p-5 text-left transition ' +
-          (index === selectedCreatorPlan
-            ? 'border-orange-400 bg-orange-500/10 shadow-glow'
-            : 'border-white/10 bg-black/30 hover:bg-white/10');
-
-        btn.innerHTML = `
-          <div class="flex items-start justify-between gap-4">
-            <div class="font-bold text-lg">${plan.name}</div>
-            <div class="text-orange-300 font-black">${plan.label}</div>
-          </div>
-          <div class="mt-3 space-y-1 text-sm text-white/70">
-            ${plan.features.map(f => `<div>• ${f}</div>`).join('')}
-          </div>
-        `;
-
-        btn.onclick = () => {
-          selectedCreatorPlan = index;
-          updateUI();
-          renderCreatorPlans();
-          renderCreatorSimulation();
-        };
-
-        creatorPlansGrid.appendChild(btn);
-      });
-    }
-
-    function renderPublicPlans() {
-      const publicPlansGrid = document.getElementById('publicPlansGrid');
-      publicPlansGrid.innerHTML = '';
-
-      publicPlans.forEach((plan, index) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className =
-          'rounded-[24px] border p-5 text-left transition ' +
-          (index === selectedPublicPlan
-            ? 'border-orange-400 bg-orange-500/10 shadow-glow'
-            : 'border-white/10 bg-black/30 hover:bg-white/10');
-
-        btn.innerHTML = `
-          <div class="flex items-start justify-between gap-4">
-            <div class="font-bold text-lg">${plan.name}</div>
-            <div class="text-orange-300 font-black">${plan.label}</div>
-          </div>
-          <div class="mt-3 space-y-1 text-sm text-white/70">
-            ${plan.features.map(f => `<div>• ${f}</div>`).join('')}
-          </div>
-        `;
-
-        btn.onclick = () => {
-          selectedPublicPlan = index;
-          updateUI();
-          renderPublicPlans();
-          renderPublicSimulation();
-        };
-
-        publicPlansGrid.appendChild(btn);
-      });
-    }
-
-    function renderCreatorSimulation() {
-      const creatorSimulationGrid = document.getElementById('creatorSimulationGrid');
-      creatorSimulationGrid.innerHTML = '';
-
-      creatorPlans.forEach((plan, index) => {
-        const annual = plan.price * 12;
-        const reserve = plan.price / 3;
-
-        const card = document.createElement('div');
-        card.className =
-          'rounded-[24px] border p-5 transition ' +
-          (index === selectedCreatorPlan
-            ? 'border-orange-400 bg-orange-500/10'
-            : 'border-white/10 bg-black/30');
-
-        card.innerHTML = `
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <div class="font-bold text-lg">${plan.name}</div>
-              <div class="text-sm text-white/60 mt-1">${plan.investorText}</div>
-            </div>
-            <div class="text-orange-300 font-black">${plan.label}</div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Capacité</div>
-              <div class="mt-1 font-bold">${plan.monthlyUploads}</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Accès</div>
-              <div class="mt-1 font-bold">${plan.access}</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Revenu mensuel / abonné</div>
-              <div class="mt-1 font-bold">${plan.price.toFixed(2)}$</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Projection annuelle / abonné</div>
-              <div class="mt-1 font-bold">${annual.toFixed(2)}$</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3 col-span-2">
-              <div class="text-white/45">Part mise en provision 1/3</div>
-              <div class="mt-1 font-bold">${reserve.toFixed(2)}$</div>
-            </div>
-          </div>
-        `;
-
-        creatorSimulationGrid.appendChild(card);
-      });
-    }
-
-    function renderPublicSimulation() {
-      const publicSimulationGrid = document.getElementById('publicSimulationGrid');
-      publicSimulationGrid.innerHTML = '';
-
-      publicPlans.forEach((plan, index) => {
-        const annual = plan.price * 12;
-        const reserve = plan.price / 3;
-
-        const card = document.createElement('div');
-        card.className =
-          'rounded-[24px] border p-5 transition ' +
-          (index === selectedPublicPlan
-            ? 'border-orange-400 bg-orange-500/10'
-            : 'border-white/10 bg-black/30');
-
-        card.innerHTML = `
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <div class="font-bold text-lg">${plan.name}</div>
-              <div class="text-sm text-white/60 mt-1">${plan.investorText}</div>
-            </div>
-            <div class="text-orange-300 font-black">${plan.label}</div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Accès</div>
-              <div class="mt-1 font-bold">${plan.access}</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Revenu mensuel / abonné</div>
-              <div class="mt-1 font-bold">${plan.price.toFixed(2)}$</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Projection annuelle / abonné</div>
-              <div class="mt-1 font-bold">${annual.toFixed(2)}$</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Provision 1/3</div>
-              <div class="mt-1 font-bold">${reserve.toFixed(2)}$</div>
-            </div>
-          </div>
-        `;
-
-        publicSimulationGrid.appendChild(card);
-      });
-    }
-
-    function renderMarketScenarios() {
-      document.getElementById('simPopulation').textContent = marketAssumptions.populationQc.toLocaleString('fr-CA');
-      document.getElementById('simConsumers').textContent =
-        Math.round(marketAssumptions.populationQc * marketAssumptions.contentConsumersRate).toLocaleString('fr-CA');
-      document.getElementById('simArtists').textContent = marketAssumptions.artistsQc.toLocaleString('fr-CA');
-
-      const marketScenarioGrid = document.getElementById('marketScenarioGrid');
-      marketScenarioGrid.innerHTML = '';
-
-      marketAssumptions.scenarios.forEach((scenario) => {
-        const creators = Math.round(marketAssumptions.artistsQc * scenario.creatorAdoption);
-        const publicPremium = Math.round((marketAssumptions.populationQc * marketAssumptions.contentConsumersRate) * scenario.publicAdoption);
-        const creator14 = Math.round(creators * 0.7);
-        const creator65 = Math.round(creators * 0.3);
-
-        const revenue = (creator14 * 14.99) + (creator65 * 65.99) + (publicPremium * 1.99);
-        const reserve = revenue / 3;
-        const estimatedNet = revenue - reserve - (revenue * 0.08) - (reserve * 0.6);
-
-        const card = document.createElement('div');
-        card.className = 'rounded-[26px] border border-white/10 bg-black/30 p-5';
-        card.innerHTML = `
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <div class="text-2xl font-black">${scenario.name}</div>
-              <div class="mt-1 text-sm text-white/60">${scenario.note}</div>
-            </div>
-            <div class="text-orange-300 font-black">${creators.toLocaleString('fr-CA')} créateurs</div>
-          </div>
-
-          <div class="grid gap-3 mt-5 text-sm">
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Public premium estimé</div>
-              <div class="mt-1 font-bold">${publicPremium.toLocaleString('fr-CA')}</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Revenu mensuel brut estimé</div>
-              <div class="mt-1 font-bold text-green-300">${formatCurrency(revenue)}</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Provision 1/3</div>
-              <div class="mt-1 font-bold text-yellow-300">${formatCurrency(reserve)}</div>
-            </div>
-            <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-              <div class="text-white/45">Bénéfice net simulé</div>
-              <div class="mt-1 font-bold text-green-300">${formatCurrency(estimatedNet)}</div>
-            </div>
-          </div>
-        `;
-        marketScenarioGrid.appendChild(card);
-      });
-    }
-
-    function updateUI() {
-      const monitor = monitors[selectedMonitor];
-      const creatorPlan = creatorPlans[selectedCreatorPlan];
-      const publicPlan = publicPlans[selectedPublicPlan];
-
-      document.getElementById('activeMonitorName').textContent = monitor.name;
-      document.getElementById('activeMonitorAudience').textContent = monitor.audience;
-
-      document.getElementById('topScore').textContent = Math.round(score);
-      document.getElementById('topCoins').textContent = Math.round(coins);
-      document.getElementById('topTuned').textContent = Math.round(tuned);
-      document.getElementById('moneyValue').textContent = 'Valeur : ' + moneyFromCoins(coins);
-
-      document.getElementById('videoTitle').textContent = 'Clip V' + version;
-      document.getElementById('videoAudience').textContent = monitor.name;
-      document.getElementById('videoScore').textContent = Math.round(score);
-      document.getElementById('videoCoins').textContent = Math.round(coins);
-      document.getElementById('videoStatus').textContent = currentStatus;
-      document.getElementById('videoStatusHero').textContent = currentStatus;
-
-      document.getElementById('dashboardAudience').textContent = monitor.name;
-      document.getElementById('dashboardPerformance').textContent = Math.round(score);
-      document.getElementById('dashboardCoins').textContent = Math.round(coins);
-      document.getElementById('dashboardCreatorPlan').textContent = creatorPlan.name;
-      document.getElementById('dashboardPublicPlan').textContent = publicPlan.name;
-      document.getElementById('dashboardStatus').textContent = currentStatus;
-      document.getElementById('dashboardVersion').textContent = version;
-
-      document.getElementById('linkAudience').textContent = monitor.name;
-      document.getElementById('linkPerformance').textContent = Math.round(score);
-      document.getElementById('linkCoins').textContent = Math.round(coins);
-      document.getElementById('linkImprovement').textContent = 'Version ' + version;
-
-      document.getElementById('coinVisibleTotal').textContent = Math.round(coins);
-      document.getElementById('coinVisibleMoney').textContent = moneyFromCoins(coins);
-      document.getElementById('tunedBtn').textContent = 'Tuned On (' + Math.round(tuned) + ')';
-
-      renderFlow();
-    }
-
-    function computeSimulation() {
-      const weeklyRevenue = simState.creatorWeekly * 14.99;
-      const dailyRevenue = simState.creatorDaily * 65.99;
-      const premiumRevenue = simState.publicPremium * 1.99;
-      const totalIn = weeklyRevenue + dailyRevenue + premiumRevenue;
-      const reserve = totalIn / 3;
-      const withdrawals = simState.quarterlyWithdrawCreators * simState.avgWithdrawalCoins * 0.15;
-      const safety = totalIn * simState.safetyRate;
-      const totalOut = reserve + withdrawals + safety;
-      const net = totalIn - totalOut;
-
-      document.getElementById('simCreatorTotal').textContent =
-        (simState.creatorFree + simState.creatorWeekly + simState.creatorDaily).toLocaleString('fr-CA');
-      document.getElementById('simCreatorMix').textContent =
-        `Gratuit ${simState.creatorFree} • 14.99$ ${simState.creatorWeekly} • 65.99$ ${simState.creatorDaily}`;
-
-      document.getElementById('simPublicTotal').textContent =
-        (simState.publicFree + simState.publicPremium).toLocaleString('fr-CA');
-      document.getElementById('simPublicMix').textContent =
-        `Gratuit ${simState.publicFree} • 1.99$ ${simState.publicPremium}`;
-
-      document.getElementById('revCreatorWeeklyCount').textContent = simState.creatorWeekly;
-      document.getElementById('revCreatorDailyCount').textContent = simState.creatorDaily;
-      document.getElementById('revPublicPremiumCount').textContent = simState.publicPremium;
-
-      document.getElementById('revCreatorWeekly').textContent = formatCurrency(weeklyRevenue);
-      document.getElementById('revCreatorDaily').textContent = formatCurrency(dailyRevenue);
-      document.getElementById('revPublicPremium').textContent = formatCurrency(premiumRevenue);
-      document.getElementById('revTotalIn').textContent = formatCurrency(totalIn);
-
-      document.getElementById('outReserve').textContent = formatCurrency(reserve);
-      document.getElementById('outCoinWithdrawals').textContent = formatCurrency(withdrawals);
-      document.getElementById('outSafety').textContent = formatCurrency(safety);
-      document.getElementById('outTotal').textContent = formatCurrency(totalOut);
-
-      document.getElementById('simNetProfit').textContent = formatCurrency(net);
-
-      document.getElementById('withdrawalList').innerHTML = `
-        <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-          <div class="text-white/45">Créateurs qui encaissent</div>
-          <div class="mt-1 font-bold">${simState.quarterlyWithdrawCreators}</div>
-        </div>
-        <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-          <div class="text-white/45">Coins moyens retirés / créateur</div>
-          <div class="mt-1 font-bold">${simState.avgWithdrawalCoins}</div>
-        </div>
-        <div class="rounded-xl border border-white/10 bg-black/20 p-3">
-          <div class="text-white/45">Valeur par coin</div>
-          <div class="mt-1 font-bold">0.15$ CAD</div>
-        </div>
-      `;
-
-      document.getElementById('profitConclusion').innerHTML = net > 0
-        ? `La simulation montre un <strong>bénéfice net positif</strong> après provision, retraits de coins et coussin de sécurité. Le modèle reste rentable si la croissance premium et créateur payant continue.`
-        : `Le modèle devient fragile. Il faut augmenter la part d’abonnements payants, réduire les retraits ou ajuster la sécurité.`;
-    }
-
-    function applyScenarioButtonStyles(activeId) {
-      ['scenarioConservativeBtn', 'scenarioRealisticBtn', 'scenarioAmbitiousBtn'].forEach((id) => {
-        const btn = document.getElementById(id);
-        if (!btn) return;
-
-        btn.className = id === activeId
-          ? 'rounded-2xl bg-orange-500 px-4 py-3 font-black text-black transition hover:scale-[1.01]'
-          : 'rounded-2xl border border-white/10 bg-white/10 px-4 py-3 font-bold transition hover:bg-white/20';
-      });
-    }
-
-    function simulateGrowth24Months(mode = 'realistic') {
-      const months = [];
-      const revenue = [];
-      const profit = [];
-      const subs = [];
-
-      let creator14;
-      let creator65;
-      let publicPremium;
-      let growth14;
-      let growth65;
-      let growthPublic;
-
-      if (mode === 'conservative') {
-        activeScenarioName = 'Conservateur';
-        creator14 = 90;
-        creator65 = 28;
-        publicPremium = 280;
-        growth14 = 1.035;
-        growth65 = 1.045;
-        growthPublic = 1.05;
-        applyScenarioButtonStyles('scenarioConservativeBtn');
-      } else if (mode === 'ambitious') {
-        activeScenarioName = 'Ambitieux';
-        creator14 = 150;
-        creator65 = 60;
-        publicPremium = 600;
-        growth14 = 1.105;
-        growth65 = 1.125;
-        growthPublic = 1.14;
-        applyScenarioButtonStyles('scenarioAmbitiousBtn');
-      } else {
-        activeScenarioName = 'Réaliste';
-        creator14 = 110;
-        creator65 = 40;
-        publicPremium = 400;
-        growth14 = 1.08;
-        growth65 = 1.10;
-        growthPublic = 1.12;
-        applyScenarioButtonStyles('scenarioRealisticBtn');
-      }
-
-      for (let i = 1; i <= 24; i++) {
-        creator14 *= growth14;
-        creator65 *= growth65;
-        publicPremium *= growthPublic;
-
-        const rev = (creator14 * 14.99) + (creator65 * 65.99) + (publicPremium * 1.99);
-        const reserve = rev / 3;
-        const safety = rev * 0.08;
-        const withdrawals = reserve * 0.6;
-        const net = rev - reserve - safety - withdrawals;
-
-        months.push('M' + i);
-        revenue.push(Math.round(rev));
-        profit.push(Math.round(net));
-        subs.push(Math.round(creator14 + creator65 + publicPremium));
-      }
-
-      const ctx = document.getElementById('growthChart').getContext('2d');
-      if (chart) chart.destroy();
-
-      chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: months,
-          datasets: [
-            {
-              label: 'Revenus',
-              data: revenue,
-              borderColor: '#f97316',
-              backgroundColor: 'rgba(249,115,22,0.16)',
-              borderWidth: 3,
-              tension: 0.35,
-              fill: true
-            },
-            {
-              label: 'Profit net',
-              data: profit,
-              borderColor: '#4ade80',
-              backgroundColor: 'rgba(74,222,128,0.12)',
-              borderWidth: 3,
-              tension: 0.35,
-              fill: true
-            },
-            {
-              label: 'Abonnés payants',
-              data: subs,
-              borderColor: '#facc15',
-              backgroundColor: 'rgba(250,204,21,0.08)',
-              borderWidth: 3,
-              tension: 0.35,
-              fill: false
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          animation: { duration: 1000 },
-          plugins: {
-            legend: {
-              labels: { color: '#ffffff' }
-            }
-          },
-          scales: {
-            x: {
-              ticks: { color: '#ffffff' },
-              grid: { color: 'rgba(255,255,255,0.08)' }
-            },
-            y: {
-              ticks: { color: '#ffffff' },
-              grid: { color: 'rgba(255,255,255,0.08)' }
-            }
-          }
-        }
-      });
-
-      document.getElementById('activeScenarioLabel').textContent = activeScenarioName;
-      document.getElementById('finalRevenue').textContent = revenue[23].toLocaleString('fr-CA') + '$';
-      document.getElementById('finalProfit').textContent = profit[23].toLocaleString('fr-CA') + '$';
-      document.getElementById('finalSubs').textContent = subs[23].toLocaleString('fr-CA');
     }
 
     function openModal(id) {
@@ -1796,67 +719,298 @@
     function setupForm(formId, storageKey, successId, modalId) {
       const form = document.getElementById(formId);
       const success = document.getElementById(successId);
-
+      if (!form) return;
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        const data = Object.fromEntries(new FormData(form).entries());
         saveFormData(storageKey, data);
-
         success.classList.remove('hidden');
         form.reset();
-
         setTimeout(() => {
           success.classList.add('hidden');
           closeModal(modalId);
-        }, 1800);
+        }, 1600);
       });
     }
 
-    function getCurrentQuarter() {
-      const month = new Date().getMonth() + 1;
-      if (month >= 1 && month <= 3) return 'T1';
-      if (month >= 4 && month <= 6) return 'T2';
-      if (month >= 7 && month <= 9) return 'T3';
-      return 'T4';
+    function renderMonitors() {
+      const monitorGrid = document.getElementById('monitorGrid');
+      monitorGrid.innerHTML = '';
+
+      monitors.forEach((monitor, index) => {
+        const card = document.createElement('article');
+        card.className = 'grid gap-4 rounded-[28px] border p-4 transition md:grid-cols-[1.1fr_180px_180px] ' +
+          (index === selectedMonitor
+            ? 'border-orange-400 bg-orange-500/10 shadow-glowxl'
+            : 'border-white/10 bg-black/30 hover:bg-white/10');
+
+        card.innerHTML = `
+          <div>
+            <div class="text-2xl font-black">${monitor.name}</div>
+            <div class="mt-2 text-sm leading-7 text-white/65">${monitor.description}</div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="rounded-full border border-orange-500/25 bg-orange-500/10 px-3 py-2 text-xs font-semibold text-orange-200">${monitor.rewardText}</span>
+              ${monitor.tags.map(tag => `<span class="rounded-full border border-white/10 bg-black/30 px-3 py-2 text-xs font-semibold text-white/75">${tag}</span>`).join('')}
+            </div>
+          </div>
+
+          <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-black">
+            <video class="h-full w-full object-cover" muted autoplay loop playsinline src="${monitor.video}"></video>
+            <div class="absolute top-3 right-3 rounded-full bg-red-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white">Live</div>
+            <div class="absolute left-3 bottom-3 rounded-full bg-black/65 px-3 py-2 text-xs font-bold text-white">▶</div>
+          </div>
+
+          <div class="grid gap-3">
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-xs text-white/45">Audience</div>
+              <div class="mt-2 text-xl font-black">${monitor.audienceValue.toLocaleString('fr-CA')}</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div class="text-xs text-white/45">Performance</div>
+              <div class="mt-2 text-xl font-black ${monitor.performance >= 75 ? 'text-green-400' : 'text-orange-300'}">${monitor.performance}</div>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          selectedMonitor = index;
+          updateUI();
+          renderMonitors();
+          openViewer();
+        });
+
+        card.addEventListener('mouseenter', () => {
+          autoRotate = false;
+          document.getElementById('rotationStatus').textContent = 'Rotation auto · pause';
+          selectedMonitor = index;
+          updateUI();
+          renderMonitors();
+        });
+
+        card.addEventListener('mouseleave', () => {
+          if (!document.getElementById('viewer').classList.contains('flex')) {
+            autoRotate = true;
+            document.getElementById('rotationStatus').textContent = 'Rotation auto · active';
+          }
+        });
+
+        monitorGrid.appendChild(card);
+      });
     }
 
-    function initCoinsWindow() {
-      const quarter = getCurrentQuarter();
-      const isOpen = true;
+    function renderFlow() {
+      const flowGrid = document.getElementById('flowGrid');
+      flowGrid.innerHTML = '';
+      phases.forEach((phaseLabel, index) => {
+        const div = document.createElement('div');
+        div.className = 'rounded-2xl border p-3 text-sm transition ' +
+          (index === flowPhase
+            ? 'bg-orange-500 text-black border-orange-500 font-bold'
+            : 'bg-black/30 border-white/10 text-white/70');
+        div.textContent = phaseLabel;
+        flowGrid.appendChild(div);
+      });
+      document.getElementById('flowText').textContent = flowDescriptions[flowPhase];
+      document.getElementById('emailBox').classList.toggle('hidden', flowPhase !== 5);
+    }
 
-      document.getElementById('coinsQuarterLabel').textContent = quarter;
-      document.getElementById('coinsWindowStatus').textContent = isOpen ? 'Ouvert' : 'Fermé';
+    function renderPlans() {
+      const creatorPlansGrid = document.getElementById('creatorPlansGrid');
+      const publicPlansGrid = document.getElementById('publicPlansGrid');
+      creatorPlansGrid.innerHTML = '';
+      publicPlansGrid.innerHTML = '';
+
+      creatorPlans.forEach((plan, index) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'rounded-[24px] border p-5 text-left transition ' +
+          (index === selectedCreatorPlan ? 'border-orange-400 bg-orange-500/10 shadow-glow' : 'border-white/10 bg-black/30 hover:bg-white/10');
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-4">
+            <div class="text-xl font-black">${plan.name}</div>
+            <div class="text-sm font-bold text-orange-300">${plan.label}</div>
+          </div>
+          <div class="mt-3 text-sm text-white/70">${plan.monthlyUploads}</div>
+          <div class="mt-2 text-sm text-white/60">${plan.access}</div>
+          <div class="mt-4 text-sm text-white/75 leading-7">${plan.investorText}</div>
+          <div class="mt-4 flex flex-wrap gap-2">${plan.features.map(f => `<span class="rounded-full border border-white/10 bg-black/30 px-3 py-2 text-xs">${f}</span>`).join('')}</div>
+        `;
+        card.onclick = () => { selectedCreatorPlan = index; updateUI(); renderPlans(); };
+        creatorPlansGrid.appendChild(card);
+      });
+
+      publicPlans.forEach((plan, index) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'rounded-[24px] border p-5 text-left transition ' +
+          (index === selectedPublicPlan ? 'border-orange-400 bg-orange-500/10 shadow-glow' : 'border-white/10 bg-black/30 hover:bg-white/10');
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-4">
+            <div class="text-xl font-black">${plan.name}</div>
+            <div class="text-sm font-bold text-orange-300">${plan.label}</div>
+          </div>
+          <div class="mt-3 text-sm text-white/70">${plan.access}</div>
+          <div class="mt-4 text-sm text-white/75 leading-7">${plan.investorText}</div>
+          <div class="mt-4 flex flex-wrap gap-2">${plan.features.map(f => `<span class="rounded-full border border-white/10 bg-black/30 px-3 py-2 text-xs">${f}</span>`).join('')}</div>
+        `;
+        card.onclick = () => { selectedPublicPlan = index; updateUI(); renderPlans(); };
+        publicPlansGrid.appendChild(card);
+      });
+    }
+
+    function updateViewer() {
+      const monitor = monitors[selectedMonitor];
+      document.getElementById('viewerTitle').textContent = monitor.name;
+      document.getElementById('viewerDesc').textContent = monitor.description;
+      document.getElementById('viewerAudience').textContent = monitor.audienceValue.toLocaleString('fr-CA');
+      document.getElementById('viewerCoins').textContent = coins;
+      document.getElementById('viewerRevenue').textContent = monitor.projection;
+      document.getElementById('mainVideo').src = monitor.video;
+    }
+
+    function openViewer() {
+      updateViewer();
+      document.getElementById('viewer').classList.remove('hidden');
+      document.getElementById('viewer').classList.add('flex');
+      document.body.classList.add('viewer-open');
+      autoRotate = false;
+      document.getElementById('rotationStatus').textContent = 'Rotation auto · pause';
+    }
+
+    function closeViewer() {
+      const viewer = document.getElementById('viewer');
+      const mainVideo = document.getElementById('mainVideo');
+      viewer.classList.add('hidden');
+      viewer.classList.remove('flex');
+      mainVideo.pause();
+      document.body.classList.remove('viewer-open');
+      autoRotate = true;
+      document.getElementById('rotationStatus').textContent = 'Rotation auto · active';
+    }
+
+    function updateUI() {
+      const monitor = monitors[selectedMonitor];
+      document.getElementById('activeMonitorName').textContent = monitor.name;
+      document.getElementById('activeMonitorAudience').textContent = monitor.audience;
+      document.getElementById('topScore').textContent = score;
+      document.getElementById('topCoins').textContent = coins;
+      document.getElementById('moneyValue').textContent = 'Valeur : ' + moneyFromCoins(coins);
+      document.getElementById('topTuned').textContent = tuned;
+      document.getElementById('nowPlayingLabel').textContent = monitor.name;
+
+      document.getElementById('heroVideo').src = monitor.video;
+      document.getElementById('videoTitle').textContent = 'Clip V' + version;
+      document.getElementById('videoStatusHero').textContent = monitor.status;
+      document.getElementById('videoAudience').textContent = monitor.name;
+      document.getElementById('videoScore').textContent = score;
+      document.getElementById('videoCoins').textContent = coins;
+      document.getElementById('videoStatus').textContent = currentStatus;
+
+      document.getElementById('dashboardAudience').textContent = monitor.name;
+      document.getElementById('dashboardPerformance').textContent = score;
+      document.getElementById('dashboardCoins').textContent = coins;
+      document.getElementById('dashboardCreatorPlan').textContent = creatorPlans[selectedCreatorPlan].name;
+      document.getElementById('dashboardPublicPlan').textContent = publicPlans[selectedPublicPlan].name;
+      document.getElementById('dashboardStatus').textContent = currentStatus;
+      document.getElementById('dashboardVersion').textContent = version;
+
+      document.getElementById('linkAudience').textContent = monitor.name;
+      document.getElementById('linkPerformance').textContent = score;
+      document.getElementById('linkCoins').textContent = coins;
+      document.getElementById('linkImprovement').textContent = 'Version ' + version;
+
+      document.getElementById('tunedBtn').textContent = `Tuned On (${tuned})`;
+      updateViewer();
+    }
+
+    function startFlowLoop() {
+      setInterval(() => {
+        flowPhase = (flowPhase + 1) % phases.length;
+        if (flowPhase === 2) score = Math.max(45, Math.min(100, Math.round(score + (Math.random() * 8 - 3))));
+        if (flowPhase === 3) currentStatus = score >= 80 ? 'Monte' : 'Chute';
+        if (flowPhase === 4 && score < 72) currentStatus = 'Recyclage';
+        if (flowPhase === 6) currentStatus = 'Amélioration';
+        if (flowPhase === 7) currentStatus = 'En circulation';
+        renderFlow();
+        updateUI();
+      }, 2800);
+    }
+
+    function startMonitorRotation() {
+      rotationInterval = setInterval(() => {
+        if (!autoRotate) return;
+        selectedMonitor = (selectedMonitor + 1) % monitors.length;
+        score = monitors[selectedMonitor].performance;
+        currentStatus = monitors[selectedMonitor].status;
+        renderMonitors();
+        updateUI();
+      }, 4000);
+    }
+
+    function buildGrowthScenario(type) {
+      const scenario = scenarios[type];
+      activeScenarioName = scenario.label;
+      const labels = Array.from({ length: 24 }, (_, i) => `M${i + 1}`);
+      const revenueData = labels.map((_, i) => Math.round((scenario.revenue / 24) * (i + 1)));
+      const profitData = labels.map((_, i) => Math.round((scenario.profit / 24) * (i + 1)));
+      const subsData = labels.map((_, i) => Math.round(((scenario.creator + scenario.public) / 24) * (i + 1)));
+      return { labels, revenueData, profitData, subsData, scenario };
+    }
+
+    function renderGrowthChart(type = 'realistic') {
+      const { labels, revenueData, profitData, subsData, scenario } = buildGrowthScenario(type);
+      const ctx = document.getElementById('growthChart').getContext('2d');
+      if (growthChart) growthChart.destroy();
+      growthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Revenu', data: revenueData, borderColor: '#fb923c', backgroundColor: 'rgba(251,146,60,0.15)', tension: 0.35, fill: true },
+            { label: 'Profit net', data: profitData, borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.10)', tension: 0.35, fill: true },
+            { label: 'Abonnés payants', data: subsData, borderColor: '#fde047', backgroundColor: 'rgba(253,224,71,0.10)', tension: 0.35, fill: true, yAxisID: 'y1' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#fff' } } },
+          scales: {
+            x: { ticks: { color: 'rgba(255,255,255,0.65)' }, grid: { color: 'rgba(255,255,255,0.07)' } },
+            y: { ticks: { color: 'rgba(255,255,255,0.65)' }, grid: { color: 'rgba(255,255,255,0.07)' } },
+            y1: { position: 'right', ticks: { color: 'rgba(255,255,255,0.45)' }, grid: { drawOnChartArea: false } }
+          }
+        }
+      });
+
+      document.getElementById('activeScenarioLabel').textContent = scenario.label;
+      document.getElementById('finalRevenue').textContent = formatCurrency(scenario.revenue);
+      document.getElementById('finalProfit').textContent = formatCurrency(scenario.profit);
+      document.getElementById('finalSubs').textContent = (scenario.creator + scenario.public).toLocaleString('fr-CA');
     }
 
     function initModalsAndForms() {
       document.getElementById('openSponsorModalBtn').addEventListener('click', () => openModal('sponsorModal'));
       document.getElementById('openSceneBookModalBtn').addEventListener('click', () => openModal('sceneBookModal'));
       document.getElementById('openSceneAttendModalBtn').addEventListener('click', () => openModal('sceneAttendModal'));
-      document.getElementById('openCoinsModalBtn').addEventListener('click', () => openModal('coinsModal'));
-
-      document.querySelectorAll('[data-close-modal]').forEach((btn) => {
-        btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close-modal')));
-      });
-
-      ['sponsorModal', 'sceneBookModal', 'sceneAttendModal', 'coinsModal'].forEach((id) => {
+      document.getElementById('closeViewerBtn').addEventListener('click', closeViewer);
+      document.querySelectorAll('[data-close-modal]').forEach(btn => btn.addEventListener('click', () => closeModal(btn.dataset.closeModal)));
+      ['sponsorModal', 'sceneBookModal', 'sceneAttendModal'].forEach((id) => {
         const modal = document.getElementById(id);
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) closeModal(id);
-        });
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(id); });
       });
-
+      document.getElementById('viewer').addEventListener('click', (e) => { if (e.target.id === 'viewer') closeViewer(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeViewer(); });
       setupForm('sponsorForm', 'meydenSponsorLeads', 'sponsorSuccess', 'sponsorModal');
       setupForm('sceneBookForm', 'meydenSceneBookings', 'sceneBookSuccess', 'sceneBookModal');
       setupForm('sceneAttendForm', 'meydenSceneAttendance', 'sceneAttendSuccess', 'sceneAttendModal');
-      setupForm('coinsForm', 'meydenCoinsRequests', 'coinsSuccess', 'coinsModal');
     }
 
     function initActions() {
       document.getElementById('tunedBtn').addEventListener('click', () => {
         tuned += 120;
         score = Math.min(100, score + 2);
-        coins += monitors[selectedMonitor].reward > 0 ? monitors[selectedMonitor].reward * 4 : 1;
+        coins += monitors[selectedMonitor].reward > 0 ? Math.ceil(monitors[selectedMonitor].reward * 4) : 1;
         currentStatus = score >= 85 ? 'Monte' : 'Actif';
         updateUI();
       });
@@ -1867,75 +1021,24 @@
         score = Math.min(100, score + 5);
         coins += 12;
         currentStatus = 'Nouvelle version déposée';
+        renderFlow();
         updateUI();
       });
 
-      document.getElementById('growthTickBtn').addEventListener('click', () => {
-        simState.creatorFree += 12;
-        simState.creatorWeekly += 8;
-        simState.creatorDaily += 3;
-        simState.publicFree += 150;
-        simState.publicPremium += 22;
-        simState.quarterlyWithdrawCreators = Math.max(12, simState.quarterlyWithdrawCreators + 1);
-        computeSimulation();
-      });
-
-      document.getElementById('scenarioConservativeBtn').addEventListener('click', () => {
-        simulateGrowth24Months('conservative');
-      });
-      document.getElementById('scenarioRealisticBtn').addEventListener('click', () => {
-        simulateGrowth24Months('realistic');
-      });
-      document.getElementById('scenarioAmbitiousBtn').addEventListener('click', () => {
-        simulateGrowth24Months('ambitious');
-      });
+      document.getElementById('scenarioConservativeBtn').addEventListener('click', () => renderGrowthChart('conservative'));
+      document.getElementById('scenarioRealisticBtn').addEventListener('click', () => renderGrowthChart('realistic'));
+      document.getElementById('scenarioAmbitiousBtn').addEventListener('click', () => renderGrowthChart('ambitious'));
     }
 
-    function startFlowLoop() {
-      setInterval(() => {
-        flowPhase = (flowPhase + 1) % phases.length;
-
-        if (flowPhase === 2) {
-          score = Math.max(45, Math.min(100, score + (Math.random() * 8 - 3)));
-        }
-
-        if (flowPhase === 3) {
-          currentStatus = score >= 80 ? 'Monte' : 'Chute';
-        }
-
-        if (flowPhase === 4 && score < 72) {
-          currentStatus = 'Recyclage';
-        }
-
-        if (flowPhase === 6) {
-          currentStatus = 'Amélioration';
-        }
-
-        if (flowPhase === 7) {
-          currentStatus = score >= 75 ? 'Retour en circulation' : 'À retravailler';
-        }
-
-        updateUI();
-      }, 3500);
-    }
-
-    function init() {
-      renderMonitors();
-      renderCreatorPlans();
-      renderPublicPlans();
-      renderCreatorSimulation();
-      renderPublicSimulation();
-      renderMarketScenarios();
-      updateUI();
-      computeSimulation();
-      initActions();
-      initModalsAndForms();
-      initCoinsWindow();
-      simulateGrowth24Months('realistic');
-      startFlowLoop();
-    }
-
-    init();
+    renderMonitors();
+    renderFlow();
+    renderPlans();
+    updateUI();
+    renderGrowthChart('realistic');
+    initModalsAndForms();
+    initActions();
+    startFlowLoop();
+    startMonitorRotation();
   </script>
 </body>
 </html>
