@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meyden Monitor — Version 15</title>
+  <title>Meyden Monitor — Version 15.2</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
@@ -32,24 +31,26 @@
 
   <main class="relative max-w-7xl mx-auto px-5 py-8 lg:px-8">
 
+    <!-- HERO -->
     <section class="rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-sm shadow-glow overflow-hidden mb-8">
       <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-0">
         <div class="p-7 lg:p-10">
           <div class="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-orange-300">
             Meyden Monitor
-            <span class="text-white/50">Version 15</span>
+            <span class="text-white/50">Version 15.2</span>
           </div>
 
           <h1 class="mt-5 text-4xl md:text-5xl font-black tracking-tight leading-tight">
             La plateforme qui relie
             <span class="text-orange-400"> audience</span>,
             <span class="text-yellow-300"> performance</span>,
-            <span class="text-green-400"> revenus</span>
-            et évolution du contenu
+            <span class="text-green-400"> revenus</span>,
+            évolution du contenu
+            et <span class="text-orange-300">l’Algorithme Naturel</span>
           </h1>
 
           <p class="mt-5 max-w-2xl text-white/70 leading-7">
-            Version premium pensée pour lecture investisseur et sponsor. Le système montre comment un contenu circule, est analysé, amélioré, monétisé et sécurisé par une logique d’abonnement, de provision et de Meyden Coins.
+            Version premium pensée pour lecture investisseur, sponsor, scène et circulation de valeur. Le système montre comment un contenu circule, est analysé, amélioré, monétisé et sécurisé par une logique d’abonnement, de provision, de guichet trimestriel et de Meyden Coins.
           </p>
 
           <div class="grid sm:grid-cols-3 gap-4 mt-8">
@@ -61,12 +62,12 @@
             <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
               <div class="text-xs uppercase tracking-wide text-white/40">Modèle</div>
               <div class="mt-2 text-lg font-bold">Abonnement + Coins</div>
-              <div class="mt-2 text-sm text-white/60">Croissance récurrente avec réserve et sécurité intégrées.</div>
+              <div class="mt-2 text-sm text-white/60">Croissance récurrente avec réserve, guichet et sécurité intégrés.</div>
             </div>
             <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
               <div class="text-xs uppercase tracking-wide text-white/40">Lecture</div>
-              <div class="mt-2 text-lg font-bold">Investisseur + Sponsor</div>
-              <div class="mt-2 text-sm text-white/60">Compréhension rapide du potentiel et de la valeur.</div>
+              <div class="mt-2 text-lg font-bold">Investisseur + Sponsor + Scène</div>
+              <div class="mt-2 text-sm text-white/60">Compréhension rapide du potentiel, de la monétisation et des retombées.</div>
             </div>
           </div>
         </div>
@@ -78,7 +79,7 @@
             <div class="rounded-2xl border border-white/10 bg-black/40 p-5">
               <div class="text-sm text-white/50">Positionnement</div>
               <div class="mt-2 text-2xl font-bold text-orange-300">Écosystème de diffusion créative</div>
-              <div class="mt-2 text-sm text-white/65">Un environnement où la performance réelle déclenche visibilité, recommandation et amélioration.</div>
+              <div class="mt-2 text-sm text-white/65">Un environnement où la performance réelle déclenche visibilité, recommandation, amélioration et valeur économique.</div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -96,13 +97,14 @@
 
             <div class="rounded-2xl border border-orange-500/30 bg-orange-500/10 p-5">
               <div class="text-sm text-orange-200/80">Lecture directe</div>
-              <div class="mt-2 text-lg font-bold">Plus le contenu performe, plus il gagne en portée, en coins et en pouvoir d’amélioration.</div>
+              <div class="mt-2 text-lg font-bold">Plus le contenu performe, plus il gagne en portée, en coins, en potentiel d’amélioration et en crédibilité de marché.</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- TOP KPIs -->
     <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-4 mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
         <div class="text-sm text-white/45">Monitor actif</div>
@@ -129,6 +131,7 @@
       </div>
     </section>
 
+    <!-- MONITORS -->
     <section class="mb-8 rounded-3xl border border-white/10 bg-white/5 p-6">
       <div class="flex items-center justify-between gap-4 flex-wrap mb-5">
         <div>
@@ -142,6 +145,7 @@
       <div id="monitorGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
     </section>
 
+    <!-- VIDEO + FLOW -->
     <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr] mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
         <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
@@ -216,6 +220,7 @@
       </div>
     </section>
 
+    <!-- DASHBOARD + STRATEGIC -->
     <section class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr] mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
         <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
@@ -318,6 +323,7 @@
       </div>
     </section>
 
+    <!-- SUBSCRIPTIONS -->
     <section class="grid gap-6 lg:grid-cols-2 mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
         <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
@@ -342,6 +348,7 @@
       </div>
     </section>
 
+    <!-- SUBSCRIPTION SIM -->
     <section class="grid gap-6 lg:grid-cols-2 mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
         <h2 class="text-2xl font-bold mb-2">Simulation d’évolution d’abonnement créateur</h2>
@@ -360,6 +367,7 @@
       </div>
     </section>
 
+    <!-- GROWTH -->
     <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
       <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
         <div>
@@ -398,13 +406,14 @@
       </div>
     </section>
 
+    <!-- SPONSORS -->
     <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
       <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
         <div>
           <h2 class="text-2xl font-bold">Espace sponsors</h2>
           <p class="mt-2 text-sm text-white/65">Zone conçue pour projeter une valeur commerciale réelle aux partenaires et commanditaires.</p>
         </div>
-        <button class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
+        <button id="openSponsorModalBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
           Devenir sponsor
         </button>
       </div>
@@ -488,6 +497,153 @@
       </div>
     </section>
 
+    <!-- SCENE -->
+    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
+      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
+        <div>
+          <h2 class="text-2xl font-bold">Scène Meyden ici</h2>
+          <p class="mt-2 text-sm text-white/65">Section dédiée aux demandes de booking, aux salles, aux artistes et au public qui veut assister à un show.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button id="openSceneBookModalBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
+            Booker un show
+          </button>
+          <button id="openSceneAttendModalBtn" class="rounded-2xl border border-white/10 bg-white/10 px-5 py-3 font-bold transition hover:bg-white/20">
+            Assister à un show
+          </button>
+        </div>
+      </div>
+
+      <div class="grid gap-4 lg:grid-cols-3 mb-6">
+        <div class="rounded-[26px] border border-orange-500/35 bg-orange-500/10 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-orange-300">Booking</div>
+          <div class="mt-3 text-2xl font-black">Faire venir la Scène Meyden</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Pour salles, diffuseurs, événements, festivals, partenaires et lieux qui veulent accueillir une programmation Meyden.
+          </div>
+        </div>
+
+        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Public</div>
+          <div class="mt-3 text-2xl font-black">Assister à un show</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Inscription d’intérêt pour spectateurs, fans, collaborateurs ou gens qui veulent être avisés des prochains événements.
+          </div>
+        </div>
+
+        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Mission</div>
+          <div class="mt-3 text-2xl font-black">Créer des retombées réelles</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Relier scène, captation, diffusion, visibilité, commandite et retombées culturelles mesurables.
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-4 lg:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold">Événements</h3>
+          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
+            <p>• Shows live</p>
+            <p>• Lancements</p>
+            <p>• Soirées thématiques</p>
+            <p>• Scène Meyden mobile</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold">Retombées</h3>
+          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
+            <p>• Visibilité pour les artistes</p>
+            <p>• Captation et contenu</p>
+            <p>• Achalandage et engagement</p>
+            <p>• Valeur pour partenaires et salles</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold">Activation</h3>
+          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
+            <p>• Booking de salles</p>
+            <p>• Présence sponsor</p>
+            <p>• Diffusion numérique</p>
+            <p>• Croissance de marque Meyden</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COINS WINDOW -->
+    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
+      <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
+        <div>
+          <h2 class="text-2xl font-bold">Guichet Meyden Coins</h2>
+          <p class="mt-2 text-sm text-white/65">
+            Guichet trimestriel pour les demandes d’échange de Meyden Coins. Le retrait est soumis à validation, au coussin de sécurité et aux règles du trimestre en cours.
+          </p>
+        </div>
+        <button id="openCoinsModalBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
+          Ouvrir le guichet trimestriel
+        </button>
+      </div>
+
+      <div class="grid gap-4 lg:grid-cols-3 mb-6">
+        <div class="rounded-[26px] border border-orange-500/35 bg-orange-500/10 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-orange-300">Statut</div>
+          <div id="coinsWindowStatus" class="mt-3 text-2xl font-black">Ouvert</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Le guichet peut recevoir les demandes d’échange du trimestre actif.
+          </div>
+        </div>
+
+        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Règle</div>
+          <div class="mt-3 text-2xl font-black">1/3 en provision</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Les sorties sont limitées par la réserve, la sécurité et l’évaluation de la demande.
+          </div>
+        </div>
+
+        <div class="rounded-[26px] border border-white/10 bg-black/30 p-5">
+          <div class="text-xs uppercase tracking-[0.2em] text-white/45">Cycle</div>
+          <div id="coinsQuarterLabel" class="mt-3 text-2xl font-black">T2</div>
+          <div class="mt-3 text-sm leading-7 text-white/70">
+            Le guichet opère par trimestre pour protéger la stabilité du système.
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-4 lg:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold">Conditions</h3>
+          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
+            <p>• Validation manuelle ou semi-automatique</p>
+            <p>• Respect du plafond trimestriel</p>
+            <p>• Ajustement selon le coussin actif</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold">Lecture créateur</h3>
+          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
+            <p>• Déposer une demande d’échange</p>
+            <p>• Déclarer le nombre de coins</p>
+            <p>• Attendre l’approbation du trimestre</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-black/30 p-5">
+          <h3 class="text-xl font-bold">Lecture système</h3>
+          <div class="mt-4 space-y-2 text-sm leading-7 text-white/75">
+            <p>• Réserve protégée</p>
+            <p>• Anti-abus</p>
+            <p>• Sortie économique contrôlée</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARKET -->
     <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
       <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
         <div>
@@ -505,6 +661,7 @@
       <div id="marketScenarioGrid" class="grid gap-5 lg:grid-cols-3"></div>
     </section>
 
+    <!-- COINS + RULE -->
     <section class="grid gap-6 lg:grid-cols-2 mb-8">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
         <h2 class="text-2xl font-bold mb-4">Meyden Coins visibles</h2>
@@ -532,7 +689,8 @@
       </div>
     </section>
 
-    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-8">
+    <!-- INTERACTIVE -->
+    <section class="rounded-3xl border border-white/10 bg-white/5 p-6 mb-16">
       <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
         <div>
           <h2 class="text-2xl font-bold">Simulation interactive — abonnements, coins et bénéfices</h2>
@@ -666,6 +824,305 @@
     </section>
 
   </main>
+
+  <!-- SPONSOR MODAL -->
+  <div id="sponsorModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
+    <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-neutral-950 shadow-glow">
+      <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
+        <div>
+          <h3 class="text-2xl font-black">Formulaire sponsor</h3>
+          <p class="mt-1 text-sm text-white/60">Proposition de partenariat, commandite ou activation de marque.</p>
+        </div>
+        <button data-close-modal="sponsorModal" class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Fermer</button>
+      </div>
+
+      <form id="sponsorForm" class="p-6 space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Nom complet
+            <input required name="name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Entreprise / marque
+            <input required name="company" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Courriel
+            <input required type="email" name="email" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Téléphone
+            <input name="phone" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Type de partenariat
+            <select required name="sponsor_type" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
+              <option value="">Choisir</option>
+              <option>Sponsor principal</option>
+              <option>Partenaire officiel</option>
+              <option>Sponsor soutien</option>
+              <option>Partenariat média</option>
+              <option>Activation événementielle</option>
+            </select>
+          </label>
+
+          <label class="block text-sm">
+            Budget approximatif
+            <select name="budget" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
+              <option value="">Choisir</option>
+              <option>Moins de 500$</option>
+              <option>500$ à 1500$</option>
+              <option>1500$ à 5000$</option>
+              <option>5000$ à 10000$</option>
+              <option>10000$ et plus</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="block text-sm">
+          Objectif / intérêt
+          <textarea required name="message" rows="5" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Décrivez votre intérêt, votre objectif, le type de visibilité recherchée ou la campagne souhaitée."></textarea>
+        </label>
+
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
+            Envoyer la demande sponsor
+          </button>
+          <button type="button" data-close-modal="sponsorModal" class="rounded-2xl border border-white/10 px-5 py-3 font-bold hover:bg-white/10">
+            Annuler
+          </button>
+        </div>
+
+        <div id="sponsorSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">
+          Demande sponsor envoyée localement avec succès.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- BOOK MODAL -->
+  <div id="sceneBookModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
+    <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-neutral-950 shadow-glow">
+      <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
+        <div>
+          <h3 class="text-2xl font-black">Formulaire booking — Scène Meyden</h3>
+          <p class="mt-1 text-sm text-white/60">Pour salles, festivals, diffuseurs, bars, partenaires et événements.</p>
+        </div>
+        <button data-close-modal="sceneBookModal" class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Fermer</button>
+      </div>
+
+      <form id="sceneBookForm" class="p-6 space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Nom complet
+            <input required name="name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Organisation / lieu
+            <input required name="venue" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Courriel
+            <input required type="email" name="email" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Téléphone
+            <input name="phone" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Type de demande
+            <select required name="request_type" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
+              <option value="">Choisir</option>
+              <option>Booker un show</option>
+              <option>Booker plusieurs shows</option>
+              <option>Programmer une soirée Meyden</option>
+              <option>Inviter un band</option>
+              <option>Partenariat de scène</option>
+            </select>
+          </label>
+
+          <label class="block text-sm">
+            Date souhaitée
+            <input type="date" name="date" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Ville
+            <input name="city" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Capacité du lieu
+            <input name="capacity" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Ex. 80, 150, 300" />
+          </label>
+        </div>
+
+        <label class="block text-sm">
+          Détails du projet / show
+          <textarea required name="message" rows="5" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Décrivez le type d’événement, la programmation souhaitée, le contexte et vos besoins."></textarea>
+        </label>
+
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
+            Envoyer la demande de booking
+          </button>
+          <button type="button" data-close-modal="sceneBookModal" class="rounded-2xl border border-white/10 px-5 py-3 font-bold hover:bg-white/10">
+            Annuler
+          </button>
+        </div>
+
+        <div id="sceneBookSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">
+          Demande de booking envoyée localement avec succès.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ATTEND MODAL -->
+  <div id="sceneAttendModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
+    <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-neutral-950 shadow-glow">
+      <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
+        <div>
+          <h3 class="text-2xl font-black">Formulaire — Assister à un show</h3>
+          <p class="mt-1 text-sm text-white/60">Pour être contacté ou avisé des prochains événements Meyden.</p>
+        </div>
+        <button data-close-modal="sceneAttendModal" class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Fermer</button>
+      </div>
+
+      <form id="sceneAttendForm" class="p-6 space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Nom complet
+            <input required name="name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Courriel
+            <input required type="email" name="email" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Ville
+            <input name="city" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Type d’intérêt
+            <select required name="interest" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
+              <option value="">Choisir</option>
+              <option>Être avisé des prochains shows</option>
+              <option>Réserver pour un show précis</option>
+              <option>Suivre la scène metal</option>
+              <option>Participer comme collaborateur</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="block text-sm">
+          Message / préférence
+          <textarea name="message" rows="5" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Indiquez vos préférences, votre ville, le type de show ou les artistes qui vous intéressent."></textarea>
+        </label>
+
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
+            Envoyer la demande public
+          </button>
+          <button type="button" data-close-modal="sceneAttendModal" class="rounded-2xl border border-white/10 px-5 py-3 font-bold hover:bg-white/10">
+            Annuler
+          </button>
+        </div>
+
+        <div id="sceneAttendSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">
+          Demande public envoyée localement avec succès.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- COINS MODAL -->
+  <div id="coinsModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
+    <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-neutral-950 shadow-glow">
+      <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
+        <div>
+          <h3 class="text-2xl font-black">Guichet Meyden Coins — demande trimestrielle</h3>
+          <p class="mt-1 text-sm text-white/60">Déposez une demande d’échange de coins pour le trimestre en cours.</p>
+        </div>
+        <button data-close-modal="coinsModal" class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Fermer</button>
+      </div>
+
+      <form id="coinsForm" class="p-6 space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Nom complet
+            <input required name="name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Courriel
+            <input required type="email" name="email" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Nom d’artiste / créateur
+            <input required name="creator_name" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Trimestre
+            <select required name="quarter" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400">
+              <option value="">Choisir</option>
+              <option>T1</option>
+              <option>T2</option>
+              <option>T3</option>
+              <option>T4</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="block text-sm">
+            Nombre de Meyden Coins demandés
+            <input required type="number" min="1" name="coins_requested" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" />
+          </label>
+          <label class="block text-sm">
+            Valeur estimée souhaitée
+            <input name="estimated_value" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Ex. 45$ CAD" />
+          </label>
+        </div>
+
+        <label class="block text-sm">
+          Justification / notes
+          <textarea required name="message" rows="5" class="mt-1 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-orange-400" placeholder="Précisez votre demande, votre activité, votre contenu ou toute information utile."></textarea>
+        </label>
+
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button type="submit" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black transition hover:scale-[1.01]">
+            Déposer la demande
+          </button>
+          <button type="button" data-close-modal="coinsModal" class="rounded-2xl border border-white/10 px-5 py-3 font-bold hover:bg-white/10">
+            Annuler
+          </button>
+        </div>
+
+        <div id="coinsSuccess" class="hidden rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-300">
+          Demande de guichet Meyden Coins envoyée localement avec succès.
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script>
     const monitors = [
@@ -1251,4 +1708,234 @@
       }
 
       const ctx = document.getElementById('growthChart').getContext('2d');
- 
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: 'Revenus',
+              data: revenue,
+              borderColor: '#f97316',
+              backgroundColor: 'rgba(249,115,22,0.16)',
+              borderWidth: 3,
+              tension: 0.35,
+              fill: true
+            },
+            {
+              label: 'Profit net',
+              data: profit,
+              borderColor: '#4ade80',
+              backgroundColor: 'rgba(74,222,128,0.12)',
+              borderWidth: 3,
+              tension: 0.35,
+              fill: true
+            },
+            {
+              label: 'Abonnés payants',
+              data: subs,
+              borderColor: '#facc15',
+              backgroundColor: 'rgba(250,204,21,0.08)',
+              borderWidth: 3,
+              tension: 0.35,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          animation: { duration: 1000 },
+          plugins: {
+            legend: {
+              labels: { color: '#ffffff' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#ffffff' },
+              grid: { color: 'rgba(255,255,255,0.08)' }
+            },
+            y: {
+              ticks: { color: '#ffffff' },
+              grid: { color: 'rgba(255,255,255,0.08)' }
+            }
+          }
+        }
+      });
+
+      document.getElementById('activeScenarioLabel').textContent = activeScenarioName;
+      document.getElementById('finalRevenue').textContent = revenue[23].toLocaleString('fr-CA') + '$';
+      document.getElementById('finalProfit').textContent = profit[23].toLocaleString('fr-CA') + '$';
+      document.getElementById('finalSubs').textContent = subs[23].toLocaleString('fr-CA');
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function saveFormData(key, data) {
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      existing.push({ ...data, createdAt: new Date().toISOString() });
+      localStorage.setItem(key, JSON.stringify(existing));
+    }
+
+    function setupForm(formId, storageKey, successId, modalId) {
+      const form = document.getElementById(formId);
+      const success = document.getElementById(successId);
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        saveFormData(storageKey, data);
+
+        success.classList.remove('hidden');
+        form.reset();
+
+        setTimeout(() => {
+          success.classList.add('hidden');
+          closeModal(modalId);
+        }, 1800);
+      });
+    }
+
+    function getCurrentQuarter() {
+      const month = new Date().getMonth() + 1;
+      if (month >= 1 && month <= 3) return 'T1';
+      if (month >= 4 && month <= 6) return 'T2';
+      if (month >= 7 && month <= 9) return 'T3';
+      return 'T4';
+    }
+
+    function initCoinsWindow() {
+      const quarter = getCurrentQuarter();
+      const isOpen = true;
+
+      document.getElementById('coinsQuarterLabel').textContent = quarter;
+      document.getElementById('coinsWindowStatus').textContent = isOpen ? 'Ouvert' : 'Fermé';
+    }
+
+    function initModalsAndForms() {
+      document.getElementById('openSponsorModalBtn').addEventListener('click', () => openModal('sponsorModal'));
+      document.getElementById('openSceneBookModalBtn').addEventListener('click', () => openModal('sceneBookModal'));
+      document.getElementById('openSceneAttendModalBtn').addEventListener('click', () => openModal('sceneAttendModal'));
+      document.getElementById('openCoinsModalBtn').addEventListener('click', () => openModal('coinsModal'));
+
+      document.querySelectorAll('[data-close-modal]').forEach((btn) => {
+        btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close-modal')));
+      });
+
+      ['sponsorModal', 'sceneBookModal', 'sceneAttendModal', 'coinsModal'].forEach((id) => {
+        const modal = document.getElementById(id);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal(id);
+        });
+      });
+
+      setupForm('sponsorForm', 'meydenSponsorLeads', 'sponsorSuccess', 'sponsorModal');
+      setupForm('sceneBookForm', 'meydenSceneBookings', 'sceneBookSuccess', 'sceneBookModal');
+      setupForm('sceneAttendForm', 'meydenSceneAttendance', 'sceneAttendSuccess', 'sceneAttendModal');
+      setupForm('coinsForm', 'meydenCoinsRequests', 'coinsSuccess', 'coinsModal');
+    }
+
+    function initActions() {
+      document.getElementById('tunedBtn').addEventListener('click', () => {
+        tuned += 120;
+        score = Math.min(100, score + 2);
+        coins += monitors[selectedMonitor].reward > 0 ? monitors[selectedMonitor].reward * 4 : 1;
+        currentStatus = score >= 85 ? 'Monte' : 'Actif';
+        updateUI();
+      });
+
+      document.getElementById('submitVersionBtn').addEventListener('click', () => {
+        version += 1;
+        flowPhase = 0;
+        score = Math.min(100, score + 5);
+        coins += 12;
+        currentStatus = 'Nouvelle version déposée';
+        updateUI();
+      });
+
+      document.getElementById('growthTickBtn').addEventListener('click', () => {
+        simState.creatorFree += 12;
+        simState.creatorWeekly += 8;
+        simState.creatorDaily += 3;
+        simState.publicFree += 150;
+        simState.publicPremium += 22;
+        simState.quarterlyWithdrawCreators = Math.max(12, simState.quarterlyWithdrawCreators + 1);
+        computeSimulation();
+      });
+
+      document.getElementById('scenarioConservativeBtn').addEventListener('click', () => {
+        simulateGrowth24Months('conservative');
+      });
+      document.getElementById('scenarioRealisticBtn').addEventListener('click', () => {
+        simulateGrowth24Months('realistic');
+      });
+      document.getElementById('scenarioAmbitiousBtn').addEventListener('click', () => {
+        simulateGrowth24Months('ambitious');
+      });
+    }
+
+    function startFlowLoop() {
+      setInterval(() => {
+        flowPhase = (flowPhase + 1) % phases.length;
+
+        if (flowPhase === 2) {
+          score = Math.max(45, Math.min(100, score + (Math.random() * 8 - 3)));
+        }
+
+        if (flowPhase === 3) {
+          currentStatus = score >= 80 ? 'Monte' : 'Chute';
+        }
+
+        if (flowPhase === 4 && score < 72) {
+          currentStatus = 'Recyclage';
+        }
+
+        if (flowPhase === 6) {
+          currentStatus = 'Amélioration';
+        }
+
+        if (flowPhase === 7) {
+          currentStatus = score >= 75 ? 'Retour en circulation' : 'À retravailler';
+        }
+
+        updateUI();
+      }, 3500);
+    }
+
+    function init() {
+      renderMonitors();
+      renderCreatorPlans();
+      renderPublicPlans();
+      renderCreatorSimulation();
+      renderPublicSimulation();
+      renderMarketScenarios();
+      updateUI();
+      computeSimulation();
+      initActions();
+      initModalsAndForms();
+      initCoinsWindow();
+      simulateGrowth24Months('realistic');
+      startFlowLoop();
+    }
+
+    init();
+  </script>
+</body>
+</html>
