@@ -411,7 +411,8 @@
 
   <script>
     const MAX_FILES = 5;
-    let files = files.filter(item => item.source === "library");
+    let // On conserve maintenant toute la bibliothèque active.
+      // Ancienne version supprimait certains médias lors des nouveaux uploads.
     let activeFile = null;
     let activeMode = "empty";
     let currentVideo = null;
@@ -544,6 +545,10 @@
       if (activeFile.type.startsWith("video/")) {
         const video = document.createElement("video");
         video.src = activeFile.url;
+        video.crossOrigin = "anonymous";
+        video.autoplay = false;
+        video.loop = false;
+        video.muted = false;
         video.controls = true;
         video.playsInline = true;
         video.preload = "auto";
@@ -551,6 +556,10 @@
         video.style.height = "100%";
         video.style.objectFit = "contain";
         video.style.background = "#000";
+
+        video.addEventListener("loadeddata", () => {
+          setStatus(`Flux vidéo chargé : ${activeFile.name}`);
+        });
 
         video.addEventListener("canplay", () => {
           setStatus(`Vidéo prête : ${activeFile.name}`);
@@ -605,6 +614,8 @@
 
       files = [];
 
+      const newFiles = [];
+
       for (const file of selectedFiles) {
         const type = file.type || guessFileType(file.name);
         const isVideo = type.startsWith("video/");
@@ -613,16 +624,18 @@
         if (isVideo) {
           const cleanBlob = new Blob([file], { type: type || "video/mp4" });
           const url = URL.createObjectURL(cleanBlob);
-          files.push({ name: file.name, type, size: file.size, url, mode: "video-blob", source: "library" });
+          newFiles.push({ name: file.name, type, size: file.size, url, mode: "video-blob", source: "library" });
         } else if (isImage) {
           const dataUrl = await fileToDataUrl(file);
-          files.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl", source: "library" });
+          newFiles.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl", source: "library" });
         } else {
-          files.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported", source: "library" });
+          newFiles.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported", source: "library" });
         }
       }
 
-      currentIndex = Math.max(0, files.length - selectedFiles.length);
+      files = [...files, ...newFiles];
+
+      currentIndex = Math.max(0, files.length - newFiles.length);
       activeFile = files[currentIndex];
       setStatus(`${files.length} fichier(s) reçu(s).`);
       renderActiveFile();
@@ -697,6 +710,7 @@
         return;
       }
       try {
+        currentVideo.load();
         await currentVideo.play();
         setStatus("Lecture lancée.");
         setError("");
