@@ -361,7 +361,7 @@
           <button id="fileBtn" class="white">Fichier sur mon appareil</button>
           <input id="fileInput" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif" hidden />
 
-          <input id="youtubeInput" type="text" value="https://youtube.com/shorts/ngW0aYs41ao?feature=shared" placeholder="Coller un lien YouTube" />
+          <input id="youtubeInput" type="text" value="https://youtu.be/4-7yGUUPOmM?si=7ldOh0559yDWORpg" placeholder="Coller un lien YouTube" />
           <button id="youtubeBtn" class="blue">Diffuser via YouTube</button>
         </div>
 
@@ -472,8 +472,20 @@
       const shortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
       const watchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
       const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-      const id = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
-      return id ? `https://www.youtube.com/embed/${id}` : "";
+      const playlistMatch = trimmed.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+
+      const videoId = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
+      const playlistId = playlistMatch?.[1] || "";
+
+      if (playlistId) {
+        return `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&loop=1&rel=0`;
+      }
+
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&rel=0`;
+      }
+
+      return "";
     }
 
     function clearMonitor() {
