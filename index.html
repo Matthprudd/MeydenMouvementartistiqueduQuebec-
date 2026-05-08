@@ -1,341 +1,670 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lujamko — Test média</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-const MAX_FILES = 5;
-const DEFAULT_YOUTUBE_URL = "https://youtube.com/shorts/ngW0aYs41ao?feature=shared";
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at center, rgba(0,191,255,0.18), transparent 30%), linear-gradient(180deg, #000000 0%, #071120 100%);
+      color: white;
+      min-height: 100vh;
+    }
 
-function guessFileType(name = "") {
-  const lower = name.toLowerCase();
-  if (lower.endsWith(".mp4")) return "video/mp4";
-  if (lower.endsWith(".webm")) return "video/webm";
-  if (lower.endsWith(".mov")) return "video/quicktime";
-  if (lower.endsWith(".gif")) return "image/gif";
-  if (lower.endsWith(".png")) return "image/png";
-  if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
-  return "application/octet-stream";
-}
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(0,191,255,0.12);
+      padding: 20px;
+    }
 
-function formatSize(bytes = 0) {
-  return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
-}
+    .header-inner,
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-function fileToDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => resolve(event.target?.result || "");
-    reader.onerror = () => reject(new Error("Lecture impossible"));
-    reader.readAsDataURL(file);
-  });
-}
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
 
-function youtubeEmbedUrl(url = "") {
-  const trimmed = url.trim();
-  const shortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
-  const watchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
-  const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-  const id = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
-  return id ? `https://www.youtube.com/embed/${id}` : "";
-}
+    .logo {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 0.25em;
+      color: #67e8f9;
+    }
 
-function runSelfTests() {
-  return [
-    { name: "MP4 reconnu", pass: guessFileType("video.mp4") === "video/mp4" },
-    { name: "GIF reconnu", pass: guessFileType("anim.gif") === "image/gif" },
-    { name: "YouTube Shorts converti", pass: youtubeEmbedUrl(DEFAULT_YOUTUBE_URL).includes("/embed/ngW0aYs41ao") },
-  ];
-}
+    .subtitle {
+      font-size: 12px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      opacity: 0.45;
+      margin-top: 4px;
+    }
 
-export default function LujamkoTest() {
-  const [files, setFiles] = useState([]);
-  const [activeFile, setActiveFile] = useState(null);
-  const [status, setStatus] = useState("Aucun média sélectionné");
-  const [error, setError] = useState("");
-  const [youtubeUrl, setYoutubeUrl] = useState(DEFAULT_YOUTUBE_URL);
-  const [activeMode, setActiveMode] = useState("empty");
-  const [showMediaChoices, setShowMediaChoices] = useState(false);
-  const videoRef = useRef(null);
-  const inputRef = useRef(null);
-  const tests = useMemo(() => runSelfTests(), []);
+    .container {
+      padding: 40px 16px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 32px;
+      align-items: center;
+    }
 
-  const embedUrl = youtubeEmbedUrl(youtubeUrl);
+    .tag {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(103,232,249,0.25);
+      background: rgba(103,232,249,0.10);
+      color: #a5f3fc;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      margin-bottom: 24px;
+    }
 
-  useEffect(() => {
-    return () => {
-      files.forEach((file) => {
-        if (file.url?.startsWith("blob:")) URL.revokeObjectURL(file.url);
-      });
-    };
-  }, [files]);
+    h1 {
+      font-size: clamp(44px, 7vw, 78px);
+      line-height: 0.95;
+      margin: 0 0 24px;
+      font-weight: 900;
+    }
 
-  useEffect(() => {
-    if (!activeFile || !activeFile.type.startsWith("video/")) return;
+    h1 span {
+      color: #67e8f9;
+    }
 
-    setTimeout(() => {
-      if (videoRef.current) {
-        videoRef.current.src = activeFile.url;
-        videoRef.current.load();
-        setStatus(`Vidéo chargée : ${activeFile.name}`);
+    p {
+      color: rgba(255,255,255,0.72);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    button,
+    .button-link {
+      border: 0;
+      cursor: pointer;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 900;
+      text-decoration: none;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .primary {
+      background: #67e8f9;
+      color: #000;
+    }
+
+    .blue {
+      background: #0f52ba;
+      color: #fff;
+    }
+
+    .dark {
+      background: rgba(255,255,255,0.10);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .white {
+      background: #fff;
+      color: #000;
+    }
+
+    .player-card {
+      border: 1px solid rgba(103,232,249,0.25);
+      background: #000;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(0,191,255,0.15);
+    }
+
+    .player-top {
+      padding: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      display: grid;
+      gap: 12px;
+    }
+
+    .player-top h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .hint {
+      color: rgba(255,255,255,0.55);
+      font-size: 14px;
+      margin: 4px 0 0;
+    }
+
+    .choice-panel {
+      display: none;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .choice-panel.open {
+      display: grid;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      border-radius: 16px;
+      background: #000;
+      border: 1px solid rgba(103,232,249,0.35);
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .status,
+    .error {
+      border-radius: 18px;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    .status {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.70);
+    }
+
+    .error {
+      display: none;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(248,113,113,0.35);
+      color: #fecaca;
+    }
+
+    .monitor {
+      aspect-ratio: 16 / 9;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .placeholder {
+      text-align: center;
+      padding: 24px;
+    }
+
+    .placeholder-title {
+      font-size: 48px;
+      font-weight: 900;
+      color: #67e8f9;
+      margin-bottom: 8px;
+    }
+
+    video,
+    img,
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+    }
+
+    video,
+    img {
+      object-fit: contain;
+    }
+
+    .controls {
+      padding: 18px;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .file-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .file-item {
+      width: 100%;
+      text-align: left;
+      justify-content: flex-start;
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .file-item.active {
+      background: rgba(103,232,249,0.18);
+      border-color: rgba(103,232,249,0.65);
+    }
+
+    .services {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 16px 80px;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .service {
+      border-radius: 26px;
+      border: 1px solid rgba(103,232,249,0.12);
+      background: #08101f;
+      padding: 22px;
+    }
+
+    .service h3 {
+      font-size: 22px;
+      margin: 0 0 10px;
+    }
+
+    .meyden {
+      max-width: 1200px;
+      margin: 0 auto 70px;
+      padding: 0 16px;
+    }
+
+    .meyden-box {
+      border-radius: 34px;
+      border: 1px solid rgba(255,90,0,0.25);
+      background: linear-gradient(180deg, rgba(255,90,0,0.14), rgba(0,0,0,0.70));
+      padding: 34px;
+    }
+
+    .orange {
+      color: #fdba74;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
       }
-    }, 100);
-  }, [activeFile]);
 
-  const handleUpload = async (event) => {
-    const selectedFiles = Array.from(event.target.files || []).slice(0, MAX_FILES);
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
 
-    setError("");
-    setActiveMode("local");
-    setStatus("Chargement du média local...");
-
-    if (selectedFiles.length === 0) {
-      setStatus("Aucun fichier sélectionné");
-      return;
-    }
-
-    const preparedFiles = [];
-
-    for (const file of selectedFiles) {
-      const type = file.type || guessFileType(file.name);
-      const isVideo = type.startsWith("video/");
-      const isImage = type.startsWith("image/");
-
-      if (isVideo) {
-        const cleanBlob = new Blob([file], { type: type || "video/mp4" });
-        const url = URL.createObjectURL(cleanBlob);
-        preparedFiles.push({ name: file.name, type, size: file.size, url, mode: "video-blob" });
-      } else if (isImage) {
-        const dataUrl = await fileToDataUrl(file);
-        preparedFiles.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl" });
-      } else {
-        preparedFiles.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported" });
+      .header-inner {
+        align-items: flex-start;
+        flex-direction: column;
       }
     }
-
-    setFiles(preparedFiles);
-    setActiveFile(preparedFiles[0]);
-    setStatus(`${preparedFiles.length} fichier(s) reçu(s).`);
-    event.target.value = "";
-  };
-
-  const activateYoutube = () => {
-    if (!embedUrl) {
-      setError("Lien YouTube invalide. Colle un lien YouTube Shorts, youtu.be ou youtube.com/watch.");
-      return;
-    }
-    setActiveMode("youtube");
-    setError("");
-    setStatus("Diffusion YouTube activée dans le moniteur.");
-  };
-
-  const playVideo = async () => {
-    if (!videoRef.current) return;
-
-    try {
-      videoRef.current.muted = false;
-      await videoRef.current.play();
-      setStatus("Lecture lancée.");
-      setError("");
-    } catch (err) {
-      setError("Le lecteur local bloque cette vidéo. Utilise YouTube dans Choisir un média.");
-    }
-  };
-
-  const pauseVideo = () => {
-    videoRef.current?.pause();
-    setStatus("Pause.");
-  };
-
-  const reloadVideo = () => {
-    if (!videoRef.current || !activeFile?.url) return;
-    videoRef.current.src = activeFile.url;
-    videoRef.current.load();
-    setStatus("Lecteur local rechargé.");
-  };
-
-  const isVideo = activeFile?.type?.startsWith("video/");
-  const isImage = activeFile?.type?.startsWith("image/");
-  const isUnsupported = activeFile && !isVideo && !isImage;
-
-  return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,191,255,0.18),transparent_30%),linear-gradient(180deg,#000000_0%,#071120_100%)]" />
-
-      <div className="relative z-10">
-        <header className="sticky top-0 backdrop-blur-xl border-b border-cyan-400/10 bg-black/70 z-50">
-          <div className="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
-            <div>
-              <div className="text-3xl font-black tracking-[0.25em] text-cyan-300">LUJAMKO</div>
-              <div className="text-xs uppercase tracking-[0.35em] text-white/40">Production Studio</div>
-            </div>
-            <button className="px-6 py-3 rounded-2xl bg-[#0f52ba] hover:bg-cyan-400 transition font-semibold">Réserver</button>
-          </div>
-        </header>
-
-        <section className="max-w-7xl mx-auto px-4 pt-10 pb-12">
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-center">
-            <div>
-              <div className="inline-flex px-4 py-2 rounded-full border border-cyan-300/20 bg-cyan-400/10 text-cyan-200 text-xs uppercase tracking-[0.25em] font-bold mb-6">
-                Studio immersif • son • image • contenu
-              </div>
-              <h1 className="text-5xl lg:text-7xl leading-[0.95] font-black mb-6">
-                Ton projet mérite<span className="text-cyan-300"> d’être entendu</span>
-              </h1>
-              <p className="text-white/70 text-lg leading-relaxed max-w-2xl mb-8">
-                Enregistrement, mix, captation vidéo, direction artistique et contenu immersif dans une ambiance pensée pour les artistes modernes.
-              </p>
-            </div>
-
-            <div className="rounded-[30px] border border-cyan-400/20 bg-black shadow-[0_0_60px_rgba(0,191,255,0.15)] overflow-hidden">
-              <div className="p-4 border-b border-white/10 flex flex-col gap-3">
-                <div>
-                  <h2 className="text-2xl font-black">Lecteur média</h2>
-                  <p className="text-white/50 text-sm">Choisis un fichier local ou bascule vers YouTube si la vidéo locale bloque.</p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setShowMediaChoices(!showMediaChoices)}
-                  className="w-full px-5 py-4 rounded-2xl bg-cyan-400 text-black font-black hover:bg-white transition"
-                >
-                  Choisir un média
-                </button>
-
-                {showMediaChoices && (
-                  <div className="grid gap-3 rounded-3xl bg-white/5 border border-white/10 p-4">
-                    <button
-                      type="button"
-                      onClick={() => inputRef.current?.click()}
-                      className="w-full px-5 py-4 rounded-2xl bg-white text-black font-black"
-                    >
-                      Fichier sur mon appareil
-                    </button>
-
-                    <div className="grid gap-2">
-                      <input
-                        value={youtubeUrl}
-                        onChange={(event) => setYoutubeUrl(event.target.value)}
-                        placeholder="Coller un lien YouTube"
-                        className="w-full rounded-2xl bg-black border border-cyan-400/30 px-4 py-3 text-white outline-none"
-                      />
-                      <button
-                        type="button"
-                        onClick={activateYoutube}
-                        className="w-full px-5 py-4 rounded-2xl bg-[#0f52ba] text-white font-black"
-                      >
-                        Diffuser via YouTube
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                <input
-                  ref={inputRef}
-                  type="file"
-                  multiple
-                  accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif"
-                  onChange={handleUpload}
-                  className="hidden"
-                />
-
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3 text-sm text-white/60">{status}</div>
-
-                {error && (
-                  <div className="rounded-2xl bg-red-500/10 border border-red-400/30 p-3 text-sm text-red-200">{error}</div>
-                )}
-              </div>
-
-              <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
-                {activeMode === "empty" && !activeFile && (
-                  <div className="text-center p-8">
-                    <div className="text-5xl font-black text-cyan-300 mb-3">MONITEUR</div>
-                    <p className="text-white/50">Aucun média chargé</p>
-                  </div>
-                )}
-
-                {activeMode === "youtube" && embedUrl && (
-                  <iframe
-                    src={embedUrl}
-                    title="Lecteur YouTube"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="w-full h-full bg-black"
-                  />
-                )}
-
-                {activeMode === "local" && activeFile && isVideo && (
-                  <video
-                    key={activeFile.url}
-                    ref={videoRef}
-                    controls
-                    playsInline
-                    preload="auto"
-                    onCanPlay={() => {
-                      setStatus(`Vidéo prête : ${activeFile.name}`);
-                      setError("");
-                    }}
-                    onError={() => {
-                      setError("Le lecteur du site refuse cette vidéo locale. Ouvre Choisir un média puis Diffuser via YouTube.");
-                    }}
-                    className="w-full h-full object-contain bg-black"
-                  />
-                )}
-
-                {activeMode === "local" && activeFile && isImage && (
-                  <img
-                    key={activeFile.url}
-                    src={activeFile.url}
-                    alt={activeFile.name}
-                    onLoad={() => {
-                      setStatus(`Image/GIF diffusé : ${activeFile.name}`);
-                      setError("");
-                    }}
-                    onError={() => setError("Erreur : l’image ou le GIF ne peut pas être affiché ici.")}
-                    className="w-full h-full object-contain bg-black"
-                  />
-                )}
-
-                {activeMode === "local" && isUnsupported && (
-                  <div className="text-center p-8">
-                    <div className="text-2xl font-black text-red-300 mb-2">Format non pris en charge</div>
-                    <p className="text-white/50">Essaie avec MP4, WEBM, JPG, PNG ou GIF.</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-4 border-t border-white/10">
-                <div className="flex flex-wrap gap-3 mb-4">
-                  <button type="button" onClick={playVideo} disabled={activeMode !== "local" || !isVideo} className="px-5 py-3 rounded-2xl bg-cyan-400 text-black font-black disabled:opacity-30">Play</button>
-                  <button type="button" onClick={pauseVideo} disabled={activeMode !== "local" || !isVideo} className="px-5 py-3 rounded-2xl bg-white/10 border border-white/10 font-black disabled:opacity-30">Pause</button>
-                  <button type="button" onClick={reloadVideo} disabled={activeMode !== "local" || !isVideo} className="px-5 py-3 rounded-2xl bg-white/10 border border-white/10 font-black disabled:opacity-30">Recharger</button>
-                  <button type="button" onClick={activateYoutube} className="px-5 py-3 rounded-2xl bg-[#0f52ba] text-white font-black">YouTube secours</button>
-                </div>
-
-                <div className="grid gap-2">
-                  {files.map((file, index) => (
-                    <button
-                      type="button"
-                      key={`${file.name}-${index}`}
-                      onClick={() => {
-                        setActiveMode("local");
-                        setActiveFile(file);
-                        setStatus(`Fichier actif : ${file.name}`);
-                      }}
-                      className={`w-full text-left rounded-2xl border px-4 py-3 transition ${
-                        activeFile?.name === file.name && activeMode === "local" ? "border-cyan-300 bg-cyan-400/20" : "border-white/10 bg-white/5 hover:bg-white/10"
-                      }`}
-                    >
-                      <div className="font-bold truncate">{index + 1}. {file.name}</div>
-                      <div className="text-xs text-white/45">{file.type || "type inconnu"} • {formatSize(file.size)} • {file.mode}</div>
-                    </button>
-                  ))}
-                </div>
-
-                <div className="mt-4 rounded-2xl bg-white/5 border border-white/10 p-3 text-xs text-white/45">
-                  Tests internes : {tests.filter((test) => test.pass).length}/{tests.length} réussis
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div>
+        <div class="logo">LUJAMKO</div>
+        <div class="subtitle">Production Studio</div>
       </div>
+      <button class="blue">Réserver</button>
     </div>
-  );
-}
+  </header>
+
+  <main class="container">
+    <section>
+      <div class="tag">Studio immersif • son • image • contenu</div>
+      <h1>Ton projet mérite<span> d’être entendu</span></h1>
+      <p>
+        Enregistrement, mix, captation vidéo, direction artistique et contenu immersif dans une ambiance pensée pour les artistes modernes.
+      </p>
+    </section>
+
+    <section class="player-card">
+      <div class="player-top">
+        <div>
+          <h2>Lecteur média</h2>
+          <p class="hint">Choisis un fichier local ou utilise YouTube si une vidéo locale bloque.</p>
+        </div>
+
+        <button id="chooseMediaBtn" class="primary">Choisir un média</button>
+
+        <div id="choicePanel" class="choice-panel">
+          <button id="fileBtn" class="white">Fichier sur mon appareil</button>
+          <input id="fileInput" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif" hidden />
+
+          <input id="youtubeInput" type="text" value="https://youtube.com/shorts/ngW0aYs41ao?feature=shared" placeholder="Coller un lien YouTube" />
+          <button id="youtubeBtn" class="blue">Diffuser via YouTube</button>
+        </div>
+
+        <div id="status" class="status">Aucun média sélectionné.</div>
+        <div id="error" class="error"></div>
+      </div>
+
+      <div id="monitor" class="monitor">
+        <div class="placeholder">
+          <div class="placeholder-title">MONITEUR</div>
+          <p>Aucun média chargé.</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="button-row">
+          <button id="playBtn" class="primary">Play</button>
+          <button id="pauseBtn" class="dark">Pause</button>
+          <button id="reloadBtn" class="dark">Recharger</button>
+          <button id="youtubeHelpBtn" class="blue">YouTube secours</button>
+        </div>
+        <div id="fileList" class="file-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <section class="services">
+    <div class="orange">Services</div>
+    <h2>Une vraie expérience studio</h2>
+    <div class="service-grid">
+      <div class="service"><h3>Enregistrement vocal</h3><p>Voix principales, harmonies et direction artistique.</p></div>
+      <div class="service"><h3>Mix & Master</h3><p>Traitement sonore professionnel et diffusion.</p></div>
+      <div class="service"><h3>Captation vidéo</h3><p>Reels, clips et contenu immersif.</p></div>
+      <div class="service"><h3>Direction artistique</h3><p>Image, structure et identité visuelle.</p></div>
+    </div>
+  </section>
+
+  <section class="meyden">
+    <div class="meyden-box">
+      <div class="orange">Meyden — Mouvement Artistique du Québec</div>
+      <h2>Passe du son à une vraie structure</h2>
+      <p>Lujamko produit le son. Meyden aide à structurer l’image, la diffusion et le développement artistique.</p>
+    </div>
+  </section>
+
+  <script>
+    const MAX_FILES = 5;
+    let files = [];
+    let activeFile = null;
+    let activeMode = "empty";
+    let currentVideo = null;
+
+    const chooseMediaBtn = document.getElementById("chooseMediaBtn");
+    const choicePanel = document.getElementById("choicePanel");
+    const fileBtn = document.getElementById("fileBtn");
+    const fileInput = document.getElementById("fileInput");
+    const youtubeInput = document.getElementById("youtubeInput");
+    const youtubeBtn = document.getElementById("youtubeBtn");
+    const youtubeHelpBtn = document.getElementById("youtubeHelpBtn");
+    const monitor = document.getElementById("monitor");
+    const statusBox = document.getElementById("status");
+    const errorBox = document.getElementById("error");
+    const fileList = document.getElementById("fileList");
+    const playBtn = document.getElementById("playBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const reloadBtn = document.getElementById("reloadBtn");
+
+    function setStatus(text) {
+      statusBox.textContent = text;
+    }
+
+    function setError(text) {
+      if (!text) {
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+        return;
+      }
+      errorBox.style.display = "block";
+      errorBox.textContent = text;
+    }
+
+    function guessFileType(name = "") {
+      const lower = name.toLowerCase();
+      if (lower.endsWith(".mp4")) return "video/mp4";
+      if (lower.endsWith(".webm")) return "video/webm";
+      if (lower.endsWith(".mov")) return "video/quicktime";
+      if (lower.endsWith(".gif")) return "image/gif";
+      if (lower.endsWith(".png")) return "image/png";
+      if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+      return "application/octet-stream";
+    }
+
+    function formatSize(bytes = 0) {
+      return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+    }
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(event.target.result);
+        reader.onerror = () => reject(new Error("Lecture impossible"));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function youtubeEmbedUrl(url = "") {
+      const trimmed = url.trim();
+      const shortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
+      const watchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+      const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+      const id = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
+      return id ? `https://www.youtube.com/embed/${id}` : "";
+    }
+
+    function clearMonitor() {
+      monitor.innerHTML = "";
+      currentVideo = null;
+    }
+
+    function renderPlaceholder() {
+      clearMonitor();
+      monitor.innerHTML = `
+        <div class="placeholder">
+          <div class="placeholder-title">MONITEUR</div>
+          <p>Aucun média chargé.</p>
+        </div>
+      `;
+    }
+
+    function renderYoutube() {
+      const embed = youtubeEmbedUrl(youtubeInput.value);
+      if (!embed) {
+        setError("Lien YouTube invalide. Utilise un lien Shorts, youtu.be ou youtube.com/watch.");
+        return;
+      }
+
+      activeMode = "youtube";
+      activeFile = null;
+      clearMonitor();
+      setError("");
+      setStatus("Diffusion YouTube activée.");
+
+      const iframe = document.createElement("iframe");
+      iframe.src = embed;
+      iframe.title = "Lecteur YouTube";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.allowFullscreen = true;
+      monitor.appendChild(iframe);
+      updateFileList();
+    }
+
+    function renderActiveFile() {
+      clearMonitor();
+      setError("");
+
+      if (!activeFile) {
+        renderPlaceholder();
+        return;
+      }
+
+      activeMode = "local";
+
+      if (activeFile.type.startsWith("video/")) {
+        const video = document.createElement("video");
+        video.src = activeFile.url;
+        video.controls = true;
+        video.playsInline = true;
+        video.preload = "auto";
+        video.style.width = "100%";
+        video.style.height = "100%";
+        video.style.objectFit = "contain";
+        video.style.background = "#000";
+
+        video.addEventListener("canplay", () => {
+          setStatus(`Vidéo prête : ${activeFile.name}`);
+          setError("");
+        });
+
+        video.addEventListener("error", () => {
+          setError("Le lecteur local refuse cette vidéo. Utilise Choisir un média → Diffuser via YouTube.");
+        });
+
+        currentVideo = video;
+        monitor.appendChild(video);
+        setStatus(`Vidéo chargée : ${activeFile.name}`);
+        return;
+      }
+
+      if (activeFile.type.startsWith("image/")) {
+        const img = document.createElement("img");
+        img.src = activeFile.url;
+        img.alt = activeFile.name;
+        img.onload = () => setStatus(`Image/GIF diffusé : ${activeFile.name}`);
+        img.onerror = () => setError("Erreur : image ou GIF impossible à afficher.");
+        monitor.appendChild(img);
+        return;
+      }
+
+      monitor.innerHTML = `
+        <div class="placeholder">
+          <div class="placeholder-title">FORMAT NON SUPPORTÉ</div>
+          <p>Essaie avec MP4, WEBM, JPG, PNG ou GIF.</p>
+        </div>
+      `;
+    }
+
+    async function handleFileUpload(event) {
+      const selectedFiles = Array.from(event.target.files || []).slice(0, MAX_FILES);
+      setError("");
+      setStatus("Chargement du média local...");
+
+      if (!selectedFiles.length) {
+        setStatus("Aucun fichier sélectionné.");
+        return;
+      }
+
+      files.forEach((item) => {
+        if (item.url && item.url.startsWith("blob:")) URL.revokeObjectURL(item.url);
+      });
+
+      files = [];
+
+      for (const file of selectedFiles) {
+        const type = file.type || guessFileType(file.name);
+        const isVideo = type.startsWith("video/");
+        const isImage = type.startsWith("image/");
+
+        if (isVideo) {
+          const cleanBlob = new Blob([file], { type: type || "video/mp4" });
+          const url = URL.createObjectURL(cleanBlob);
+          files.push({ name: file.name, type, size: file.size, url, mode: "video-blob" });
+        } else if (isImage) {
+          const dataUrl = await fileToDataUrl(file);
+          files.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl" });
+        } else {
+          files.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported" });
+        }
+      }
+
+      activeFile = files[0];
+      setStatus(`${files.length} fichier(s) reçu(s).`);
+      renderActiveFile();
+      updateFileList();
+      fileInput.value = "";
+    }
+
+    function updateFileList() {
+      fileList.innerHTML = "";
+
+      files.forEach((file, index) => {
+        const button = document.createElement("button");
+        button.className = "file-item" + (activeFile?.name === file.name && activeMode === "local" ? " active" : "");
+        button.innerHTML = `
+          <div><strong>${index + 1}. ${file.name}</strong></div>
+          <div style="opacity:.5;font-size:12px;margin-top:4px;">${file.type} • ${formatSize(file.size)} • ${file.mode}</div>
+        `;
+        button.onclick = () => {
+          activeFile = file;
+          renderActiveFile();
+          updateFileList();
+        };
+        fileList.appendChild(button);
+      });
+    }
+
+    chooseMediaBtn.addEventListener("click", () => {
+      choicePanel.classList.toggle("open");
+    });
+
+    fileBtn.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", handleFileUpload);
+    youtubeBtn.addEventListener("click", renderYoutube);
+    youtubeHelpBtn.addEventListener("click", renderYoutube);
+
+    playBtn.addEventListener("click", async () => {
+      if (!currentVideo) {
+        setError("Aucune vidéo locale active à lire.");
+        return;
+      }
+      try {
+        await currentVideo.play();
+        setStatus("Lecture lancée.");
+        setError("");
+      } catch (error) {
+        setError("Lecture bloquée. Appuie directement sur le triangle Play du lecteur vidéo.");
+      }
+    });
+
+    pauseBtn.addEventListener("click", () => {
+      if (currentVideo) {
+        currentVideo.pause();
+        setStatus("Pause.");
+      }
+    });
+
+    reloadBtn.addEventListener("click", () => {
+      if (currentVideo) {
+        currentVideo.load();
+        setStatus("Lecteur rechargé.");
+      }
+    });
+
+    renderPlaceholder();
+  </script>
+</body>
+</html>
