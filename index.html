@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lujamko — Test média</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -28,8 +25,7 @@
       padding: 20px;
     }
 
-    .header-inner,
-    .container {
+    .header-inner, .container, .services, .meyden {
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -85,9 +81,7 @@
       font-weight: 900;
     }
 
-    h1 span {
-      color: #67e8f9;
-    }
+    h1 span { color: #67e8f9; }
 
     p {
       color: rgba(255,255,255,0.72);
@@ -95,8 +89,7 @@
       line-height: 1.55;
     }
 
-    button,
-    .button-link {
+    button, .button-link {
       border: 0;
       cursor: pointer;
       border-radius: 18px;
@@ -110,26 +103,11 @@
       text-align: center;
     }
 
-    .primary {
-      background: #67e8f9;
-      color: #000;
-    }
-
-    .blue {
-      background: #0f52ba;
-      color: #fff;
-    }
-
-    .dark {
-      background: rgba(255,255,255,0.10);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .white {
-      background: #fff;
-      color: #000;
-    }
+    .primary { background: #67e8f9; color: #000; }
+    .blue { background: #0f52ba; color: #fff; }
+    .dark { background: rgba(255,255,255,0.10); color: #fff; border: 1px solid rgba(255,255,255,0.12); }
+    .white { background: #fff; color: #000; }
+    .orange-btn { background: #ff5a00; color: #fff; }
 
     .player-card {
       border: 1px solid rgba(103,232,249,0.25);
@@ -146,16 +124,8 @@
       gap: 12px;
     }
 
-    .player-top h2 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    .hint {
-      color: rgba(255,255,255,0.55);
-      font-size: 14px;
-      margin: 4px 0 0;
-    }
+    .player-top h2 { margin: 0; font-size: 28px; }
+    .hint { color: rgba(255,255,255,0.55); font-size: 14px; margin: 4px 0 0; }
 
     .choice-panel {
       display: none;
@@ -166,9 +136,7 @@
       border: 1px solid rgba(255,255,255,0.12);
     }
 
-    .choice-panel.open {
-      display: grid;
-    }
+    .choice-panel.open { display: grid; }
 
     input[type="text"] {
       width: 100%;
@@ -181,8 +149,7 @@
       outline: none;
     }
 
-    .status,
-    .error {
+    .status, .error {
       border-radius: 18px;
       padding: 12px;
       font-size: 14px;
@@ -211,48 +178,21 @@
       position: relative;
     }
 
-    .placeholder {
-      text-align: center;
-      padding: 24px;
-    }
+    .placeholder { text-align: center; padding: 24px; }
+    .placeholder-title { font-size: 48px; font-weight: 900; color: #67e8f9; margin-bottom: 8px; }
 
-    .placeholder-title {
-      font-size: 48px;
-      font-weight: 900;
-      color: #67e8f9;
-      margin-bottom: 8px;
-    }
-
-    video,
-    img,
-    iframe {
+    video, img, iframe {
       width: 100%;
       height: 100%;
       border: 0;
       background: #000;
     }
 
-    video,
-    img {
-      object-fit: contain;
-    }
+    video, img { object-fit: contain; }
 
-    .controls {
-      padding: 18px;
-      border-top: 1px solid rgba(255,255,255,0.10);
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .file-list {
-      display: grid;
-      gap: 8px;
-    }
+    .controls { padding: 18px; border-top: 1px solid rgba(255,255,255,0.10); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+    .file-list { display: grid; gap: 8px; }
 
     .file-item {
       width: 100%;
@@ -261,6 +201,7 @@
       background: rgba(255,255,255,0.06);
       color: #fff;
       border: 1px solid rgba(255,255,255,0.12);
+      display: block;
     }
 
     .file-item.active {
@@ -268,64 +209,19 @@
       border-color: rgba(103,232,249,0.65);
     }
 
-    .services {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 10px 16px 80px;
-    }
+    .services { padding: 10px 16px 80px; }
+    .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .service { border-radius: 26px; border: 1px solid rgba(103,232,249,0.12); background: #08101f; padding: 22px; }
+    .service h3 { font-size: 22px; margin: 0 0 10px; }
 
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .service {
-      border-radius: 26px;
-      border: 1px solid rgba(103,232,249,0.12);
-      background: #08101f;
-      padding: 22px;
-    }
-
-    .service h3 {
-      font-size: 22px;
-      margin: 0 0 10px;
-    }
-
-    .meyden {
-      max-width: 1200px;
-      margin: 0 auto 70px;
-      padding: 0 16px;
-    }
-
-    .meyden-box {
-      border-radius: 34px;
-      border: 1px solid rgba(255,90,0,0.25);
-      background: linear-gradient(180deg, rgba(255,90,0,0.14), rgba(0,0,0,0.70));
-      padding: 34px;
-    }
-
-    .orange {
-      color: #fdba74;
-      text-transform: uppercase;
-      letter-spacing: 0.25em;
-      font-size: 13px;
-      font-weight: 900;
-    }
+    .meyden { padding: 0 16px 70px; }
+    .meyden-box { border-radius: 34px; border: 1px solid rgba(255,90,0,0.25); background: linear-gradient(180deg, rgba(255,90,0,0.14), rgba(0,0,0,0.70)); padding: 34px; }
+    .orange { color: #fdba74; text-transform: uppercase; letter-spacing: 0.25em; font-size: 13px; font-weight: 900; }
 
     @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-
-      .service-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .header-inner {
-        align-items: flex-start;
-        flex-direction: column;
-      }
+      .container { grid-template-columns: 1fr; }
+      .service-grid { grid-template-columns: 1fr; }
+      .header-inner { align-items: flex-start; flex-direction: column; }
     }
   </style>
 </head>
@@ -344,16 +240,14 @@
     <section>
       <div class="tag">Studio immersif • son • image • contenu</div>
       <h1>Ton projet mérite<span> d’être entendu</span></h1>
-      <p>
-        Enregistrement, mix, captation vidéo, direction artistique et contenu immersif dans une ambiance pensée pour les artistes modernes.
-      </p>
+      <p>Enregistrement, mix, captation vidéo, direction artistique et contenu immersif dans une ambiance pensée pour les artistes modernes.</p>
     </section>
 
     <section class="player-card">
       <div class="player-top">
         <div>
           <h2>Lecteur média</h2>
-          <p class="hint">Choisis un fichier local ou utilise YouTube si une vidéo locale bloque.</p>
+          <p class="hint">Playlist YouTube, fichiers locaux, bibliothèque temporaire et lecture en boucle.</p>
         </div>
 
         <button id="chooseMediaBtn" class="primary">Choisir un média</button>
@@ -361,8 +255,7 @@
         <div id="choicePanel" class="choice-panel">
           <button id="fileBtn" class="white">Fichier sur mon appareil</button>
           <input id="fileInput" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif" hidden />
-
-          <input id="youtubeInput" type="text" value="https://youtube.com/shorts/ngW0aYs41ao?feature=shared" placeholder="Coller un lien YouTube" />
+          <input id="youtubeInput" type="text" value="https://youtube.com/playlist?list=PL73OuET0k-fug6l__s2e86K-6fKRbXC-6&si=FWfSDZtpnDhNuXf-" placeholder="Coller un lien YouTube ou playlist" />
           <button id="youtubeBtn" class="blue">Diffuser via YouTube</button>
         </div>
 
@@ -370,19 +263,16 @@
         <div id="error" class="error"></div>
       </div>
 
-      <div id="monitor" class="monitor">
-        <div class="placeholder">
-          <div class="placeholder-title">MONITEUR</div>
-          <p>Aucun média chargé.</p>
-        </div>
-      </div>
+      <div id="monitor" class="monitor"></div>
 
       <div class="controls">
         <div class="button-row">
           <button id="playBtn" class="primary">Play</button>
           <button id="pauseBtn" class="dark">Pause</button>
           <button id="reloadBtn" class="dark">Recharger</button>
-          <button id="youtubeHelpBtn" class="blue">YouTube secours</button>
+          <button id="prevBtn" class="dark">Vidéo précédente</button>
+          <button id="nextBtn" class="dark">Vidéo suivante</button>
+          <button id="youtubeHelpBtn" class="blue">YouTube playlist</button>
         </div>
         <div id="fileList" class="file-list"></div>
       </div>
@@ -414,6 +304,7 @@
     let activeFile = null;
     let activeMode = "empty";
     let currentVideo = null;
+    let currentIndex = 0;
 
     const chooseMediaBtn = document.getElementById("chooseMediaBtn");
     const choicePanel = document.getElementById("choicePanel");
@@ -429,6 +320,8 @@
     const playBtn = document.getElementById("playBtn");
     const pauseBtn = document.getElementById("pauseBtn");
     const reloadBtn = document.getElementById("reloadBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
     function setStatus(text) {
       statusBox.textContent = text;
@@ -456,7 +349,7 @@
     }
 
     function formatSize(bytes = 0) {
-      return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+      return (bytes / 1024 / 1024).toFixed(2) + " MB";
     }
 
     function fileToDataUrl(file) {
@@ -473,8 +366,19 @@
       const shortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
       const watchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
       const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-      const id = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
-      return id ? `https://www.youtube.com/embed/${id}` : "";
+      const playlistMatch = trimmed.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+      const videoId = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
+      const playlistId = playlistMatch?.[1] || "";
+
+      if (playlistId) {
+        return "https://www.youtube.com/embed/videoseries?list=" + playlistId + "&autoplay=1&loop=1&rel=0&enablejsapi=1";
+      }
+
+      if (videoId) {
+        return "https://www.youtube.com/embed/" + videoId + "?autoplay=1&loop=1&playlist=" + videoId + "&rel=0";
+      }
+
+      return "";
     }
 
     function clearMonitor() {
@@ -483,19 +387,16 @@
     }
 
     function renderPlaceholder() {
+      activeMode = "empty";
       clearMonitor();
-      monitor.innerHTML = `
-        <div class="placeholder">
-          <div class="placeholder-title">MONITEUR</div>
-          <p>Aucun média chargé.</p>
-        </div>
-      `;
+      monitor.innerHTML = '<div class="placeholder"><div class="placeholder-title">MONITEUR</div><p>Aucun média chargé.</p></div>';
+      updateFileList();
     }
 
     function renderYoutube() {
       const embed = youtubeEmbedUrl(youtubeInput.value);
       if (!embed) {
-        setError("Lien YouTube invalide. Utilise un lien Shorts, youtu.be ou youtube.com/watch.");
+        setError("Lien YouTube invalide. Utilise une playlist, un Shorts, youtu.be ou youtube.com/watch.");
         return;
       }
 
@@ -503,11 +404,11 @@
       activeFile = null;
       clearMonitor();
       setError("");
-      setStatus("Diffusion YouTube activée.");
+      setStatus("Playlist YouTube activée en boucle dans le moniteur.");
 
       const iframe = document.createElement("iframe");
       iframe.src = embed;
-      iframe.title = "Lecteur YouTube";
+      iframe.title = "Lecteur YouTube Playlist";
       iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
       iframe.allowFullscreen = true;
       monitor.appendChild(iframe);
@@ -531,23 +432,33 @@
         video.controls = true;
         video.playsInline = true;
         video.preload = "auto";
+        video.autoplay = false;
+        video.loop = false;
         video.style.width = "100%";
         video.style.height = "100%";
         video.style.objectFit = "contain";
         video.style.background = "#000";
 
+        video.addEventListener("loadeddata", () => {
+          setStatus("Flux vidéo chargé : " + activeFile.name);
+        });
+
         video.addEventListener("canplay", () => {
-          setStatus(`Vidéo prête : ${activeFile.name}`);
+          setStatus("Vidéo prête : " + activeFile.name);
           setError("");
         });
 
+        video.addEventListener("ended", () => {
+          nextLibraryMedia();
+        });
+
         video.addEventListener("error", () => {
-          setError("Le lecteur local refuse cette vidéo. Utilise Choisir un média → Diffuser via YouTube.");
+          setError("Le lecteur local refuse cette vidéo. Utilise YouTube playlist comme secours.");
         });
 
         currentVideo = video;
         monitor.appendChild(video);
-        setStatus(`Vidéo chargée : ${activeFile.name}`);
+        setStatus("Vidéo chargée : " + activeFile.name);
         return;
       }
 
@@ -555,18 +466,13 @@
         const img = document.createElement("img");
         img.src = activeFile.url;
         img.alt = activeFile.name;
-        img.onload = () => setStatus(`Image/GIF diffusé : ${activeFile.name}`);
+        img.onload = () => setStatus("Image/GIF diffusé : " + activeFile.name);
         img.onerror = () => setError("Erreur : image ou GIF impossible à afficher.");
         monitor.appendChild(img);
         return;
       }
 
-      monitor.innerHTML = `
-        <div class="placeholder">
-          <div class="placeholder-title">FORMAT NON SUPPORTÉ</div>
-          <p>Essaie avec MP4, WEBM, JPG, PNG ou GIF.</p>
-        </div>
-      `;
+      monitor.innerHTML = '<div class="placeholder"><div class="placeholder-title">FORMAT NON SUPPORTÉ</div><p>Essaie avec MP4, WEBM, JPG, PNG ou GIF.</p></div>';
     }
 
     async function handleFileUpload(event) {
@@ -579,11 +485,7 @@
         return;
       }
 
-      files.forEach((item) => {
-        if (item.url && item.url.startsWith("blob:")) URL.revokeObjectURL(item.url);
-      });
-
-      files = [];
+      const newFiles = [];
 
       for (const file of selectedFiles) {
         const type = file.type || guessFileType(file.name);
@@ -593,17 +495,21 @@
         if (isVideo) {
           const cleanBlob = new Blob([file], { type: type || "video/mp4" });
           const url = URL.createObjectURL(cleanBlob);
-          files.push({ name: file.name, type, size: file.size, url, mode: "video-blob" });
+          newFiles.push({ name: file.name, type, size: file.size, url, mode: "video-blob" });
         } else if (isImage) {
           const dataUrl = await fileToDataUrl(file);
-          files.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl" });
+          newFiles.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl" });
         } else {
-          files.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported" });
+          newFiles.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported" });
         }
       }
 
-      activeFile = files[0];
-      setStatus(`${files.length} fichier(s) reçu(s).`);
+      const startIndex = files.length;
+      files = files.concat(newFiles);
+      currentIndex = startIndex;
+      activeFile = files[currentIndex];
+
+      setStatus(files.length + " média(s) dans la bibliothèque.");
       renderActiveFile();
       updateFileList();
       fileInput.value = "";
@@ -612,20 +518,47 @@
     function updateFileList() {
       fileList.innerHTML = "";
 
+      if (!files.length) {
+        const empty = document.createElement("div");
+        empty.className = "status";
+        empty.textContent = "Bibliothèque vide. Téléverse des vidéos, GIF ou images.";
+        fileList.appendChild(empty);
+        return;
+      }
+
       files.forEach((file, index) => {
         const button = document.createElement("button");
-        button.className = "file-item" + (activeFile?.name === file.name && activeMode === "local" ? " active" : "");
-        button.innerHTML = `
-          <div><strong>${index + 1}. ${file.name}</strong></div>
-          <div style="opacity:.5;font-size:12px;margin-top:4px;">${file.type} • ${formatSize(file.size)} • ${file.mode}</div>
-        `;
+        button.className = "file-item" + (activeFile && activeFile.url === file.url && activeMode === "local" ? " active" : "");
+        button.innerHTML = '<div><strong>' + (index + 1) + '. ' + file.name + '</strong></div><div style="opacity:.5;font-size:12px;margin-top:4px;">' + file.type + ' • ' + formatSize(file.size) + ' • ' + file.mode + '</div>';
         button.onclick = () => {
+          currentIndex = index;
           activeFile = file;
           renderActiveFile();
           updateFileList();
         };
         fileList.appendChild(button);
       });
+    }
+
+    function playLibraryIndex(index) {
+      if (!files.length) {
+        setError("La bibliothèque est vide.");
+        return;
+      }
+
+      currentIndex = (index + files.length) % files.length;
+      activeFile = files[currentIndex];
+      activeMode = "local";
+      renderActiveFile();
+      updateFileList();
+    }
+
+    function nextLibraryMedia() {
+      playLibraryIndex(currentIndex + 1);
+    }
+
+    function prevLibraryMedia() {
+      playLibraryIndex(currentIndex - 1);
     }
 
     chooseMediaBtn.addEventListener("click", () => {
@@ -636,12 +569,15 @@
     fileInput.addEventListener("change", handleFileUpload);
     youtubeBtn.addEventListener("click", renderYoutube);
     youtubeHelpBtn.addEventListener("click", renderYoutube);
+    prevBtn.addEventListener("click", prevLibraryMedia);
+    nextBtn.addEventListener("click", nextLibraryMedia);
 
     playBtn.addEventListener("click", async () => {
       if (!currentVideo) {
         setError("Aucune vidéo locale active à lire.");
         return;
       }
+
       try {
         await currentVideo.play();
         setStatus("Lecture lancée.");
