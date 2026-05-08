@@ -250,13 +250,25 @@
           <p class="hint">Playlist YouTube, fichiers locaux, bibliothèque temporaire et lecture en boucle.</p>
         </div>
 
-        <button id="chooseMediaBtn" class="primary">Choisir un média</button>
+        <div class="button-row" style="margin-bottom:0;">
+          <button id="chooseMediaBtn" class="primary">Choisir un média</button>
+          <button id="libraryBtn" class="dark">Bibliothèque</button>
+        </div>
 
         <div id="choicePanel" class="choice-panel">
           <button id="fileBtn" class="white">Fichier sur mon appareil</button>
           <input id="fileInput" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif" hidden />
           <input id="youtubeInput" type="text" value="https://youtube.com/playlist?list=PL73OuET0k-fug6l__s2e86K-6fKRbXC-6&si=FWfSDZtpnDhNuXf-" placeholder="Coller un lien YouTube ou playlist" />
           <button id="youtubeBtn" class="blue">Diffuser via YouTube</button>
+        </div>
+
+        <div id="libraryPanel" class="choice-panel">
+          <div class="status">Bibliothèque temporaire : les fichiers téléversés restent disponibles tant que la page reste ouverte. Les liens YouTube sont gardés dans ce navigateur.</div>
+          <h3 style="margin:0;color:#67e8f9;">Médias téléversés</h3>
+          <div id="libraryUploads" class="file-list"></div>
+          <h3 style="margin:8px 0 0;color:#67e8f9;">Historique YouTube</h3>
+          <div id="libraryYoutube" class="file-list"></div>
+          <button id="clearYoutubeHistoryBtn" class="orange-btn">Effacer l’historique YouTube</button>
         </div>
 
         <div id="status" class="status">Aucun média sélectionné.</div>
@@ -307,7 +319,12 @@
     let currentIndex = 0;
 
     const chooseMediaBtn = document.getElementById("chooseMediaBtn");
+    const libraryBtn = document.getElementById("libraryBtn");
     const choicePanel = document.getElementById("choicePanel");
+    const libraryPanel = document.getElementById("libraryPanel");
+    const libraryUploads = document.getElementById("libraryUploads");
+    const libraryYoutube = document.getElementById("libraryYoutube");
+    const clearYoutubeHistoryBtn = document.getElementById("clearYoutubeHistoryBtn");
     const fileBtn = document.getElementById("fileBtn");
     const fileInput = document.getElementById("fileInput");
     const youtubeInput = document.getElementById("youtubeInput");
@@ -335,6 +352,34 @@
       }
       errorBox.style.display = "block";
       errorBox.textContent = text;
+    }
+
+    function getYoutubeHistory() {
+      try {
+        return JSON.parse(localStorage.getItem("lujamkoYoutubeHistory") || "[]");
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveYoutubeHistory(history) {
+      localStorage.setItem("lujamkoYoutubeHistory", JSON.stringify(history.slice(0, 25)));
+    }
+
+    function addYoutubeToHistory(url) {
+      const embed = youtubeEmbedUrl(url);
+      if (!embed) return;
+
+      const history = getYoutubeHistory();
+      const cleanUrl = url.trim();
+      const filtered = history.filter((item) => item.url !== cleanUrl);
+      filtered.unshift({
+        url: cleanUrl,
+        embed,
+        date: new Date().toLocaleString("fr-CA"),
+      });
+      saveYoutubeHistory(filtered);
+      renderLibrary();
     }
 
     function guessFileType(name = "") {
@@ -405,6 +450,7 @@
       clearMonitor();
       setError("");
       setStatus("Playlist YouTube activée en boucle dans le moniteur.");
+      addYoutubeToHistory(youtubeInput.value);
 
       const iframe = document.createElement("iframe");
       iframe.src = embed;
@@ -420,7 +466,14 @@
       setError("");
 
       if (!activeFile) {
-        renderPlaceholder();
+        clearYoutubeHistoryBtn.addEventListener("click", () => {
+      saveYoutubeHistory([]);
+      renderLibrary();
+      setStatus("Historique YouTube effacé.");
+    });
+
+    renderPlaceholder();
+    renderLibrary();
         return;
       }
 
@@ -515,6 +568,50 @@
       fileInput.value = "";
     }
 
+    function renderLibrary() {
+      libraryUploads.innerHTML = "";
+      libraryYoutube.innerHTML = "";
+
+      if (!files.length) {
+        const emptyUploads = document.createElement("div");
+        emptyUploads.className = "status";
+        emptyUploads.textContent = "Aucun média téléversé dans cette session.";
+        libraryUploads.appendChild(emptyUploads);
+      } else {
+        files.forEach((file, index) => {
+          const button = document.createElement("button");
+          button.className = "file-item";
+          button.innerHTML = '<div><strong>' + (index + 1) + '. ' + file.name + '</strong></div><div style="opacity:.5;font-size:12px;margin-top:4px;">' + file.type + ' • ' + formatSize(file.size) + '</div>';
+          button.onclick = () => {
+            currentIndex = index;
+            activeFile = file;
+            renderActiveFile();
+            updateFileList();
+          };
+          libraryUploads.appendChild(button);
+        });
+      }
+
+      const history = getYoutubeHistory();
+      if (!history.length) {
+        const emptyYoutube = document.createElement("div");
+        emptyYoutube.className = "status";
+        emptyYoutube.textContent = "Aucun lien YouTube visionné.";
+        libraryYoutube.appendChild(emptyYoutube);
+      } else {
+        history.forEach((item, index) => {
+          const button = document.createElement("button");
+          button.className = "file-item";
+          button.innerHTML = '<div><strong>' + (index + 1) + '. YouTube</strong></div><div style="opacity:.5;font-size:12px;margin-top:4px;">' + item.url + '<br>' + item.date + '</div>';
+          button.onclick = () => {
+            youtubeInput.value = item.url;
+            renderYoutube();
+          };
+          libraryYoutube.appendChild(button);
+        });
+      }
+    }
+
     function updateFileList() {
       fileList.innerHTML = "";
 
@@ -523,6 +620,7 @@
         empty.className = "status";
         empty.textContent = "Bibliothèque vide. Téléverse des vidéos, GIF ou images.";
         fileList.appendChild(empty);
+        renderLibrary();
         return;
       }
 
@@ -538,6 +636,7 @@
         };
         fileList.appendChild(button);
       });
+      renderLibrary();
     }
 
     function playLibraryIndex(index) {
@@ -563,6 +662,13 @@
 
     chooseMediaBtn.addEventListener("click", () => {
       choicePanel.classList.toggle("open");
+      libraryPanel.classList.remove("open");
+    });
+
+    libraryBtn.addEventListener("click", () => {
+      libraryPanel.classList.toggle("open");
+      choicePanel.classList.remove("open");
+      renderLibrary();
     });
 
     fileBtn.addEventListener("click", () => fileInput.click());
