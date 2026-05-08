@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -361,7 +362,7 @@
           <button id="fileBtn" class="white">Fichier sur mon appareil</button>
           <input id="fileInput" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif" hidden />
 
-          <input id="youtubeInput" type="text" value="https://youtube.com/playlist?list=PL73OuET0k-fug6l__s2e86K-6fKRbXC-6&si=FWfSDZtpnDhNuXf-" placeholder="Coller un lien YouTube" />
+          <input id="youtubeInput" type="text" value="https://youtube.com/shorts/ngW0aYs41ao?feature=shared" placeholder="Coller un lien YouTube" />
           <button id="youtubeBtn" class="blue">Diffuser via YouTube</button>
         </div>
 
@@ -381,9 +382,7 @@
           <button id="playBtn" class="primary">Play</button>
           <button id="pauseBtn" class="dark">Pause</button>
           <button id="reloadBtn" class="dark">Recharger</button>
-          <button id="prevBtn" class="dark">Vidéo précédente</button>
-          <button id="nextBtn" class="dark">Vidéo suivante</button>
-          <button id="youtubeHelpBtn" class="blue">YouTube playlist</button>
+          <button id="youtubeHelpBtn" class="blue">YouTube secours</button>
         </div>
         <div id="fileList" class="file-list"></div>
       </div>
@@ -411,12 +410,10 @@
 
   <script>
     const MAX_FILES = 5;
-    let // On conserve maintenant toute la bibliothèque active.
-      // Ancienne version supprimait certains médias lors des nouveaux uploads.
+    let files = [];
     let activeFile = null;
     let activeMode = "empty";
     let currentVideo = null;
-    let currentIndex = 0;
 
     const chooseMediaBtn = document.getElementById("chooseMediaBtn");
     const choicePanel = document.getElementById("choicePanel");
@@ -432,8 +429,6 @@
     const playBtn = document.getElementById("playBtn");
     const pauseBtn = document.getElementById("pauseBtn");
     const reloadBtn = document.getElementById("reloadBtn");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
 
     function setStatus(text) {
       statusBox.textContent = text;
@@ -478,20 +473,8 @@
       const shortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
       const watchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
       const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-      const playlistMatch = trimmed.match(/[?&]list=([a-zA-Z0-9_-]+)/);
-
-      const videoId = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
-      const playlistId = playlistMatch?.[1] || "";
-
-      if (playlistId) {
-        return `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&loop=1&rel=0&enablejsapi=1`;
-      }
-
-      if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&rel=0`;
-      }
-
-      return "";
+      const id = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
+      return id ? `https://www.youtube.com/embed/${id}` : "";
     }
 
     function clearMonitor() {
@@ -512,7 +495,7 @@
     function renderYoutube() {
       const embed = youtubeEmbedUrl(youtubeInput.value);
       if (!embed) {
-        setError("Lien YouTube invalide. Utilise un lien playlist, Shorts, youtu.be ou youtube.com/watch.");
+        setError("Lien YouTube invalide. Utilise un lien Shorts, youtu.be ou youtube.com/watch.");
         return;
       }
 
@@ -520,11 +503,11 @@
       activeFile = null;
       clearMonitor();
       setError("");
-      setStatus("Playlist YouTube activée en boucle dans le moniteur.");
+      setStatus("Diffusion YouTube activée.");
 
       const iframe = document.createElement("iframe");
       iframe.src = embed;
-      iframe.title = "Lecteur YouTube Playlist";
+      iframe.title = "Lecteur YouTube";
       iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
       iframe.allowFullscreen = true;
       monitor.appendChild(iframe);
@@ -545,10 +528,6 @@
       if (activeFile.type.startsWith("video/")) {
         const video = document.createElement("video");
         video.src = activeFile.url;
-        video.crossOrigin = "anonymous";
-        video.autoplay = false;
-        video.loop = false;
-        video.muted = false;
         video.controls = true;
         video.playsInline = true;
         video.preload = "auto";
@@ -557,10 +536,6 @@
         video.style.objectFit = "contain";
         video.style.background = "#000";
 
-        video.addEventListener("loadeddata", () => {
-          setStatus(`Flux vidéo chargé : ${activeFile.name}`);
-        });
-
         video.addEventListener("canplay", () => {
           setStatus(`Vidéo prête : ${activeFile.name}`);
           setError("");
@@ -568,10 +543,6 @@
 
         video.addEventListener("error", () => {
           setError("Le lecteur local refuse cette vidéo. Utilise Choisir un média → Diffuser via YouTube.");
-        });
-
-        video.addEventListener("ended", () => {
-          nextLibraryMedia();
         });
 
         currentVideo = video;
@@ -614,8 +585,6 @@
 
       files = [];
 
-      const newFiles = [];
-
       for (const file of selectedFiles) {
         const type = file.type || guessFileType(file.name);
         const isVideo = type.startsWith("video/");
@@ -624,19 +593,16 @@
         if (isVideo) {
           const cleanBlob = new Blob([file], { type: type || "video/mp4" });
           const url = URL.createObjectURL(cleanBlob);
-          newFiles.push({ name: file.name, type, size: file.size, url, mode: "video-blob", source: "library" });
+          files.push({ name: file.name, type, size: file.size, url, mode: "video-blob" });
         } else if (isImage) {
           const dataUrl = await fileToDataUrl(file);
-          newFiles.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl", source: "library" });
+          files.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl" });
         } else {
-          newFiles.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported", source: "library" });
+          files.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported" });
         }
       }
 
-      files = [...files, ...newFiles];
-
-      currentIndex = Math.max(0, files.length - newFiles.length);
-      activeFile = files[currentIndex];
+      activeFile = files[0];
       setStatus(`${files.length} fichier(s) reçu(s).`);
       renderActiveFile();
       updateFileList();
@@ -646,14 +612,6 @@
     function updateFileList() {
       fileList.innerHTML = "";
 
-      if (!files.length) {
-        const empty = document.createElement("div");
-        empty.className = "status";
-        empty.textContent = "Bibliothèque vide. Téléverse des vidéos, GIF ou images.";
-        fileList.appendChild(empty);
-        return;
-      }
-
       files.forEach((file, index) => {
         const button = document.createElement("button");
         button.className = "file-item" + (activeFile?.name === file.name && activeMode === "local" ? " active" : "");
@@ -662,35 +620,12 @@
           <div style="opacity:.5;font-size:12px;margin-top:4px;">${file.type} • ${formatSize(file.size)} • ${file.mode}</div>
         `;
         button.onclick = () => {
-          currentIndex = index;
-          currentIndex = files.findIndex(item => item.url === file.url);
           activeFile = file;
           renderActiveFile();
           updateFileList();
         };
         fileList.appendChild(button);
       });
-    }
-
-    function playLibraryIndex(index) {
-      if (!files.length) {
-        setError("La bibliothèque est vide.");
-        return;
-      }
-
-      currentIndex = (index + files.length) % files.length;
-      activeFile = files[currentIndex];
-      activeMode = "local";
-      renderActiveFile();
-      updateFileList();
-    }
-
-    function nextLibraryMedia() {
-      playLibraryIndex(currentIndex + 1);
-    }
-
-    function prevLibraryMedia() {
-      playLibraryIndex(currentIndex - 1);
     }
 
     chooseMediaBtn.addEventListener("click", () => {
@@ -701,8 +636,6 @@
     fileInput.addEventListener("change", handleFileUpload);
     youtubeBtn.addEventListener("click", renderYoutube);
     youtubeHelpBtn.addEventListener("click", renderYoutube);
-    prevBtn.addEventListener("click", prevLibraryMedia);
-    nextBtn.addEventListener("click", nextLibraryMedia);
 
     playBtn.addEventListener("click", async () => {
       if (!currentVideo) {
@@ -710,7 +643,6 @@
         return;
       }
       try {
-        currentVideo.load();
         await currentVideo.play();
         setStatus("Lecture lancée.");
         setError("");
