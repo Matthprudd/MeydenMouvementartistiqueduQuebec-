@@ -3,711 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lujamko — Test média</title>
+  <title>MEYDEN OS — Fusion Monitor + Média</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: radial-gradient(circle at center, rgba(0,191,255,0.18), transparent 30%), linear-gradient(180deg, #000000 0%, #071120 100%);
-      color: white;
-      min-height: 100vh;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(0,191,255,0.12);
-      padding: 20px;
-    }
-
-    .header-inner, .container, .services, .meyden {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .header-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .logo {
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: 0.25em;
-      color: #67e8f9;
-    }
-
-    .subtitle {
-      font-size: 12px;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      opacity: 0.45;
-      margin-top: 4px;
-    }
-
-    .container {
-      padding: 40px 16px;
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 32px;
-      align-items: center;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 10px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(103,232,249,0.25);
-      background: rgba(103,232,249,0.10);
-      color: #a5f3fc;
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      margin-bottom: 24px;
-    }
-
-    h1 {
-      font-size: clamp(44px, 7vw, 78px);
-      line-height: 0.95;
-      margin: 0 0 24px;
-      font-weight: 900;
-    }
-
-    h1 span { color: #67e8f9; }
-
-    p {
-      color: rgba(255,255,255,0.72);
-      font-size: 18px;
-      line-height: 1.55;
-    }
-
-    button, .button-link {
-      border: 0;
-      cursor: pointer;
-      border-radius: 18px;
-      padding: 14px 18px;
-      font-size: 15px;
-      font-weight: 900;
-      text-decoration: none;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    .primary { background: #67e8f9; color: #000; }
-    .blue { background: #0f52ba; color: #fff; }
-    .dark { background: rgba(255,255,255,0.10); color: #fff; border: 1px solid rgba(255,255,255,0.12); }
-    .white { background: #fff; color: #000; }
-    .orange-btn { background: #ff5a00; color: #fff; }
-
-    .player-card {
-      border: 1px solid rgba(103,232,249,0.25);
-      background: #000;
-      border-radius: 30px;
-      overflow: hidden;
-      box-shadow: 0 0 60px rgba(0,191,255,0.15);
-    }
-
-    .player-top {
-      padding: 18px;
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-      display: grid;
-      gap: 12px;
-    }
-
-    .player-top h2 { margin: 0; font-size: 28px; }
-    .hint { color: rgba(255,255,255,0.55); font-size: 14px; margin: 4px 0 0; }
-
-    .choice-panel {
-      display: none;
-      gap: 12px;
-      padding: 14px;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .choice-panel.open { display: grid; }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 15px;
-      border-radius: 16px;
-      background: #000;
-      border: 1px solid rgba(103,232,249,0.35);
-      color: #fff;
-      font-size: 15px;
-      outline: none;
-    }
-
-    .status, .error {
-      border-radius: 18px;
-      padding: 12px;
-      font-size: 14px;
-    }
-
-    .status {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      color: rgba(255,255,255,0.70);
-    }
-
-    .error {
-      display: none;
-      background: rgba(239,68,68,0.12);
-      border: 1px solid rgba(248,113,113,0.35);
-      color: #fecaca;
-    }
-
-    .monitor {
-      aspect-ratio: 16 / 9;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .placeholder { text-align: center; padding: 24px; }
-    .placeholder-title { font-size: 48px; font-weight: 900; color: #67e8f9; margin-bottom: 8px; }
-
-    video, img, iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #000;
-    }
-
-    video, img { object-fit: contain; }
-
-    .controls { padding: 18px; border-top: 1px solid rgba(255,255,255,0.10); }
-    .button-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
-    .file-list { display: grid; gap: 8px; }
-
-    .file-item {
-      width: 100%;
-      text-align: left;
-      justify-content: flex-start;
-      background: rgba(255,255,255,0.06);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.12);
-      display: block;
-    }
-
-    .file-item.active {
-      background: rgba(103,232,249,0.18);
-      border-color: rgba(103,232,249,0.65);
-    }
-
-    .services { padding: 10px 16px 80px; }
-    .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .service { border-radius: 26px; border: 1px solid rgba(103,232,249,0.12); background: #08101f; padding: 22px; }
-    .service h3 { font-size: 22px; margin: 0 0 10px; }
-
-    .meyden { padding: 0 16px 70px; }
-    .meyden-box { border-radius: 34px; border: 1px solid rgba(255,90,0,0.25); background: linear-gradient(180deg, rgba(255,90,0,0.14), rgba(0,0,0,0.70)); padding: 34px; }
-    .orange { color: #fdba74; text-transform: uppercase; letter-spacing: 0.25em; font-size: 13px; font-weight: 900; }
-
-    @media (max-width: 900px) {
-      .container { grid-template-columns: 1fr; }
-      .service-grid { grid-template-columns: 1fr; }
-      .header-inner { align-items: flex-start; flex-direction: column; }
-    }
+    body{background:radial-gradient(circle at 15% 5%,rgba(255,90,0,.24),transparent 30%),radial-gradient(circle at 85% 8%,rgba(0,191,255,.16),transparent 28%),linear-gradient(180deg,#050505 0%,#101014 48%,#000 100%)}
+    .glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(14px)}
+    .strong{background:rgba(0,0,0,.44);border:1px solid rgba(255,255,255,.12)}
+    .orange-glow{box-shadow:0 0 55px rgba(255,90,0,.16)}
+    .cyan-glow{box-shadow:0 0 55px rgba(0,191,255,.12)}
+    video,iframe,img{width:100%;height:100%;background:#000;border:0;object-fit:contain}
+    .modal{display:none}.modal.open{display:flex}.panel{display:none}.panel.open{display:block}
   </style>
 </head>
-<body>
-  <header>
-    <div class="header-inner">
+<body class="min-h-screen text-white selection:bg-orange-500 selection:text-black">
+<header class="sticky top-0 z-50 border-b border-white/10 bg-black/75 backdrop-blur-xl">
+  <div class="mx-auto max-w-7xl px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+    <div><div class="text-3xl font-black tracking-[.28em] text-orange-400">MEYDEN</div><div class="text-xs uppercase tracking-[.32em] text-white/45">Mouvement Artistique du Québec • OS Fusion</div></div>
+    <nav class="flex flex-wrap gap-2 text-sm font-bold">
+      <button data-scroll="media" class="rounded-2xl bg-orange-500 px-4 py-3 text-black">Média</button>
+      <button data-scroll="monitor-section" class="rounded-2xl bg-white/10 px-4 py-3">Monitors</button>
+      <button data-scroll="dashboard" class="rounded-2xl bg-white/10 px-4 py-3">Dashboard</button>
+      <button data-scroll="scene" class="rounded-2xl bg-white/10 px-4 py-3">Scène</button>
+      <button data-scroll="studio-lujamko" class="rounded-2xl bg-white/10 px-4 py-3">Studio</button>
+      <button data-modal="sceneBookModal" class="rounded-2xl bg-[#0f52ba] px-4 py-3">Réserver</button>
+    </nav>
+  </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-4 py-6 space-y-6">
+  <section class="grid gap-6 lg:grid-cols-[1.05fr_.95fr]">
+    <div class="glass orange-glow rounded-[32px] p-6 lg:p-8">
+      <div class="inline-flex rounded-full border border-orange-400/30 bg-orange-500/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-orange-300">Meyden Monitor + Média</div>
+      <h1 class="mt-5 text-5xl lg:text-7xl font-black leading-[.92]">MEYDEN OS</h1>
+      <p class="mt-5 text-lg leading-8 text-white/70 max-w-2xl">Une plateforme fusionnée : diffusion média, bibliothèque, monitors, coins, dashboard créateur, scène, sponsors, guichet et simulation économique.</p>
+      <div class="mt-7 grid sm:grid-cols-4 gap-4">
+        <div class="glass rounded-3xl p-4"><div class="text-white/45 text-sm">Signal public</div><div id="topTuned" class="text-3xl font-black text-orange-300">1200</div><button id="tunedBtn" class="mt-3 w-full rounded-2xl bg-orange-500 py-3 font-black text-black">Tuned On</button></div>
+        <div class="glass rounded-3xl p-4"><div class="text-white/45 text-sm">Meyden Coins</div><div id="topCoins" class="text-3xl font-black text-yellow-300">148</div><div class="mt-3 text-sm text-white/60">Valeur : <span id="coinValue">22.20$</span></div></div>
+        <div class="glass rounded-3xl p-4"><div class="text-white/45 text-sm">Performance</div><div id="topScore" class="text-3xl font-black text-green-300">78</div><div class="mt-3 text-sm text-white/60">Lecture comportementale</div></div>
+        <div class="glass rounded-3xl p-4"><div class="text-white/45 text-sm">Monitor actif</div><div id="activeMonitorName" class="text-2xl font-black text-cyan-300">International</div><div id="activeMonitorAudience" class="mt-3 text-sm text-white/60">Audience large</div></div>
+      </div>
+    </div>
+
+    <section id="media" class="glass cyan-glow rounded-[32px] overflow-hidden">
+      <div class="p-4 border-b border-white/10 flex flex-wrap gap-3 justify-between items-center">
+        <div><h2 class="text-2xl font-black">Moniteur média central</h2><p id="mediaStatus" class="text-sm text-white/55">Playlist YouTube prête.</p></div>
+        <div class="flex gap-2 flex-wrap"><button data-panel="mediaPanel" class="panelBtn rounded-2xl bg-cyan-300 px-4 py-3 font-black text-black">Choisir un média</button><button data-panel="libraryPanel" class="panelBtn rounded-2xl bg-white/10 px-4 py-3 font-black">Bibliothèque</button></div>
+      </div>
+      <div id="mediaPanel" class="panel p-4 border-b border-white/10">
+        <div class="grid gap-4 lg:grid-cols-2">
+          <div class="glass rounded-3xl p-4"><h3 class="font-black text-orange-300 mb-3">Fichiers locaux</h3><input id="fileInput" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif" class="block w-full text-sm text-white/70"><button id="addFilesBtn" class="mt-4 w-full rounded-2xl bg-orange-500 py-3 font-black text-black">Ajouter à la bibliothèque</button><p class="mt-3 text-sm text-white/50">Les fichiers restent disponibles tant que la page reste ouverte.</p></div>
+          <div class="glass rounded-3xl p-4"><h3 class="font-black text-cyan-300 mb-3">YouTube / Playlist</h3><input id="youtubeInput" class="w-full rounded-2xl bg-black border border-cyan-400/30 px-4 py-3" value="https://youtube.com/playlist?list=PL73OuET0k-fug6l__s2e86K-6fKRbXC-6&si=FWfSDZtpnDhNuXf-"><button id="launchYoutubeBtn" class="mt-4 w-full rounded-2xl bg-[#0f52ba] py-3 font-black">Diffuser via YouTube</button><p class="mt-3 text-sm text-white/50">Historique YouTube conservé dans le navigateur.</p></div>
+        </div>
+      </div>
+      <div id="libraryPanel" class="panel p-4 border-b border-white/10"><div class="flex justify-between gap-3 flex-wrap mb-4"><h3 class="text-xl font-black">Bibliothèque</h3><button id="clearYoutubeHistoryBtn" class="rounded-2xl bg-red-500/20 border border-red-400/30 px-4 py-3 font-black text-red-200">Effacer YouTube</button></div><div class="grid gap-5 lg:grid-cols-2"><div><h4 class="text-orange-300 font-black mb-3">Médias téléversés</h4><div id="uploadLibrary" class="grid gap-2"></div></div><div><h4 class="text-cyan-300 font-black mb-3">Historique YouTube</h4><div id="youtubeLibrary" class="grid gap-2"></div></div></div></div>
+      <div id="errorBox" class="hidden m-4 rounded-2xl border border-red-400/30 bg-red-500/10 p-3 text-red-200 text-sm"></div>
+      <div id="monitor" class="aspect-video bg-black flex items-center justify-center"><div class="text-center p-8"><div class="text-5xl font-black text-orange-400">MEYDEN MONITOR</div><p class="mt-3 text-white/50">Chargement YouTube...</p></div></div>
+      <div class="p-4 border-t border-white/10"><div class="flex flex-wrap gap-2"><button id="playBtn" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Play</button><button id="pauseBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Pause</button><button id="reloadBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Recharger</button><button id="prevBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Précédent</button><button id="nextBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Suivant</button><button id="youtubeFallbackBtn" class="rounded-2xl bg-[#0f52ba] px-4 py-3 font-black">YouTube secours</button></div></div>
+    </section>
+  </section>
+
+  <section id="monitor-section" class="glass rounded-[32px] p-5">
+    <div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Les 5 Meyden Monitors</h2><p class="text-white/60 text-sm">Chaque monitor représente un niveau de circulation, comme dans la version 15.2.</p></div></div>
+    <div id="monitorGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
+  </section>
+
+  <section class="grid gap-6 xl:grid-cols-[1fr_.9fr]">
+    <div class="glass rounded-[32px] p-5">
+      <div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Flow d’évolution du contenu</h2><p class="text-white/60 text-sm">Cycle automatique en boucle : upload, analyse, circulation, performance, coins, recommandation, nouvelle version, relance.</p></div><div class="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/60">Automatisé</div></div>
+      <div class="flex flex-wrap gap-2 mb-4"><button id="flowPlayBtn" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Cycle automatique ON</button><button id="flowStepBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Avancer 1 étape</button><button id="flowResetBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Réinitialiser</button></div>
+      <div class="rounded-3xl border border-white/10 bg-black/30 p-3 mb-4"><div class="flex items-center justify-between text-xs text-white/50 mb-2"><span>Cycle Meyden Monitor</span><span id="flowPercent">0%</span></div><div class="h-3 rounded-full bg-white/10 overflow-hidden"><div id="flowProgress" class="h-full w-0 rounded-full bg-orange-500 transition-all duration-700"></div></div></div>
+      <div id="flowGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+      <div id="flowText" class="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm leading-7 text-white/75">Le contenu entre dans le système et commence son analyse.</div>
+      <div id="emailBox" class="hidden mt-4 rounded-2xl border border-orange-500 bg-orange-500/10 p-4"><div class="font-bold">📧 Courriel de recommandation</div><div class="mt-2 text-sm text-white/80">Ton contenu manque d’impact dans les premières secondes. Coupe l’intro, renforce le hook et clarifie immédiatement l’audience.</div></div>
+    </div>
+    <div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Lien stratégique</h2><div class="grid grid-cols-2 gap-3 text-sm"><div class="glass rounded-2xl p-4">Audience<div id="linkAudience" class="mt-2 text-xl font-black text-cyan-300">International</div></div><div class="glass rounded-2xl p-4">Performance<div id="linkPerformance" class="mt-2 text-xl font-black text-green-300">78</div></div><div class="glass rounded-2xl p-4">Coins<div id="linkCoins" class="mt-2 text-xl font-black text-yellow-300">148</div></div><div class="glass rounded-2xl p-4">Amélioration<div id="linkImprovement" class="mt-2 text-xl font-black text-orange-300">Version 1</div></div></div><div class="mt-4 rounded-2xl border border-orange-500/30 bg-orange-500/10 p-4 text-sm leading-7 text-white/75">Le système récompense la clarté, la rétention et la pertinence. Les coins deviennent un signal économique et comportemental.</div></div>
+  </section>
+
+  <section id="dashboard" class="grid gap-6 xl:grid-cols-[.95fr_1.05fr]">
+    <div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Dashboard créateur</h2><div class="grid gap-3"><input id="creatorNameInput" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom du créateur"><input id="creatorEmailInput" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><input id="contentNameInput" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom du contenu"></div><div class="grid gap-3 mt-4 text-sm"><div class="glass rounded-2xl p-3">Audience : <b id="dashboardAudience">International</b></div><div class="glass rounded-2xl p-3">Performance : <b id="dashboardPerformance">78</b></div><div class="glass rounded-2xl p-3">Meyden Coins : <b id="dashboardCoins">148</b></div><div class="glass rounded-2xl p-3">Plan créateur : <b id="dashboardCreatorPlan">Créateur 14.99$</b></div><div class="glass rounded-2xl p-3">Plan public : <b id="dashboardPublicPlan">Public 1.99$</b></div><div class="glass rounded-2xl p-3">Statut : <b id="dashboardStatus">En circulation</b></div><div class="glass rounded-2xl p-3">Version : <b id="dashboardVersion">1</b></div></div><button id="submitVersionBtn" class="mt-4 w-full rounded-2xl bg-orange-500 py-4 font-black text-black">Submit nouvelle version</button></div>
+    <div class="space-y-6"><div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Abonnements créateur</h2><div id="creatorPlansGrid" class="grid gap-3"></div></div><div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Abonnements public</h2><div id="publicPlansGrid" class="grid gap-3"></div></div></div>
+  </section>
+
+  <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Projection 24 mois</h2><p class="text-white/60 text-sm">Scénarios investisseur pour visualiser revenus, bénéfice net et abonnés payants.</p></div><div class="flex flex-wrap gap-2"><button data-scenario="conservative" class="scenarioBtn rounded-2xl bg-white/10 px-4 py-3 font-black">Conservateur</button><button data-scenario="realistic" class="scenarioBtn rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Réaliste</button><button data-scenario="ambitious" class="scenarioBtn rounded-2xl bg-white/10 px-4 py-3 font-black">Ambitieux</button></div></div><div class="rounded-3xl bg-black/40 border border-white/10 p-4"><canvas id="growthChart" height="100"></canvas></div><div class="grid md:grid-cols-4 gap-3 mt-4"><div class="glass rounded-2xl p-4">Scénario<div id="activeScenarioLabel" class="text-xl font-black text-orange-300">Réaliste</div></div><div class="glass rounded-2xl p-4">Revenu final<div id="finalRevenue" class="text-xl font-black text-green-300">0$</div></div><div class="glass rounded-2xl p-4">Profit net<div id="finalProfit" class="text-xl font-black text-green-300">0$</div></div><div class="glass rounded-2xl p-4">Abonnés<div id="finalSubs" class="text-xl font-black text-yellow-300">0</div></div></div></section>
+
+  <section class="grid gap-6 xl:grid-cols-3"><div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black">Simulation financière</h2><p class="text-white/65 mt-2">Cycle local des abonnements, revenus, provision 1/3 et bénéfice net.</p><button id="growthTickBtn" class="mt-4 w-full rounded-2xl bg-orange-500 py-3 font-black text-black">Simuler 1 cycle</button></div><div class="glass rounded-[32px] p-5"><div class="text-white/45">Créateurs abonnés</div><div id="simCreatorTotal" class="text-3xl font-black text-orange-300">410</div><div id="simCreatorMix" class="text-sm text-white/60 mt-2">Gratuit 260 • 14.99$ 110 • 65.99$ 40</div></div><div class="glass rounded-[32px] p-5"><div class="text-white/45">Bénéfice net simulé</div><div id="simNetProfit" class="text-3xl font-black text-green-300">0$</div><div class="text-sm text-white/60 mt-2">Après provision, coins et coussin.</div></div></section>
+
+  <section id="scene" class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Scène Meyden ici</h2><p class="text-white/60 text-sm">Booking, public, shows, livestream, billets et captation.</p></div><div class="flex gap-2 flex-wrap"><button data-modal="sceneBookModal" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Booker un show</button><button data-modal="sceneAttendModal" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Assister à un show</button></div></div><div class="grid gap-4 lg:grid-cols-3"><div class="glass rounded-3xl p-4"><b>Événements</b><p class="text-white/60 mt-2">Shows live, lancements, soirées thématiques, scène mobile.</p></div><div class="glass rounded-3xl p-4"><b>Retombées</b><p class="text-white/60 mt-2">Visibilité, captation, achalandage, valeur pour salles.</p></div><div class="glass rounded-3xl p-4"><b>Activation</b><p class="text-white/60 mt-2">Booking, sponsors, diffusion numérique, croissance Meyden.</p></div></div></section>
+
+  <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Espace sponsors</h2><p class="text-white/60 text-sm">Présence de marque, activation mesurable et association au mouvement.</p></div><button data-modal="sponsorModal" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Devenir sponsor</button></div><div class="grid gap-4 lg:grid-cols-3"><div class="glass rounded-3xl p-4"><b>Sponsor principal</b><p class="text-white/60 mt-2">Visibilité premium plateforme + scène + contenu.</p></div><div class="glass rounded-3xl p-4"><b>Partenaire officiel</b><p class="text-white/60 mt-2">Mention campagnes, présence événements, activation.</p></div><div class="glass rounded-3xl p-4"><b>Sponsor soutien</b><p class="text-white/60 mt-2">Entrée accessible pour soutenir la croissance.</p></div></div></section>
+
+  <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Guichet Meyden Coins</h2><p class="text-white/60 text-sm">Demande d’échange trimestrielle, provision 1/3, contrôle anti-abus.</p></div><button data-modal="coinsModal" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Ouvrir le guichet</button></div><div class="grid gap-4 lg:grid-cols-3"><div class="glass rounded-3xl p-4"><b>Statut</b><div id="coinsWindowStatus" class="text-2xl font-black text-green-300">Ouvert</div></div><div class="glass rounded-3xl p-4"><b>Règle</b><div class="text-2xl font-black text-yellow-300">1/3 provision</div></div><div class="glass rounded-3xl p-4"><b>Cycle</b><div id="coinsQuarterLabel" class="text-2xl font-black text-orange-300">T2</div></div></div></section>
+
+  <section id="studio-lujamko" class="glass cyan-glow rounded-[32px] p-5">
+    <div class="grid gap-6 lg:grid-cols-[1.05fr_.95fr] items-center">
       <div>
-        <div class="logo">LUJAMKO</div>
-        <div class="subtitle">Production Studio</div>
+        <div class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-cyan-300">Studio d’enregistrement intégré</div>
+        <h2 class="mt-5 text-4xl lg:text-6xl font-black leading-[.95]">LUJAMKO<br><span class="text-cyan-300">Production Studio</span></h2>
+        <p class="mt-5 text-lg leading-8 text-white/70 max-w-2xl">Studio immersif pour transformer une idée sonore en contenu exploitable : enregistrement, mix, master, captation vidéo, direction artistique et déploiement dans l’écosystème Meyden.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <button data-modal="sceneBookModal" class="rounded-2xl bg-[#0f52ba] px-5 py-3 font-black text-white">Réserver une session</button>
+          <button data-scroll="media" class="rounded-2xl bg-white/10 px-5 py-3 font-black">Voir le moniteur média</button>
+          <button data-scroll="dashboard" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Structurer avec Meyden</button>
+        </div>
       </div>
-      <button class="blue">Réserver</button>
-    </div>
-  </header>
-
-  <main class="container">
-    <section>
-      <div class="tag">Studio immersif • son • image • contenu</div>
-      <h1>Ton projet mérite<span> d’être entendu</span></h1>
-      <p>Enregistrement, mix, captation vidéo, direction artistique et contenu immersif dans une ambiance pensée pour les artistes modernes.</p>
-    </section>
-
-    <section class="player-card">
-      <div class="player-top">
-        <div>
-          <h2>Lecteur média</h2>
-          <p class="hint">Playlist YouTube, fichiers locaux, bibliothèque temporaire et lecture en boucle.</p>
+      <div class="rounded-[30px] overflow-hidden border border-cyan-400/20 bg-gradient-to-br from-[#091a3f] via-black to-[#0f52ba] p-5 cyan-glow">
+        <div class="aspect-video rounded-[26px] border border-white/10 bg-black/50 flex items-center justify-center text-center p-6">
+          <div>
+            <div class="text-xs uppercase tracking-[.25em] text-cyan-300">Lujamko x Meyden</div>
+            <div class="mt-3 text-3xl font-black">Son • Image • Contenu</div>
+            <p class="mt-3 text-white/60">Une session peut devenir un actif : audio, vidéo, reels, diffusion, playlist et structure artistique.</p>
+          </div>
         </div>
-
-        <div class="button-row" style="margin-bottom:0;">
-          <button id="chooseMediaBtn" class="primary">Choisir un média</button>
-          <button id="libraryBtn" class="dark">Bibliothèque</button>
+        <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+          <button data-service="Enregistrement vocal" class="serviceBtn rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-left"><b>Enregistrement vocal</b><div class="text-white/55 mt-1">Voix, harmonies, prises studio.</div></button>
+          <button data-service="Mix & Master" class="serviceBtn rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-left"><b>Mix & Master</b><div class="text-white/55 mt-1">Son prêt pour diffusion.</div></button>
+          <button data-service="Captation vidéo" class="serviceBtn rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-left"><b>Captation vidéo</b><div class="text-white/55 mt-1">Reels, clips, studio live.</div></button>
+          <button data-service="Direction artistique" class="serviceBtn rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-left"><b>Direction artistique</b><div class="text-white/55 mt-1">Image, intention, stratégie.</div></button>
         </div>
-
-        <div id="choicePanel" class="choice-panel">
-          <button id="fileBtn" class="white">Fichier sur mon appareil</button>
-          <input id="fileInput" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif" hidden />
-          <input id="youtubeInput" type="text" value="https://youtube.com/playlist?list=PL73OuET0k-fug6l__s2e86K-6fKRbXC-6&si=FWfSDZtpnDhNuXf-" placeholder="Coller un lien YouTube ou playlist" />
-          <button id="youtubeBtn" class="blue">Diffuser via YouTube</button>
-        </div>
-
-        <div id="libraryPanel" class="choice-panel">
-          <div class="status">Bibliothèque temporaire : les fichiers téléversés restent disponibles tant que la page reste ouverte. Les liens YouTube sont gardés dans ce navigateur.</div>
-          <h3 style="margin:0;color:#67e8f9;">Médias téléversés</h3>
-          <div id="libraryUploads" class="file-list"></div>
-          <h3 style="margin:8px 0 0;color:#67e8f9;">Historique YouTube</h3>
-          <div id="libraryYoutube" class="file-list"></div>
-          <button id="clearYoutubeHistoryBtn" class="orange-btn">Effacer l’historique YouTube</button>
-        </div>
-
-        <div id="status" class="status">Aucun média sélectionné.</div>
-        <div id="error" class="error"></div>
       </div>
-
-      <div id="monitor" class="monitor"></div>
-
-      <div class="controls">
-        <div class="button-row">
-          <button id="playBtn" class="primary">Play</button>
-          <button id="pauseBtn" class="dark">Pause</button>
-          <button id="reloadBtn" class="dark">Recharger</button>
-          <button id="prevBtn" class="dark">Vidéo précédente</button>
-          <button id="nextBtn" class="dark">Vidéo suivante</button>
-          <button id="youtubeHelpBtn" class="blue">YouTube playlist</button>
-        </div>
-        <div id="fileList" class="file-list"></div>
-      </div>
-    </section>
-  </main>
-
-  <section class="services">
-    <div class="orange">Services</div>
-    <h2>Une vraie expérience studio</h2>
-    <div class="service-grid">
-      <div class="service"><h3>Enregistrement vocal</h3><p>Voix principales, harmonies et direction artistique.</p></div>
-      <div class="service"><h3>Mix & Master</h3><p>Traitement sonore professionnel et diffusion.</p></div>
-      <div class="service"><h3>Captation vidéo</h3><p>Reels, clips et contenu immersif.</p></div>
-      <div class="service"><h3>Direction artistique</h3><p>Image, structure et identité visuelle.</p></div>
     </div>
   </section>
 
-  <section class="meyden">
-    <div class="meyden-box">
-      <div class="orange">Meyden — Mouvement Artistique du Québec</div>
-      <h2>Passe du son à une vraie structure</h2>
-      <p>Lujamko produit le son. Meyden aide à structurer l’image, la diffusion et le développement artistique.</p>
-    </div>
-  </section>
+  <section class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Services studio intégrés</h2><div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4"><button data-service="Enregistrement vocal" class="serviceBtn glass rounded-3xl p-4 text-left"><b>Enregistrement vocal</b><p class="text-white/60 mt-2">Voix, harmonies, direction.</p></button><button data-service="Mix & Master" class="serviceBtn glass rounded-3xl p-4 text-left"><b>Mix & Master</b><p class="text-white/60 mt-2">Traitement sonore et diffusion.</p></button><button data-service="Captation vidéo" class="serviceBtn glass rounded-3xl p-4 text-left"><b>Captation vidéo</b><p class="text-white/60 mt-2">Reels, clips, contenu immersif.</p></button><button data-service="Direction artistique" class="serviceBtn glass rounded-3xl p-4 text-left"><b>Direction artistique</b><p class="text-white/60 mt-2">Image, structure, identité.</p></button></div></section>
+</main>
 
-  <script>
-    const MAX_FILES = 5;
-    let files = [];
-    let activeFile = null;
-    let activeMode = "empty";
-    let currentVideo = null;
-    let currentIndex = 0;
+<div id="toast" class="fixed bottom-4 left-1/2 z-[80] hidden -translate-x-1/2 rounded-2xl bg-white text-black px-5 py-3 font-black shadow-2xl"></div>
+<div id="sponsorModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-2xl font-black">Demande sponsor</h2><button data-close="sponsorModal" class="text-2xl">×</button></div><form class="localForm grid gap-3 mt-4" data-success="Demande sponsor envoyée localement."><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom / marque"><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><textarea required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Objectif de commandite"></textarea><button class="rounded-2xl bg-orange-500 py-3 font-black text-black">Envoyer</button></form></div></div>
+<div id="sceneBookModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-2xl font-black">Booker un show</h2><button data-close="sceneBookModal" class="text-2xl">×</button></div><form class="localForm grid gap-3 mt-4" data-success="Demande de booking envoyée localement."><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom / salle / organisme"><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><input class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Date souhaitée"><textarea required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Description du show"></textarea><button class="rounded-2xl bg-orange-500 py-3 font-black text-black">Envoyer</button></form></div></div>
+<div id="sceneAttendModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-2xl font-black">Assister à un show</h2><button data-close="sceneAttendModal" class="text-2xl">×</button></div><form class="localForm grid gap-3 mt-4" data-success="Inscription public enregistrée localement."><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom"><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><button class="rounded-2xl bg-orange-500 py-3 font-black text-black">M’inscrire</button></form></div></div>
+<div id="coinsModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-2xl font-black">Guichet Meyden Coins</h2><button data-close="coinsModal" class="text-2xl">×</button></div><form class="localForm grid gap-3 mt-4" data-success="Demande de guichet envoyée localement."><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom du créateur"><select required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3"><option value="">Choisir trimestre</option><option>T1</option><option>T2</option><option>T3</option><option>T4</option></select><input required type="number" min="1" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nombre de coins"><textarea required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Justification"></textarea><button class="rounded-2xl bg-orange-500 py-3 font-black text-black">Déposer la demande</button></form></div></div>
 
-    const chooseMediaBtn = document.getElementById("chooseMediaBtn");
-    const libraryBtn = document.getElementById("libraryBtn");
-    const choicePanel = document.getElementById("choicePanel");
-    const libraryPanel = document.getElementById("libraryPanel");
-    const libraryUploads = document.getElementById("libraryUploads");
-    const libraryYoutube = document.getElementById("libraryYoutube");
-    const clearYoutubeHistoryBtn = document.getElementById("clearYoutubeHistoryBtn");
-    const fileBtn = document.getElementById("fileBtn");
-    const fileInput = document.getElementById("fileInput");
-    const youtubeInput = document.getElementById("youtubeInput");
-    const youtubeBtn = document.getElementById("youtubeBtn");
-    const youtubeHelpBtn = document.getElementById("youtubeHelpBtn");
-    const monitor = document.getElementById("monitor");
-    const statusBox = document.getElementById("status");
-    const errorBox = document.getElementById("error");
-    const fileList = document.getElementById("fileList");
-    const playBtn = document.getElementById("playBtn");
-    const pauseBtn = document.getElementById("pauseBtn");
-    const reloadBtn = document.getElementById("reloadBtn");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
-    function setStatus(text) {
-      statusBox.textContent = text;
-    }
-
-    function setError(text) {
-      if (!text) {
-        errorBox.style.display = "none";
-        errorBox.textContent = "";
-        return;
-      }
-      errorBox.style.display = "block";
-      errorBox.textContent = text;
-    }
-
-    function getYoutubeHistory() {
-      try {
-        return JSON.parse(localStorage.getItem("lujamkoYoutubeHistory") || "[]");
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function saveYoutubeHistory(history) {
-      localStorage.setItem("lujamkoYoutubeHistory", JSON.stringify(history.slice(0, 25)));
-    }
-
-    function addYoutubeToHistory(url) {
-      const embed = youtubeEmbedUrl(url);
-      if (!embed) return;
-
-      const history = getYoutubeHistory();
-      const cleanUrl = url.trim();
-      const filtered = history.filter((item) => item.url !== cleanUrl);
-      filtered.unshift({
-        url: cleanUrl,
-        embed,
-        date: new Date().toLocaleString("fr-CA"),
-      });
-      saveYoutubeHistory(filtered);
-      renderLibrary();
-    }
-
-    function guessFileType(name = "") {
-      const lower = name.toLowerCase();
-      if (lower.endsWith(".mp4")) return "video/mp4";
-      if (lower.endsWith(".webm")) return "video/webm";
-      if (lower.endsWith(".mov")) return "video/quicktime";
-      if (lower.endsWith(".gif")) return "image/gif";
-      if (lower.endsWith(".png")) return "image/png";
-      if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
-      return "application/octet-stream";
-    }
-
-    function formatSize(bytes = 0) {
-      return (bytes / 1024 / 1024).toFixed(2) + " MB";
-    }
-
-    function fileToDataUrl(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (event) => resolve(event.target.result);
-        reader.onerror = () => reject(new Error("Lecture impossible"));
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function youtubeEmbedUrl(url = "") {
-      const trimmed = url.trim();
-      const shortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
-      const watchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
-      const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-      const playlistMatch = trimmed.match(/[?&]list=([a-zA-Z0-9_-]+)/);
-      const videoId = shortsMatch?.[1] || watchMatch?.[1] || shortMatch?.[1] || "";
-      const playlistId = playlistMatch?.[1] || "";
-
-      if (playlistId) {
-        return "https://www.youtube.com/embed/videoseries?list=" + playlistId + "&autoplay=1&loop=1&rel=0&enablejsapi=1";
-      }
-
-      if (videoId) {
-        return "https://www.youtube.com/embed/" + videoId + "?autoplay=1&loop=1&playlist=" + videoId + "&rel=0";
-      }
-
-      return "";
-    }
-
-    function clearMonitor() {
-      monitor.innerHTML = "";
-      currentVideo = null;
-    }
-
-    function renderPlaceholder() {
-      activeMode = "empty";
-      clearMonitor();
-      monitor.innerHTML = '<div class="placeholder"><div class="placeholder-title">MONITEUR</div><p>Aucun média chargé.</p></div>';
-      updateFileList();
-    }
-
-    function renderYoutube() {
-      const embed = youtubeEmbedUrl(youtubeInput.value);
-      if (!embed) {
-        setError("Lien YouTube invalide. Utilise une playlist, un Shorts, youtu.be ou youtube.com/watch.");
-        return;
-      }
-
-      activeMode = "youtube";
-      activeFile = null;
-      clearMonitor();
-      setError("");
-      setStatus("Playlist YouTube activée en boucle dans le moniteur.");
-      addYoutubeToHistory(youtubeInput.value);
-
-      const iframe = document.createElement("iframe");
-      iframe.src = embed;
-      iframe.title = "Lecteur YouTube Playlist";
-      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-      iframe.allowFullscreen = true;
-      monitor.appendChild(iframe);
-      updateFileList();
-    }
-
-    function renderActiveFile() {
-      clearMonitor();
-      setError("");
-
-      if (!activeFile) {
-        clearYoutubeHistoryBtn.addEventListener("click", () => {
-      saveYoutubeHistory([]);
-      renderLibrary();
-      setStatus("Historique YouTube effacé.");
-    });
-
-    renderPlaceholder();
-    renderLibrary();
-        return;
-      }
-
-      activeMode = "local";
-
-      if (activeFile.type.startsWith("video/")) {
-        const video = document.createElement("video");
-        video.src = activeFile.url;
-        video.controls = true;
-        video.playsInline = true;
-        video.preload = "auto";
-        video.autoplay = false;
-        video.loop = false;
-        video.style.width = "100%";
-        video.style.height = "100%";
-        video.style.objectFit = "contain";
-        video.style.background = "#000";
-
-        video.addEventListener("loadeddata", () => {
-          setStatus("Flux vidéo chargé : " + activeFile.name);
-        });
-
-        video.addEventListener("canplay", () => {
-          setStatus("Vidéo prête : " + activeFile.name);
-          setError("");
-        });
-
-        video.addEventListener("ended", () => {
-          nextLibraryMedia();
-        });
-
-        video.addEventListener("error", () => {
-          setError("Le lecteur local refuse cette vidéo. Utilise YouTube playlist comme secours.");
-        });
-
-        currentVideo = video;
-        monitor.appendChild(video);
-        setStatus("Vidéo chargée : " + activeFile.name);
-        return;
-      }
-
-      if (activeFile.type.startsWith("image/")) {
-        const img = document.createElement("img");
-        img.src = activeFile.url;
-        img.alt = activeFile.name;
-        img.onload = () => setStatus("Image/GIF diffusé : " + activeFile.name);
-        img.onerror = () => setError("Erreur : image ou GIF impossible à afficher.");
-        monitor.appendChild(img);
-        return;
-      }
-
-      monitor.innerHTML = '<div class="placeholder"><div class="placeholder-title">FORMAT NON SUPPORTÉ</div><p>Essaie avec MP4, WEBM, JPG, PNG ou GIF.</p></div>';
-    }
-
-    async function handleFileUpload(event) {
-      const selectedFiles = Array.from(event.target.files || []).slice(0, MAX_FILES);
-      setError("");
-      setStatus("Chargement du média local...");
-
-      if (!selectedFiles.length) {
-        setStatus("Aucun fichier sélectionné.");
-        return;
-      }
-
-      const newFiles = [];
-
-      for (const file of selectedFiles) {
-        const type = file.type || guessFileType(file.name);
-        const isVideo = type.startsWith("video/");
-        const isImage = type.startsWith("image/");
-
-        if (isVideo) {
-          const cleanBlob = new Blob([file], { type: type || "video/mp4" });
-          const url = URL.createObjectURL(cleanBlob);
-          newFiles.push({ name: file.name, type, size: file.size, url, mode: "video-blob" });
-        } else if (isImage) {
-          const dataUrl = await fileToDataUrl(file);
-          newFiles.push({ name: file.name, type, size: file.size, url: dataUrl, mode: "image-dataurl" });
-        } else {
-          newFiles.push({ name: file.name, type, size: file.size, url: "", mode: "unsupported" });
-        }
-      }
-
-      const startIndex = files.length;
-      files = files.concat(newFiles);
-      currentIndex = startIndex;
-      activeFile = files[currentIndex];
-
-      setStatus(files.length + " média(s) dans la bibliothèque.");
-      renderActiveFile();
-      updateFileList();
-      fileInput.value = "";
-    }
-
-    function renderLibrary() {
-      libraryUploads.innerHTML = "";
-      libraryYoutube.innerHTML = "";
-
-      if (!files.length) {
-        const emptyUploads = document.createElement("div");
-        emptyUploads.className = "status";
-        emptyUploads.textContent = "Aucun média téléversé dans cette session.";
-        libraryUploads.appendChild(emptyUploads);
-      } else {
-        files.forEach((file, index) => {
-          const button = document.createElement("button");
-          button.className = "file-item";
-          button.innerHTML = '<div><strong>' + (index + 1) + '. ' + file.name + '</strong></div><div style="opacity:.5;font-size:12px;margin-top:4px;">' + file.type + ' • ' + formatSize(file.size) + '</div>';
-          button.onclick = () => {
-            currentIndex = index;
-            activeFile = file;
-            renderActiveFile();
-            updateFileList();
-          };
-          libraryUploads.appendChild(button);
-        });
-      }
-
-      const history = getYoutubeHistory();
-      if (!history.length) {
-        const emptyYoutube = document.createElement("div");
-        emptyYoutube.className = "status";
-        emptyYoutube.textContent = "Aucun lien YouTube visionné.";
-        libraryYoutube.appendChild(emptyYoutube);
-      } else {
-        history.forEach((item, index) => {
-          const button = document.createElement("button");
-          button.className = "file-item";
-          button.innerHTML = '<div><strong>' + (index + 1) + '. YouTube</strong></div><div style="opacity:.5;font-size:12px;margin-top:4px;">' + item.url + '<br>' + item.date + '</div>';
-          button.onclick = () => {
-            youtubeInput.value = item.url;
-            renderYoutube();
-          };
-          libraryYoutube.appendChild(button);
-        });
-      }
-    }
-
-    function updateFileList() {
-      fileList.innerHTML = "";
-
-      if (!files.length) {
-        const empty = document.createElement("div");
-        empty.className = "status";
-        empty.textContent = "Bibliothèque vide. Téléverse des vidéos, GIF ou images.";
-        fileList.appendChild(empty);
-        renderLibrary();
-        return;
-      }
-
-      files.forEach((file, index) => {
-        const button = document.createElement("button");
-        button.className = "file-item" + (activeFile && activeFile.url === file.url && activeMode === "local" ? " active" : "");
-        button.innerHTML = '<div><strong>' + (index + 1) + '. ' + file.name + '</strong></div><div style="opacity:.5;font-size:12px;margin-top:4px;">' + file.type + ' • ' + formatSize(file.size) + ' • ' + file.mode + '</div>';
-        button.onclick = () => {
-          currentIndex = index;
-          activeFile = file;
-          renderActiveFile();
-          updateFileList();
-        };
-        fileList.appendChild(button);
-      });
-      renderLibrary();
-    }
-
-    function playLibraryIndex(index) {
-      if (!files.length) {
-        setError("La bibliothèque est vide.");
-        return;
-      }
-
-      currentIndex = (index + files.length) % files.length;
-      activeFile = files[currentIndex];
-      activeMode = "local";
-      renderActiveFile();
-      updateFileList();
-    }
-
-    function nextLibraryMedia() {
-      playLibraryIndex(currentIndex + 1);
-    }
-
-    function prevLibraryMedia() {
-      playLibraryIndex(currentIndex - 1);
-    }
-
-    chooseMediaBtn.addEventListener("click", () => {
-      choicePanel.classList.toggle("open");
-      libraryPanel.classList.remove("open");
-    });
-
-    libraryBtn.addEventListener("click", () => {
-      libraryPanel.classList.toggle("open");
-      choicePanel.classList.remove("open");
-      renderLibrary();
-    });
-
-    fileBtn.addEventListener("click", () => fileInput.click());
-    fileInput.addEventListener("change", handleFileUpload);
-    youtubeBtn.addEventListener("click", renderYoutube);
-    youtubeHelpBtn.addEventListener("click", renderYoutube);
-    prevBtn.addEventListener("click", prevLibraryMedia);
-    nextBtn.addEventListener("click", nextLibraryMedia);
-
-    playBtn.addEventListener("click", async () => {
-      if (!currentVideo) {
-        setError("Aucune vidéo locale active à lire.");
-        return;
-      }
-
-      try {
-        await currentVideo.play();
-        setStatus("Lecture lancée.");
-        setError("");
-      } catch (error) {
-        setError("Lecture bloquée. Appuie directement sur le triangle Play du lecteur vidéo.");
-      }
-    });
-
-    pauseBtn.addEventListener("click", () => {
-      if (currentVideo) {
-        currentVideo.pause();
-        setStatus("Pause.");
-      }
-    });
-
-    reloadBtn.addEventListener("click", () => {
-      if (currentVideo) {
-        currentVideo.load();
-        setStatus("Lecteur rechargé.");
-      }
-    });
-
-    renderPlaceholder();
-  </script>
+<script>
+const $=id=>document.getElementById(id);
+const state={files:[],currentIndex:0,currentVideo:null,tuned:1200,coins:148,score:78,version:1,monitor:'International',audience:'Audience large',creator:{free:260,weekly:110,daily:40},public:{free:4800,premium:400}};
+const monitors=[{name:'International',audience:'Audience large',reward:3,rewardText:'3 coins / 24h'},{name:'Grand Public',audience:'Grand public',reward:1.5,rewardText:'1.5 coin / 24h'},{name:'Petit Public',audience:'Audience restreinte',reward:.5,rewardText:'0.5 coin / 24h'},{name:'Public Ciblé',audience:'Public précis',reward:0,rewardText:'Optimisation audience'},{name:'Fans',audience:'Communauté engagée',reward:0,rewardText:'Validation communauté'}];
+const flowSteps=[{name:'Upload',text:'Le contenu entre dans le système Meyden. Il est reçu, identifié et préparé pour sa première boucle.',effect:'entry'},{name:'Analyse',text:'Le système observe le hook, la clarté, la durée, le potentiel de rétention et la cible naturelle.',effect:'score'},{name:'Circulation',text:'Le contenu tourne dans les 5 monitors et traverse les niveaux de visibilité.',effect:'monitor'},{name:'Performance',text:'Les signaux publics sont mesurés : Tuned On, rétention simulée, engagement et cohérence.',effect:'performance'},{name:'Meyden Coins',text:'Si le contenu reste actif et performant, il accumule des Meyden Coins selon le monitor.',effect:'coins'},{name:'Recommandation',text:'Une recommandation est générée pour améliorer le contenu et préparer une nouvelle version.',effect:'email'},{name:'Nouvelle version',text:'Le créateur soumet une version améliorée. La version augmente et la performance progresse.',effect:'version'},{name:'Relance',text:'La nouvelle version repart dans la boucle. Le système recommence la circulation.',effect:'restart'}];
+let flowIndex=0,flowAuto=true,flowTimer=null,growthChart=null;
+function toast(t){const el=$('toast');el.textContent=t;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200)}
+function money(v){return Math.round(v).toLocaleString('fr-CA')+'$'}
+function setErr(t){const e=$('errorBox');e.textContent=t||'';e.classList.toggle('hidden',!t)}
+function mediaStatus(t){$('mediaStatus').textContent=t}
+function sync(){['topCoins','dashboardCoins','linkCoins'].forEach(id=>$(id).textContent=state.coins);$('topTuned').textContent=state.tuned;$('topScore').textContent=state.score;$('dashboardPerformance').textContent=state.score;$('linkPerformance').textContent=state.score;$('coinValue').textContent=(state.coins*.15).toFixed(2)+'$';$('dashboardVersion').textContent=state.version;$('linkImprovement').textContent='Version '+state.version;$('activeMonitorName').textContent=state.monitor;$('activeMonitorAudience').textContent=state.audience;$('dashboardAudience').textContent=state.monitor;$('linkAudience').textContent=state.monitor}
+function youtubeEmbedUrl(url=''){const t=url.trim();const list=t.match(/[?&]list=([a-zA-Z0-9_-]+)/)?.[1]||'';const shorts=t.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/)?.[1]||'';const watch=t.match(/[?&]v=([a-zA-Z0-9_-]+)/)?.[1]||'';const short=t.match(/youtu\.be\/([a-zA-Z0-9_-]+)/)?.[1]||'';const id=shorts||watch||short;if(list)return`https://www.youtube.com/embed/videoseries?list=${list}&autoplay=1&loop=1&rel=0&enablejsapi=1`;if(id)return`https://www.youtube.com/embed/${id}?autoplay=1&loop=1&playlist=${id}&rel=0`;return''}
+function getYt(){try{return JSON.parse(localStorage.getItem('meydenYoutubeHistory')||'[]')}catch{return[]}}
+function saveYt(h){localStorage.setItem('meydenYoutubeHistory',JSON.stringify(h.slice(0,30)))}
+function addYt(url){if(!youtubeEmbedUrl(url))return;const h=getYt().filter(x=>x.url!==url);h.unshift({url,date:new Date().toLocaleString('fr-CA')});saveYt(h);renderLibraries()}
+function clearMonitor(){ $('monitor').innerHTML=''; state.currentVideo=null }
+function launchYoutube(url){const use=url||$('youtubeInput').value;const embed=youtubeEmbedUrl(use);if(!embed){setErr('Lien YouTube invalide.');return}clearMonitor();setErr('');addYt(use);$('monitor').innerHTML=`<iframe src="${embed}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;mediaStatus('Diffusion YouTube activée.');toast('YouTube activé')}
+function fileType(f){const n=f.name.toLowerCase();return f.type||(n.endsWith('.gif')?'image/gif':n.endsWith('.png')?'image/png':n.endsWith('.jpg')||n.endsWith('.jpeg')?'image/jpeg':n.endsWith('.mp4')?'video/mp4':n.endsWith('.mov')?'video/quicktime':'application/octet-stream')}
+function fileToDataUrl(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(f)})}
+async function handleFiles(){const selected=Array.from($('fileInput').files||[]).slice(0,5);if(!selected.length){setErr('Aucun fichier sélectionné.');return}setErr('');mediaStatus('Chargement des médias...');for(const f of selected){const type=fileType(f);let url='';if(type.startsWith('image/'))url=await fileToDataUrl(f);else if(type.startsWith('video/'))url=URL.createObjectURL(new Blob([f],{type}));state.files.push({name:f.name,type,size:f.size,url})}state.currentIndex=Math.max(0,state.files.length-selected.length);renderLocal(state.currentIndex);renderLibraries();$('fileInput').value='';toast('Média ajouté')}
+function renderLocal(i){if(!state.files.length){setErr('Bibliothèque vide.');return}state.currentIndex=(i+state.files.length)%state.files.length;const f=state.files[state.currentIndex];clearMonitor();setErr('');if(f.type.startsWith('image/')){$('monitor').innerHTML=`<img src="${f.url}" alt="${f.name}">`;mediaStatus('Image/GIF diffusé : '+f.name)}else if(f.type.startsWith('video/')){const v=document.createElement('video');v.src=f.url;v.controls=true;v.playsInline=true;v.preload='auto';v.onended=nextMedia;v.onerror=()=>setErr('Vidéo locale refusée. Utilise YouTube secours.');state.currentVideo=v;$('monitor').appendChild(v);mediaStatus('Vidéo chargée : '+f.name)}else setErr('Format non supporté.');renderLibraries()}
+function playMedia(){if(state.currentVideo)state.currentVideo.play().catch(()=>setErr('Appuie sur le triangle Play du lecteur.'));else toast('Aucune vidéo locale active')}
+function pauseMedia(){if(state.currentVideo){state.currentVideo.pause();toast('Pause')}}
+function reloadMedia(){if(state.currentVideo){state.currentVideo.load();toast('Lecteur rechargé')}else launchYoutube()}
+function nextMedia(){renderLocal(state.currentIndex+1)}function prevMedia(){renderLocal(state.currentIndex-1)}
+function renderLibraries(){const up=$('uploadLibrary'),yt=$('youtubeLibrary');up.innerHTML='';yt.innerHTML='';if(!state.files.length)up.innerHTML='<div class="glass rounded-2xl p-3 text-white/55">Aucun média téléversé.</div>';state.files.forEach((f,i)=>{const b=document.createElement('button');b.className='glass rounded-2xl p-3 text-left';b.innerHTML=`<b>${i+1}. ${f.name}</b><div class="text-xs text-white/45">${f.type}</div>`;b.onclick=()=>renderLocal(i);up.appendChild(b)});const h=getYt();if(!h.length)yt.innerHTML='<div class="glass rounded-2xl p-3 text-white/55">Aucun lien YouTube visionné.</div>';h.forEach((item,i)=>{const b=document.createElement('button');b.className='glass rounded-2xl p-3 text-left';b.innerHTML=`<b>${i+1}. YouTube</b><div class="text-xs text-white/45 break-all">${item.url}</div><div class="text-xs text-white/35">${item.date}</div>`;b.onclick=()=>launchYoutube(item.url);yt.appendChild(b)})}
+function renderMonitors(){const g=$('monitorGrid');g.innerHTML='';monitors.forEach(m=>{const b=document.createElement('button');b.className='glass rounded-3xl p-4 text-left hover:bg-white/10';b.innerHTML=`<div class="text-white/45 text-sm">${m.audience}</div><div class="text-2xl font-black text-orange-300">${m.name}</div><div class="text-xs text-white/50 mt-2">${m.rewardText}</div>`;b.onclick=()=>{state.monitor=m.name;state.audience=m.audience;state.coins+=m.reward;sync();toast('Monitor : '+m.name)};g.appendChild(b)})}
+function renderFlow(){const g=$('flowGrid');g.innerHTML='';flowSteps.forEach((s,i)=>{const b=document.createElement('button');b.className=`rounded-2xl p-3 border text-left transition ${i===flowIndex?'bg-orange-500 text-black border-orange-500 scale-[1.02]':'bg-white/5 border-white/10 hover:bg-white/10'}`;b.innerHTML=`<div class="text-xs opacity-70">Étape ${i+1}</div><div class="font-black">${s.name}</div>`;b.onclick=()=>{flowIndex=i;updateFlow(true);restartFlowLoop()};g.appendChild(b)})}
+function applyFlow(step){if(step.effect==='score')state.score=Math.min(100,state.score+1);if(step.effect==='monitor'){const m=monitors[flowIndex%monitors.length];state.monitor=m.name;state.audience=m.audience}if(step.effect==='performance'){state.tuned+=3;state.score=Math.min(100,state.score+2)}if(step.effect==='coins')state.coins+=3;if(step.effect==='version')state.version++;if(step.effect==='restart')state.score=Math.min(100,state.score+1);sync()}
+function updateFlow(manual=false){const s=flowSteps[flowIndex];renderFlow();const pct=Math.round(((flowIndex+1)/flowSteps.length)*100);$('flowProgress').style.width=pct+'%';$('flowPercent').textContent=pct+'%';$('flowText').textContent=s.text;$('emailBox').classList.toggle('hidden',s.effect!=='email');applyFlow(s);if(manual)toast('Cycle : '+s.name)}
+function autoFlow(){flowIndex=(flowIndex+1)%flowSteps.length;updateFlow(false)}
+function startFlowLoop(){stopFlowLoop();flowAuto=true;$('flowPlayBtn').textContent='Cycle automatique ON';$('flowPlayBtn').className='rounded-2xl bg-orange-500 px-4 py-3 font-black text-black';flowTimer=setInterval(autoFlow,2600)}
+function stopFlowLoop(){if(flowTimer)clearInterval(flowTimer);flowTimer=null}
+function toggleFlowLoop(){flowAuto=!flowAuto;if(flowAuto)startFlowLoop();else{stopFlowLoop();$('flowPlayBtn').textContent='Cycle automatique OFF';$('flowPlayBtn').className='rounded-2xl bg-white/10 px-4 py-3 font-black text-white'}}
+function restartFlowLoop(){if(flowAuto)startFlowLoop()}function resetFlow(){flowIndex=0;updateFlow(true);restartFlowLoop()}
+function tunedOn(){state.tuned++;state.coins++;state.score=Math.min(100,state.score+1);sync();toast('Tuned On ajouté')}
+function submitVersion(){state.version++;state.score=Math.min(100,state.score+5);sync();toast('Nouvelle version soumise')}
+function renderPlans(){const creators=[['Créateur Gratuit','0$/mois','Accès limité'],['Créateur 14.99$','14.99$/mois','4 contenus / mois'],['Créateur 65.99$','65.99$/mois','1 contenu / jour']];const publics=[['Public Gratuit','0$/mois','Accès partiel'],['Public 1.99$','1.99$/mois','Accès complet']];$('creatorPlansGrid').innerHTML='';creators.forEach(p=>{const b=document.createElement('button');b.className='glass rounded-2xl p-4 text-left';b.innerHTML=`<b>${p[0]}</b><div class="text-orange-300 font-black">${p[1]}</div><div class="text-white/55 text-sm">${p[2]}</div>`;b.onclick=()=>{$('dashboardCreatorPlan').textContent=p[0];toast('Plan sélectionné : '+p[0])};$('creatorPlansGrid').appendChild(b)});$('publicPlansGrid').innerHTML='';publics.forEach(p=>{const b=document.createElement('button');b.className='glass rounded-2xl p-4 text-left';b.innerHTML=`<b>${p[0]}</b><div class="text-cyan-300 font-black">${p[1]}</div><div class="text-white/55 text-sm">${p[2]}</div>`;b.onclick=()=>{$('dashboardPublicPlan').textContent=p[0];toast('Plan public : '+p[0])};$('publicPlansGrid').appendChild(b)})}
+function scenarioData(k){const mult=k==='conservative'?1:k==='realistic'?2.1:4;return Array.from({length:24},(_,i)=>Math.round((i+1)*850*mult+Math.pow(i,1.7)*120*mult))}
+function updateScenario(k){const data=scenarioData(k),labels=data.map((_,i)=>'M'+(i+1)),profit=data.map(v=>Math.round(v*.47));if(growthChart)growthChart.destroy();growthChart=new Chart($('growthChart'),{type:'line',data:{labels,datasets:[{label:'Revenus',data,borderWidth:3},{label:'Profit net',data:profit,borderWidth:3}]},options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'#aaa'}},y:{ticks:{color:'#aaa'}}}}});$('activeScenarioLabel').textContent=k==='conservative'?'Conservateur':k==='realistic'?'Réaliste':'Ambitieux';$('finalRevenue').textContent=money(data[23]);$('finalProfit').textContent=money(profit[23]);$('finalSubs').textContent=Math.round(data[23]/8)}
+function simulateCycle(){state.creator.weekly+=8;state.creator.daily+=3;state.public.premium+=35;const revenue=state.creator.weekly*14.99+state.creator.daily*65.99+state.public.premium*1.99;const net=revenue-revenue/3-(state.coins*.15);$('simCreatorTotal').textContent=state.creator.free+state.creator.weekly+state.creator.daily;$('simCreatorMix').textContent=`Gratuit ${state.creator.free} • 14.99$ ${state.creator.weekly} • 65.99$ ${state.creator.daily}`;$('simNetProfit').textContent=money(net);toast('Cycle simulé')}
+function openModal(id){$(id).classList.add('open')}function closeModal(id){$(id).classList.remove('open')}
+document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>$(b.dataset.scroll).scrollIntoView({behavior:'smooth'}));document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>openModal(b.dataset.modal));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.querySelectorAll('.localForm').forEach(f=>f.onsubmit=e=>{e.preventDefault();toast(f.dataset.success);f.reset();f.closest('.modal').classList.remove('open')});document.querySelectorAll('.panelBtn').forEach(b=>b.onclick=()=>{$(b.dataset.panel).classList.toggle('open');renderLibraries()});document.querySelectorAll('.scenarioBtn').forEach(b=>b.onclick=()=>updateScenario(b.dataset.scenario));document.querySelectorAll('.serviceBtn').forEach(b=>b.onclick=()=>toast('Service sélectionné : '+b.dataset.service));
+$('addFilesBtn').onclick=handleFiles;$('launchYoutubeBtn').onclick=()=>launchYoutube();$('youtubeFallbackBtn').onclick=()=>launchYoutube();$('clearYoutubeHistoryBtn').onclick=()=>{saveYt([]);renderLibraries();toast('Historique effacé')};$('playBtn').onclick=playMedia;$('pauseBtn').onclick=pauseMedia;$('reloadBtn').onclick=reloadMedia;$('prevBtn').onclick=prevMedia;$('nextBtn').onclick=nextMedia;$('tunedBtn').onclick=tunedOn;$('submitVersionBtn').onclick=submitVersion;$('flowPlayBtn').onclick=toggleFlowLoop;$('flowStepBtn').onclick=()=>{autoFlow();restartFlowLoop()};$('flowResetBtn').onclick=resetFlow;$('growthTickBtn').onclick=simulateCycle;
+renderMonitors();renderFlow();updateFlow(false);renderPlans();renderLibraries();updateScenario('realistic');sync();launchYoutube($('youtubeInput').value);startFlowLoop();
+</script>
 </body>
 </html>
