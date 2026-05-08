@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -59,6 +60,7 @@
       <div id="libraryPanel" class="panel p-4 border-b border-white/10"><div class="flex justify-between gap-3 flex-wrap mb-4"><h3 class="text-xl font-black">Bibliothèque</h3><button id="clearYoutubeHistoryBtn" class="rounded-2xl bg-red-500/20 border border-red-400/30 px-4 py-3 font-black text-red-200">Effacer YouTube</button></div><div class="grid gap-5 lg:grid-cols-2"><div><h4 class="text-orange-300 font-black mb-3">Médias téléversés</h4><div id="uploadLibrary" class="grid gap-2"></div></div><div><h4 class="text-cyan-300 font-black mb-3">Historique YouTube</h4><div id="youtubeLibrary" class="grid gap-2"></div></div></div></div>
       <div id="errorBox" class="hidden m-4 rounded-2xl border border-red-400/30 bg-red-500/10 p-3 text-red-200 text-sm"></div>
       <div id="monitor" class="aspect-video bg-black flex items-center justify-center"><div class="text-center p-8"><div class="text-5xl font-black text-orange-400">MEYDEN MONITOR</div><p class="mt-3 text-white/50">Chargement YouTube...</p></div></div>
+      <button id="monitorTunedBtn" class="w-full border-t border-orange-500/30 bg-orange-500 py-4 text-xl font-black text-black hover:bg-orange-400 transition">Tuned On — Monitor</button>
       <div class="p-4 border-t border-white/10"><div class="flex flex-wrap gap-2"><button id="playBtn" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Play</button><button id="pauseBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Pause</button><button id="reloadBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Recharger</button><button id="prevBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Précédent</button><button id="nextBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Suivant</button><button id="youtubeFallbackBtn" class="rounded-2xl bg-[#0f52ba] px-4 py-3 font-black">YouTube secours</button></div></div>
     </section>
   </section>
@@ -108,12 +110,18 @@
         </div>
       </div>
       <div class="rounded-[30px] overflow-hidden border border-cyan-400/20 bg-gradient-to-br from-[#091a3f] via-black to-[#0f52ba] p-5 cyan-glow">
-        <div class="aspect-video rounded-[26px] border border-white/10 bg-black/50 flex items-center justify-center text-center p-6">
+        <div id="lujamkoMonitor" class="aspect-video rounded-[26px] border border-white/10 bg-black/50 flex items-center justify-center text-center p-6 overflow-hidden">
           <div>
             <div class="text-xs uppercase tracking-[.25em] text-cyan-300">Lujamko x Meyden</div>
             <div class="mt-3 text-3xl font-black">Son • Image • Contenu</div>
             <p class="mt-3 text-white/60">Une session peut devenir un actif : audio, vidéo, reels, diffusion, playlist et structure artistique.</p>
           </div>
+        </div>
+        <button id="lujamkoTunedBtn" class="w-full rounded-2xl bg-cyan-300 py-4 mt-4 text-lg font-black text-black hover:bg-white transition">Tuned On — Studio Lujamko</button>
+        <div class="grid grid-cols-3 gap-3 mt-4 text-sm">
+          <button id="lujamkoPreviewBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Démo monitor</button>
+          <button id="lujamkoResetBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Reset studio</button>
+          <div class="rounded-2xl border border-cyan-400/20 bg-black/30 p-3"><div class="text-white/45">Tuned</div><div id="lujamkoTunedCount" class="text-xl font-black text-cyan-300">0</div></div>
         </div>
         <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
           <button data-service="Enregistrement vocal" class="serviceBtn rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-left"><b>Enregistrement vocal</b><div class="text-white/55 mt-1">Voix, harmonies, prises studio.</div></button>
@@ -136,7 +144,7 @@
 
 <script>
 const $=id=>document.getElementById(id);
-const state={files:[],currentIndex:0,currentVideo:null,tuned:1200,coins:148,score:78,version:1,monitor:'International',audience:'Audience large',creator:{free:260,weekly:110,daily:40},public:{free:4800,premium:400}};
+const state={files:[],currentIndex:0,currentVideo:null,tuned:1200,lujamkoTuned:0,coins:148,score:78,version:1,monitor:'International',audience:'Audience large',creator:{free:260,weekly:110,daily:40},public:{free:4800,premium:400}};
 const monitors=[{name:'International',audience:'Audience large',reward:3,rewardText:'3 coins / 24h'},{name:'Grand Public',audience:'Grand public',reward:1.5,rewardText:'1.5 coin / 24h'},{name:'Petit Public',audience:'Audience restreinte',reward:.5,rewardText:'0.5 coin / 24h'},{name:'Public Ciblé',audience:'Public précis',reward:0,rewardText:'Optimisation audience'},{name:'Fans',audience:'Communauté engagée',reward:0,rewardText:'Validation communauté'}];
 const flowSteps=[{name:'Upload',text:'Le contenu entre dans le système Meyden. Il est reçu, identifié et préparé pour sa première boucle.',effect:'entry'},{name:'Analyse',text:'Le système observe le hook, la clarté, la durée, le potentiel de rétention et la cible naturelle.',effect:'score'},{name:'Circulation',text:'Le contenu tourne dans les 5 monitors et traverse les niveaux de visibilité.',effect:'monitor'},{name:'Performance',text:'Les signaux publics sont mesurés : Tuned On, rétention simulée, engagement et cohérence.',effect:'performance'},{name:'Meyden Coins',text:'Si le contenu reste actif et performant, il accumule des Meyden Coins selon le monitor.',effect:'coins'},{name:'Recommandation',text:'Une recommandation est générée pour améliorer le contenu et préparer une nouvelle version.',effect:'email'},{name:'Nouvelle version',text:'Le créateur soumet une version améliorée. La version augmente et la performance progresse.',effect:'version'},{name:'Relance',text:'La nouvelle version repart dans la boucle. Le système recommence la circulation.',effect:'restart'}];
 let flowIndex=0,flowAuto=true,flowTimer=null,growthChart=null;
@@ -169,7 +177,13 @@ function startFlowLoop(){stopFlowLoop();flowAuto=true;$('flowPlayBtn').textConte
 function stopFlowLoop(){if(flowTimer)clearInterval(flowTimer);flowTimer=null}
 function toggleFlowLoop(){flowAuto=!flowAuto;if(flowAuto)startFlowLoop();else{stopFlowLoop();$('flowPlayBtn').textContent='Cycle automatique OFF';$('flowPlayBtn').className='rounded-2xl bg-white/10 px-4 py-3 font-black text-white'}}
 function restartFlowLoop(){if(flowAuto)startFlowLoop()}function resetFlow(){flowIndex=0;updateFlow(true);restartFlowLoop()}
-function tunedOn(){state.tuned++;state.coins++;state.score=Math.min(100,state.score+1);sync();toast('Tuned On ajouté')}
+function tunedOn(){state.tuned++;state.coins++;state.score=Math.min(100,state.score+1);sync();toast('Tuned On ajouté au monitor')}
+function lujamkoTunedOn(){state.lujamkoTuned++;state.tuned++;state.coins++;state.score=Math.min(100,state.score+1);$('lujamkoTunedCount').textContent=state.lujamkoTuned;sync();toast('Tuned On ajouté au Studio Lujamko')}
+function lujamkoPreview(){
+  $('lujamkoMonitor').innerHTML='<div><div class="text-xs uppercase tracking-[.25em] text-cyan-300">Démo Studio Active</div><div class="mt-3 text-3xl font-black">Session Lujamko en diffusion</div><p class="mt-3 text-white/60">Le studio produit le contenu. Meyden le structure, le diffuse et le valorise.</p><div class="mt-4 h-2 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-2/3 bg-cyan-300 rounded-full"></div></div></div>';
+  toast('Démo monitor Lujamko activée')
+}
+function lujamkoReset(){state.lujamkoTuned=0;$('lujamkoTunedCount').textContent='0';$('lujamkoMonitor').innerHTML='<div><div class="text-xs uppercase tracking-[.25em] text-cyan-300">Lujamko x Meyden</div><div class="mt-3 text-3xl font-black">Son • Image • Contenu</div><p class="mt-3 text-white/60">Une session peut devenir un actif : audio, vidéo, reels, diffusion, playlist et structure artistique.</p></div>';toast('Studio Lujamko réinitialisé')}
 function submitVersion(){state.version++;state.score=Math.min(100,state.score+5);sync();toast('Nouvelle version soumise')}
 function renderPlans(){const creators=[['Créateur Gratuit','0$/mois','Accès limité'],['Créateur 14.99$','14.99$/mois','4 contenus / mois'],['Créateur 65.99$','65.99$/mois','1 contenu / jour']];const publics=[['Public Gratuit','0$/mois','Accès partiel'],['Public 1.99$','1.99$/mois','Accès complet']];$('creatorPlansGrid').innerHTML='';creators.forEach(p=>{const b=document.createElement('button');b.className='glass rounded-2xl p-4 text-left';b.innerHTML=`<b>${p[0]}</b><div class="text-orange-300 font-black">${p[1]}</div><div class="text-white/55 text-sm">${p[2]}</div>`;b.onclick=()=>{$('dashboardCreatorPlan').textContent=p[0];toast('Plan sélectionné : '+p[0])};$('creatorPlansGrid').appendChild(b)});$('publicPlansGrid').innerHTML='';publics.forEach(p=>{const b=document.createElement('button');b.className='glass rounded-2xl p-4 text-left';b.innerHTML=`<b>${p[0]}</b><div class="text-cyan-300 font-black">${p[1]}</div><div class="text-white/55 text-sm">${p[2]}</div>`;b.onclick=()=>{$('dashboardPublicPlan').textContent=p[0];toast('Plan public : '+p[0])};$('publicPlansGrid').appendChild(b)})}
 function scenarioData(k){const mult=k==='conservative'?1:k==='realistic'?2.1:4;return Array.from({length:24},(_,i)=>Math.round((i+1)*850*mult+Math.pow(i,1.7)*120*mult))}
@@ -177,8 +191,9 @@ function updateScenario(k){const data=scenarioData(k),labels=data.map((_,i)=>'M'
 function simulateCycle(){state.creator.weekly+=8;state.creator.daily+=3;state.public.premium+=35;const revenue=state.creator.weekly*14.99+state.creator.daily*65.99+state.public.premium*1.99;const net=revenue-revenue/3-(state.coins*.15);$('simCreatorTotal').textContent=state.creator.free+state.creator.weekly+state.creator.daily;$('simCreatorMix').textContent=`Gratuit ${state.creator.free} • 14.99$ ${state.creator.weekly} • 65.99$ ${state.creator.daily}`;$('simNetProfit').textContent=money(net);toast('Cycle simulé')}
 function openModal(id){$(id).classList.add('open')}function closeModal(id){$(id).classList.remove('open')}
 document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>$(b.dataset.scroll).scrollIntoView({behavior:'smooth'}));document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>openModal(b.dataset.modal));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.querySelectorAll('.localForm').forEach(f=>f.onsubmit=e=>{e.preventDefault();toast(f.dataset.success);f.reset();f.closest('.modal').classList.remove('open')});document.querySelectorAll('.panelBtn').forEach(b=>b.onclick=()=>{$(b.dataset.panel).classList.toggle('open');renderLibraries()});document.querySelectorAll('.scenarioBtn').forEach(b=>b.onclick=()=>updateScenario(b.dataset.scenario));document.querySelectorAll('.serviceBtn').forEach(b=>b.onclick=()=>toast('Service sélectionné : '+b.dataset.service));
-$('addFilesBtn').onclick=handleFiles;$('launchYoutubeBtn').onclick=()=>launchYoutube();$('youtubeFallbackBtn').onclick=()=>launchYoutube();$('clearYoutubeHistoryBtn').onclick=()=>{saveYt([]);renderLibraries();toast('Historique effacé')};$('playBtn').onclick=playMedia;$('pauseBtn').onclick=pauseMedia;$('reloadBtn').onclick=reloadMedia;$('prevBtn').onclick=prevMedia;$('nextBtn').onclick=nextMedia;$('tunedBtn').onclick=tunedOn;$('submitVersionBtn').onclick=submitVersion;$('flowPlayBtn').onclick=toggleFlowLoop;$('flowStepBtn').onclick=()=>{autoFlow();restartFlowLoop()};$('flowResetBtn').onclick=resetFlow;$('growthTickBtn').onclick=simulateCycle;
+$('addFilesBtn').onclick=handleFiles;$('launchYoutubeBtn').onclick=()=>launchYoutube();$('youtubeFallbackBtn').onclick=()=>launchYoutube();$('clearYoutubeHistoryBtn').onclick=()=>{saveYt([]);renderLibraries();toast('Historique effacé')};$('playBtn').onclick=playMedia;$('pauseBtn').onclick=pauseMedia;$('reloadBtn').onclick=reloadMedia;$('prevBtn').onclick=prevMedia;$('nextBtn').onclick=nextMedia;$('tunedBtn').onclick=tunedOn;$('monitorTunedBtn').onclick=tunedOn;$('lujamkoTunedBtn').onclick=lujamkoTunedOn;$('lujamkoPreviewBtn').onclick=lujamkoPreview;$('lujamkoResetBtn').onclick=lujamkoReset;$('submitVersionBtn').onclick=submitVersion;$('flowPlayBtn').onclick=toggleFlowLoop;$('flowStepBtn').onclick=()=>{autoFlow();restartFlowLoop()};$('flowResetBtn').onclick=resetFlow;$('growthTickBtn').onclick=simulateCycle;
 renderMonitors();renderFlow();updateFlow(false);renderPlans();renderLibraries();updateScenario('realistic');sync();launchYoutube($('youtubeInput').value);startFlowLoop();
 </script>
 </body>
 </html>
+
