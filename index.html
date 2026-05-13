@@ -133,6 +133,11 @@
         <label class="block text-white/50 text-sm mb-2">Titre du contenu</label>
         <input id="monitorUploadTitle" class="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 mb-3" placeholder="Ex: clip officiel, live session, reel...">
         <label class="block text-white/50 text-sm mb-2">Durée en minutes</label>
+
+      <div class="mt-4 mb-4">
+        <label class="block text-white/50 text-sm mb-2">Fichier vidéo</label>
+        <input id="creatorVideoFile" type="file" accept="video/mp4,video/webm,video/quicktime" class="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-white">
+      </div>
         <input id="monitorUploadDuration" type="number" min="1" max="120" value="4" class="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 mb-4">
         <button id="addToMonitorLibraryBtn" class="w-full rounded-2xl bg-orange-500 py-4 font-black text-black">Ajouter à la bibliothèque du monitor</button>
         <p class="text-white/45 text-sm mt-3">Démo : tu peux simuler l’ajout même sans fichier vidéo réel.</p>
@@ -462,16 +467,16 @@ async function handleFiles(){
   if(input)input.value='';toast('Média ajouté à '+destination);
 }
 
-function renderLocal(i){if(!state.files.length){setErr('Bibliothèque vide.');return}state.currentIndex=(i+state.files.length)%state.files.length;const f=state.files[state.currentIndex];clearMonitor();if(f.type.startsWith('image/')){$('monitor').innerHTML=`<img src="${f.url}" alt="${f.name}">`;mediaStatus('Image/GIF diffusé : '+f.name)}else if(f.type.startsWith('video/')){const wrap=document.createElement('div');wrap.className='relative w-full h-full bg-black';const v=document.createElement('video');v.src=f.url;v.controls=true;v.playsInline=true;v.preload='metadata';v.style.width='100%';v.style.height='100%';v.style.objectFit='contain';v.onended=nextMedia;v.onerror=()=>setErr('Vidéo locale refusée ou codec non supporté. Essaie MP4 H.264/AAC.');v.id='meydenMainLocalPlayer';v.onplay=()=>stopAllPlayback('meydenMainLocalPlayer');state.currentVideo=v;wrap.appendChild(v);const btn=document.createElement('button');btn.className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-orange-500 px-8 py-5 text-black font-black shadow-2xl';btn.textContent='Lire le média';btn.onclick=()=>v.play().then(()=>btn.style.display='none').catch(()=>setErr('Lecture bloquée. Clique sur Play dans le lecteur.'));wrap.appendChild(btn);$('monitor').appendChild(wrap);mediaStatus('Vidéo chargée : '+f.name)}setText('monitorMainLabel','Lecture locale');renderLibraries()}
+function renderLocal(i){if(!state.files.length){setErr('Bibliothèque vide.');return}state.currentIndex=(i+state.files.length)%state.files.length;const f=state.files[state.currentIndex];clearMonitor();if(f.type.startsWith('image/')){$('monitor').innerHTML=`<img src="${f.url}" alt="${f.name}">`;mediaStatus('Image/GIF diffusé : '+f.name)}else if(f.type.startsWith('video/')){const wrap=document.createElement('div');wrap.className='relative w-full h-full bg-black';const v=document.createElement('video');v.src=f.url;v.controls=true;v.playsInline=true;v.preload='metadata';v.style.width='100%';v.style.height='100%';v.style.objectFit='contain';v.loop=false;v.onended=nextMedia;v.onerror=()=>setErr('Vidéo locale refusée ou codec non supporté. Essaie MP4 H.264/AAC.');v.id='meydenMainLocalPlayer';v.onplay=()=>stopAllPlayback('meydenMainLocalPlayer');state.currentVideo=v;wrap.appendChild(v);const btn=document.createElement('button');btn.className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-orange-500 px-8 py-5 text-black font-black shadow-2xl';btn.textContent='Lire le média';btn.onclick=()=>v.play().then(()=>btn.style.display='none').catch(()=>setErr('Lecture bloquée. Clique sur Play dans le lecteur.'));wrap.appendChild(btn);$('monitor').appendChild(wrap);mediaStatus('Vidéo chargée : '+f.name)}setText('monitorMainLabel','Lecture locale');renderLibraries()}
 function playMedia(){if(state.currentVideo){stopAllPlayback(state.currentVideo.id||'meydenMainLocalPlayer');state.currentVideo.play().catch(()=>setErr('Lecture bloquée. Clique directement sur le lecteur.'))}else toast('Aucune vidéo locale active')}
 function pauseMedia(){if(state.currentVideo){state.currentVideo.pause();toast('Pause')}}
 function reloadMedia(){state.currentVideo?state.currentVideo.load():launchYoutube()}
-function nextMedia(){renderLocal(state.currentIndex+1)}function prevMedia(){renderLocal(state.currentIndex-1)}
+function nextMedia(){if(state.files.length){renderLocal((state.currentIndex+1)%state.files.length);setTimeout(()=>{if(state.currentVideo)state.currentVideo.play().catch(()=>{})},80)}}function prevMedia(){renderLocal(state.currentIndex-1)}
 
 function playerMarkup(name,item){if(!item)return '<div class="text-white/35">Aucun contenu actif</div>';if(item.url&&item.type&&item.type.startsWith('video/'))return `<video id="video_${safeMonitorId(name)}" src="${item.url}" controls playsinline preload="metadata"></video>`;if(item.url&&item.type&&item.type.startsWith('image/'))return `<img src="${item.url}" alt="${item.title}">`;return `<div><div class="text-lg font-black text-orange-300">${item.title}</div><div class="mt-2 text-sm text-white/50">Démo monitor — ajoute un MP4 pour lire une vraie vidéo</div></div>`}
 function monitorPlay(name){monitorRuntime[name].playing=true;renderFiveCentralMonitors();setTimeout(()=>{const id='video_'+safeMonitorId(name);const v=$(id);if(v){stopAllPlayback(id);monitorRuntime[name].playing=true;v.play().catch(()=>setErr('Lecture bloquée : clique directement sur le lecteur du monitor.'))}},30);toast(name+' en lecture')}
 function monitorPause(name){monitorRuntime[name].playing=false;const v=$('video_'+safeMonitorId(name));if(v)v.pause();toast(name+' en pause')}
-function monitorNext(name){const list=monitorLibraries[name]||[];if(!list.length)return;monitorRuntime[name].index=(monitorRuntime[name].index+1)%list.length;monitorRuntime[name].playing=true;renderFiveCentralMonitors();toast(name+' : contenu suivant')}
+function monitorNext(name){const list=monitorLibraries[name]||[];if(!list.length)return;monitorRuntime[name].index=(monitorRuntime[name].index+1)%list.length;monitorRuntime[name].playing=true;renderFiveCentralMonitors();setTimeout(()=>{const v=$('video_'+safeMonitorId(name));if(v)v.play().catch(()=>{})},80);toast(name+' : contenu suivant')}
 function monitorTuned(name){state.tuned++;state.coins++;const item=currentMonitorItem(name);if(item){item.tuned=Math.min(100,(item.tuned||0)+8);item.retention=Math.max(item.retention||0,55);item.average=Math.round(((item.retention||0)+(item.tuned||0))/2);item.status=item.average>=70?'Solide':item.average>=50?'À surveiller':'À retravailler'}sync();renderMonitorLibraries();renderFiveCentralMonitors();toast('Tuned On ajouté à '+name)}
 
 function renderFiveCentralMonitors(){
@@ -485,7 +490,7 @@ function renderFiveCentralMonitors(){
     const card=document.createElement('div');card.className=`rounded-[30px] overflow-hidden border ${colorClass(m.color,'border')} bg-black/30`;
     card.innerHTML=`<div class="p-4 border-b border-white/10 bg-gradient-to-r from-orange-500/20 to-cyan-500/10"><div class="text-xs uppercase tracking-[.18em] text-white/45">Meyden Monitor central</div><div class="text-2xl font-black ${colorClass(m.color,'text')} mt-1">${m.name}</div><div class="text-sm text-white/50 mt-1">${m.audience}</div></div><div class="aspect-video bg-black flex items-center justify-center text-center p-2">${playerMarkup(m.name,item)}</div><div class="p-3 border-t border-white/10"><div class="h-2 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${colorClass(m.color,'bar')}" style="width:${pct}%"></div></div><div class="mt-2 flex justify-between text-xs text-white/50"><span>${minutes}/120 min</span><span>${items.length} contenus</span></div></div><div class="p-4 border-t border-white/10 grid grid-cols-2 gap-2 text-xs"><div class="glass rounded-xl p-2">Rétention<br><b class="text-green-300 text-lg">${retention}%</b></div><div class="glass rounded-xl p-2">Tuned On<br><b class="text-orange-300 text-lg">${tuned}%</b></div><div class="glass rounded-xl p-2">Moyenne<br><b class="text-yellow-300 text-lg">${avg}%</b></div><div class="glass rounded-xl p-2">Prochain<br><b class="text-cyan-300 text-sm">${next}</b></div></div><div class="p-3 border-t border-white/10 text-xs text-white/55">Actif : <b class="text-white">${item?item.title:'Aucun'}</b><br>${item?(item.hours||0)+'h/24h • '+(item.average||0)+'% • '+(item.status||'En test'):''}</div><div class="grid grid-cols-3 border-t border-white/10"><button data-monitor-play="${m.name}" class="bg-orange-500 py-3 font-black text-black">Play</button><button data-monitor-pause="${m.name}" class="bg-white/10 py-3 font-black">Pause</button><button data-monitor-next="${m.name}" class="bg-white/10 py-3 font-black">Suivant</button></div><button data-monitor-tuned="${m.name}" class="w-full border-t border-orange-500/20 bg-orange-500 py-3 font-black text-black hover:bg-orange-400 transition">Tuned On — ${m.name}</button>`;
     root.appendChild(card);
-    setTimeout(()=>{const id='video_'+safeMonitorId(m.name);const v=$(id);if(v){v.onplay=()=>stopAllPlayback(id);v.onended=()=>monitorNext(m.name);if(monitorRuntime[m.name]?.playing){stopAllPlayback(id);v.play().catch(()=>{})}}},0)
+    setTimeout(()=>{const id='video_'+safeMonitorId(m.name);const v=$(id);if(v){v.onplay=()=>stopAllPlayback(id);v.loop=false;v.onended=()=>monitorNext(m.name);if(monitorRuntime[m.name]?.playing){stopAllPlayback(id);v.play().catch(()=>{})}}},0)
   });
   document.querySelectorAll('[data-monitor-play]').forEach(btn=>btn.onclick=()=>monitorPlay(btn.dataset.monitorPlay));
   document.querySelectorAll('[data-monitor-pause]').forEach(btn=>btn.onclick=()=>monitorPause(btn.dataset.monitorPause));
@@ -494,7 +499,51 @@ function renderFiveCentralMonitors(){
 }
 
 function renderMonitorLibraries(){const grid=$('monitorLibrariesGrid');if(!grid)return;grid.innerHTML='';let total=0,count=0;monitors.forEach(m=>{const items=monitorLibraries[m.name]||[];const minutes=monitorLibraryTotal(m.name);total+=minutes;count+=items.length;const pct=Math.min(100,Math.round(minutes/120*100));const full=minutes>=120;const card=document.createElement('div');card.className=`glass rounded-3xl p-4 border ${colorClass(m.color,'border')}`;card.innerHTML=`<div class="text-xs text-white/45 uppercase">Bibliothèque</div><div class="text-xl font-black ${colorClass(m.color,'text')}">${m.name}</div><div class="mt-4 flex items-center gap-3"><div class="h-2 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${colorClass(m.color,'bar')}" style="width:${pct}%"></div></div><div class="text-xs font-black ${full?'text-red-300':'text-white/70'}">${minutes} / 120 min</div></div><div class="mt-4 text-xs text-white/45 uppercase">Contenus</div><div class="mt-2 space-y-2 max-h-48 overflow-auto">${items.length?items.map(it=>`<div class="text-sm rounded-xl bg-black/20 p-2"><div class="flex justify-between gap-2"><span>▶ ${it.title}</span><b>${it.duration} min</b></div><div class="text-xs text-white/45 mt-1">${it.hours||0}h / 24h • Moyenne ${it.average||0}% • ${it.status||'En test'}</div></div>`).join(''):'<div class="text-white/40 text-sm">Aucun contenu.</div>'}</div><div class="mt-4 pt-3 border-t border-white/10 flex justify-between"><b>Total</b><b class="${colorClass(m.color,'text')}">${minutes}:00</b></div>`;grid.appendChild(card)});setText('totalLibraryCapacity',`${total} / 600 min`);setText('activeContentCount',count);setText('symbiosisStatus',total>0?'EN SYMBIOSE':'EN ATTENTE')}
-function addToMonitorLibrary(){const name='Fans';const title=($('monitorUploadTitle')?.value||'Nouveau contenu Meyden').trim();const duration=Math.max(1,Math.min(120,Number($('monitorUploadDuration')?.value||1)));if(monitorLibraryTotal(name)+duration>120){toast('Capacité dépassée : maximum 120 minutes dans '+name);return}monitorLibraries[name].push(makeItem(title,duration,'','demo'));state.monitor=name;const m=monitors.find(x=>x.name===name);if(m)state.audience=m.audience;sync();renderMonitorLibraries();renderFiveCentralMonitors();const titleInput=$('monitorUploadTitle');if(titleInput)titleInput.value='';toast('Contenu ajouté à '+name+' : '+duration+' min')}
+async function addToMonitorLibrary(){
+  const name='Fans';
+  const titleInput=$('monitorUploadTitle');
+  const durationInput=$('monitorUploadDuration');
+  const fileInput=$('creatorVideoFile');
+  const title=(titleInput?.value||'Nouveau contenu Meyden').trim();
+  const duration=Math.max(1,Math.min(120,Number(durationInput?.value||1)));
+
+  if(monitorLibraryTotal(name)+duration>120){
+    toast('Capacité dépassée : maximum 120 minutes dans Fans');
+    return;
+  }
+
+  if(fileInput&&fileInput.files&&fileInput.files.length){
+    const file=fileInput.files[0];
+    const type=fileType(file);
+    let url='';
+
+    if(type.startsWith('image/')){
+      url=await new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file)});
+    }else if(type.startsWith('video/')){
+      url=URL.createObjectURL(file);
+    }
+
+    const finalTitle=titleInput?.value?.trim()||file.name;
+    const media={name:file.name,type,size:file.size,url};
+    state.files.push(media);
+    monitorLibraries[name].push(makeItem(finalTitle,duration,url,type));
+    state.currentIndex=state.files.length-1;
+    renderLocal(state.currentIndex);
+  }else{
+    monitorLibraries[name].push(makeItem(title,duration,'','demo'));
+  }
+
+  state.monitor='Fans';
+  state.audience='Communauté engagée';
+  sync();
+  renderLibraries();
+  renderMonitorLibraries();
+  renderFiveCentralMonitors();
+  if(titleInput)titleInput.value='';
+  if(fileInput)fileInput.value='';
+  toast('Contenu ajouté dans Fans — entrée obligatoire');
+  safeScroll('fiveCentralMonitors');
+}
 
 function renderMonitors(){const g=$('monitorGrid');if(!g)return;g.innerHTML='';monitors.forEach(m=>{const b=document.createElement('button');b.className='glass rounded-3xl p-4 text-left hover:bg-white/10';b.innerHTML=`<div class="text-white/45 text-sm">${m.audience}</div><div class="text-2xl font-black text-orange-300">${m.name}</div><div class="text-xs text-white/50 mt-2">${m.rewardText}</div>`;b.onclick=()=>{state.monitor=m.name;state.audience=m.audience;state.coins+=m.reward;sync();toast('Monitor : '+m.name);safeScroll('monitor-libraries')};g.appendChild(b)})}
 function engineLog(message){engine.log.unshift(new Date().toLocaleTimeString('fr-CA',{hour:'2-digit',minute:'2-digit'})+' — '+message);engine.log=engine.log.slice(0,12);const el=$('engineLog');if(el)el.innerHTML=engine.log.join('<br>')}
@@ -536,10 +585,17 @@ function handleCreatorUpload(){
   }
 }
 function bindClick(id,fn){const el=$(id);if(el)el.onclick=fn;else console.warn('Bouton manquant:',id)}
+function activateAllButtons(){
+  document.querySelectorAll('button').forEach(btn=>{
+    btn.dataset.ready='true';
+  });
+}
+
 function bindAll(){document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>safeScroll(b.dataset.scroll));document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>openModal(b.dataset.modal));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.querySelectorAll('.localForm').forEach(f=>f.onsubmit=e=>{e.preventDefault();toast(f.dataset.success);f.reset();f.closest('.modal')?.classList.remove('open')});document.querySelectorAll('.panelBtn').forEach(b=>b.onclick=()=>{$(b.dataset.panel)?.classList.toggle('open');renderLibraries()});document.querySelectorAll('.scenarioBtn').forEach(b=>b.onclick=()=>updateScenario(b.dataset.scenario));bindClick('addFilesBtn',handleFiles);bindClick('launchYoutubeBtn',()=>launchYoutube());bindClick('youtubeFallbackBtn',()=>launchYoutube());bindClick('clearYoutubeHistoryBtn',()=>{saveYt([]);renderLibraries();toast('Historique effacé')});bindClick('playBtn',playMedia);bindClick('pauseBtn',pauseMedia);bindClick('reloadBtn',reloadMedia);bindClick('prevBtn',prevMedia);bindClick('nextBtn',nextMedia);bindClick('tunedBtn',tunedOn);bindClick('monitorTunedBtn',tunedOn);bindClick('lujamkoTunedBtn',lujamkoTunedOn);bindClick('lujamkoPreviewBtn',lujamkoPreview);bindClick('lujamkoResetBtn',lujamkoReset);bindClick('submitVersionBtn',submitVersion);bindClick('flowPlayBtn',toggleFlowLoop);bindClick('flowStepBtn',()=>{autoFlow();restartFlowLoop()});bindClick('flowResetBtn',resetFlow);bindClick('growthTickBtn',simulateCycle);bindClick('realAlgoBtn',simulateRealAlgo);bindClick('addToMonitorLibraryBtn',addToMonitorLibrary);bindClick('run2hCycleBtn',runMonitorEngineCycle);bindClick('run24hCycleBtn',run24hEngine);bindClick('resetCirculationBtn',resetCirculation);bindClick('creatorUploadBtn',handleCreatorUpload)}
 function runSelfTests(){const required=['media','monitor','creatorJoinModal','publicJoinModal','creatorJoinForm','publicJoinForm','artistsGrid','dashboard','scene','studio-lujamko','sponsorModal','monitor-libraries','monitorLibrariesGrid','fiveCentralMonitors','addToMonitorLibraryBtn','run2hCycleBtn','run24hCycleBtn','resetCirculationBtn','engineLog'];const missing=required.filter(id=>!$(id));if(missing.length){console.error('MEYDEN TEST FAIL — éléments manquants:',missing);toast('Test interne : éléments manquants');return false}console.log('MEYDEN TEST OK — éléments essentiels présents');return true}
-function init(){bindAll();renderMonitors();renderMonitorLibraries();renderFiveCentralMonitors();renderArtists();setupAdhesionForms();renderFlow();updateFlow(false);renderPlans();renderLibraries();updateScenario('realistic');sync();runSelfTests();launchYoutube($('youtubeInput')?.value||'');startFlowLoop()}
+function init(){bindAll();activateAllButtons();renderMonitors();renderMonitorLibraries();renderFiveCentralMonitors();renderArtists();setupAdhesionForms();renderFlow();updateFlow(false);renderPlans();renderLibraries();updateScenario('realistic');sync();runSelfTests();launchYoutube($('youtubeInput')?.value||'');startFlowLoop()}
 init();
 </script>
 </body>
 </html>
+
