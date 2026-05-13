@@ -127,8 +127,9 @@
     <div class="grid gap-4 lg:grid-cols-[.8fr_1.2fr] mb-6">
       <div class="glass rounded-[28px] p-5">
         <h3 class="text-2xl font-black mb-4">Téléverser vers un monitor</h3>
-        <label class="block text-white/50 text-sm mb-2">Monitor de destination</label>
-        <select id="uploadMonitorSelect" class="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 mb-3"><option>Fans</option><option>Public Ciblé</option><option>Petit Public</option><option>Grand Public</option><option>International</option></select>
+        <label class="block text-white/50 text-sm mb-2">Monitor d’entrée obligatoire</label>
+        <div class="w-full rounded-2xl bg-black/40 border border-orange-500/30 px-4 py-3 mb-3 font-black text-orange-300">Fans — entrée obligatoire du système</div>
+        <input id="uploadMonitorSelect" type="hidden" value="Fans">
         <label class="block text-white/50 text-sm mb-2">Titre du contenu</label>
         <input id="monitorUploadTitle" class="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 mb-3" placeholder="Ex: clip officiel, live session, reel...">
         <label class="block text-white/50 text-sm mb-2">Durée en minutes</label>
@@ -154,10 +155,144 @@
 
   <section id="adhesion" class="glass rounded-[32px] p-6"><h2 class="text-4xl font-black">Adhésion Meyden</h2><p class="text-white/60 mt-2 mb-6">Deux entrées claires : créateurs et public auditeur.</p><div class="grid gap-5 lg:grid-cols-2"><div class="glass rounded-[30px] p-5"><h3 class="text-2xl font-black text-orange-300">Créateur / Artiste</h3><p class="text-white/60 mt-2">Déposer du contenu, suivre ses coins, recevoir des recommandations.</p><button data-modal="creatorJoinModal" class="mt-5 w-full rounded-2xl bg-orange-500 py-4 font-black text-black">Remplir le formulaire créateur</button></div><div class="glass rounded-[30px] p-5"><h3 class="text-2xl font-black text-cyan-300">Public auditeur</h3><p class="text-white/60 mt-2">Écouter, suivre les artistes et participer au signal culturel.</p><button data-modal="publicJoinModal" class="mt-5 w-full rounded-2xl bg-cyan-300 py-4 font-black text-black">Remplir le formulaire public</button></div></div></section>
 
-  <section id="dashboard" class="grid gap-6 xl:grid-cols-[.95fr_1.05fr]">
-    <div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Dashboard créateur</h2><div class="grid gap-3"><input id="creatorNameInput" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom de l'artiste" value="Matante Mutante"><input id="creatorEmailInput" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel" value="contact@meyden.ca"><input id="contentNameInput" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom du projet / single" value="La Slime à 2$"></div><div class="grid gap-3 mt-4 text-sm"><div class="glass rounded-2xl p-3">Audience : <b id="dashboardAudience">Fans</b></div><div class="glass rounded-2xl p-3">Performance : <b id="dashboardPerformance">78</b></div><div class="glass rounded-2xl p-3">Meyden Coins : <b id="dashboardCoins">148</b></div><div class="glass rounded-2xl p-3">Plan créateur : <b id="dashboardCreatorPlan">Créateur 14.99$</b></div><div class="glass rounded-2xl p-3">Plan public : <b id="dashboardPublicPlan">Public 1.99$</b></div><div class="glass rounded-2xl p-3">Statut : <b id="dashboardStatus">Planifié</b></div><div class="glass rounded-2xl p-3">Version : <b id="dashboardVersion">1</b></div><div class="glass rounded-2xl p-3">Date : <b>25 septembre 2026</b></div></div><button id="submitVersionBtn" class="mt-4 w-full rounded-2xl bg-orange-500 py-4 font-black text-black">Submit nouvelle version</button></div>
-    <div class="space-y-6"><div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Abonnements créateur</h2><div id="creatorPlansGrid" class="grid gap-3"></div></div><div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Abonnements public</h2><div id="publicPlansGrid" class="grid gap-3"></div></div></div>
-  </section>
+  <section id="dashboard" class="space-y-6">
+  <div class="glass rounded-[32px] p-6 border border-orange-500/20">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="text-xs uppercase tracking-[.25em] text-orange-300">Interface créateur</div>
+        <h2 class="text-4xl font-black mt-2">Dashboard Meyden Créateur</h2>
+        <p class="text-white/60 mt-2 max-w-3xl">Téléversement, statistiques, tuned on, coins, recommandations constructives et évolution dans les 5 Meyden Monitors.</p>
+      </div>
+      <button class="rounded-2xl bg-orange-500 px-6 py-4 font-black text-black">Téléverser une vidéo</button>
+    </div>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
+    <div class="glass rounded-[32px] p-5">
+      <div class="flex items-center gap-4 mb-5">
+        <div class="w-20 h-20 rounded-3xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-3xl font-black text-orange-300">MP</div>
+        <div>
+          <div class="text-2xl font-black">Mon profil</div>
+          <div class="text-white/50">Créateur Meyden actif</div>
+          <div class="mt-2 inline-flex rounded-full bg-green-500/20 border border-green-400/30 px-3 py-1 text-xs font-black text-green-300">En circulation</div>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div class="glass rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <div class="text-white/45">Niveau Gratuit</div>
+            <div class="text-xs text-white/40 mt-1">Accès limité</div>
+          </div>
+          <input type="checkbox" class="scale-125 accent-orange-500">
+        </div>
+
+        <div class="glass rounded-2xl p-4 border border-orange-500/30 flex items-center justify-between">
+          <div>
+            <div class="text-orange-300 font-black">Créateur 14.99$</div>
+            <div class="text-xs text-white/40 mt-1">4 vidéos par mois</div>
+          </div>
+          <input checked type="checkbox" class="scale-125 accent-orange-500">
+        </div>
+
+        <div class="glass rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <div class="text-cyan-300 font-black">Créateur 65.99$</div>
+            <div class="text-xs text-white/40 mt-1">Téléversement quotidien</div>
+          </div>
+          <input type="checkbox" class="scale-125 accent-cyan-400">
+        </div>
+      </div>
+
+      <div class="mt-6 rounded-3xl border border-dashed border-orange-500/30 bg-black/30 p-5 text-center">
+        <div class="text-lg font-black">Téléverser une vidéo</div>
+        <div class="text-sm text-white/45 mt-2">MP4 • MOV • WEBM</div>
+        <input id="creatorUploadInput" type="file" accept="video/*" class="mt-4 block w-full text-sm text-white/70">
+        <button id="creatorUploadBtn" class="mt-4 w-full rounded-2xl bg-orange-500 py-4 font-black text-black">Ajouter au système Meyden</button>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="grid md:grid-cols-2 gap-5">
+        <div class="glass rounded-[28px] p-5">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="text-white/45 text-sm">Mes statistiques</div>
+              <div class="text-3xl font-black text-green-300 mt-1">78%</div>
+            </div>
+            <div class="w-20 h-20 rounded-2xl bg-green-500/10 border border-green-400/20 flex items-center justify-center">
+              📈
+            </div>
+          </div>
+          <div class="h-32 rounded-2xl bg-black/30 border border-white/10 p-3 flex items-end gap-2">
+            <div class="w-full bg-orange-500 rounded-t-xl h-[35%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[70%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[48%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[85%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[62%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[95%]"></div>
+          </div>
+        </div>
+
+        <div class="glass rounded-[28px] p-5">
+          <div class="text-white/45 text-sm">Mes Coins</div>
+          <div class="text-5xl font-black text-yellow-300 mt-2">148</div>
+          <div class="mt-4 text-sm text-white/55">Valeur estimée : 22.20$</div>
+          <div class="mt-5 h-3 rounded-full bg-white/10 overflow-hidden">
+            <div class="h-full bg-yellow-300 w-[72%]"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="glass rounded-[28px] p-5 text-center">
+          <div class="text-white/45 text-sm">Mes vidéos téléversées</div>
+          <div class="text-5xl font-black text-cyan-300 mt-3">12</div>
+          <div class="text-xs text-white/45 mt-2">Contenus actifs</div>
+        </div>
+
+        <div class="glass rounded-[28px] p-5 text-center border border-orange-500/20">
+          <div class="text-white/45 text-sm">Mes vidéos Tuned On</div>
+          <div class="text-5xl font-black text-orange-300 mt-3">84%</div>
+          <div class="text-xs text-white/45 mt-2">Engagement public</div>
+        </div>
+
+        <div class="glass rounded-[28px] p-5 text-center">
+          <div class="text-white/45 text-sm">Monitor actif</div>
+          <div class="text-4xl font-black text-green-300 mt-3">Fans</div>
+          <div class="text-xs text-white/45 mt-2">Cycle 2h actif</div>
+        </div>
+      </div>
+
+      <div class="glass rounded-[32px] p-6 border border-orange-500/20">
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <div>
+            <div class="text-2xl font-black">Mes conseils constructifs</div>
+            <div class="text-sm text-white/50 mt-1">Courriels générés automatiquement par le système Meyden</div>
+          </div>
+          <div class="rounded-full bg-orange-500/20 border border-orange-500/30 px-4 py-2 text-xs font-black text-orange-300">Analyse active</div>
+        </div>
+
+        <div class="space-y-3 text-sm leading-7">
+          <div class="rounded-2xl border border-orange-500/20 bg-orange-500/10 p-4">
+            <b class="text-orange-300">Conseil #1</b><br>
+            Les 5 premières secondes doivent créer un impact immédiat. Le taux de rétention descend après 7 secondes.
+          </div>
+
+          <div class="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 p-4">
+            <b class="text-cyan-300">Conseil #2</b><br>
+            Les vidéos avec visage humain et mouvement rapide obtiennent plus de Tuned On dans Fans et Public Ciblé.
+          </div>
+
+          <div class="rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
+            <b class="text-green-300">Conseil #3</b><br>
+            Ton contenu approche une promotion vers Petit Public. Maintiens une moyenne supérieure à 70% pendant 24h.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
   <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Projection 24 mois</h2><p class="text-white/60 text-sm">Scénarios investisseur.</p></div><div class="flex flex-wrap gap-2"><button data-scenario="conservative" class="scenarioBtn rounded-2xl bg-white/10 px-4 py-3 font-black">Conservateur</button><button data-scenario="realistic" class="scenarioBtn rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Réaliste</button><button data-scenario="ambitious" class="scenarioBtn rounded-2xl bg-white/10 px-4 py-3 font-black">Ambitieux</button></div></div><div class="rounded-3xl bg-black/40 border border-white/10 p-4"><canvas id="growthChart" height="100"></canvas></div><div class="grid md:grid-cols-4 gap-3 mt-4"><div class="glass rounded-2xl p-4">Scénario<div id="activeScenarioLabel" class="text-xl font-black text-orange-300">Réaliste</div></div><div class="glass rounded-2xl p-4">Revenu final<div id="finalRevenue" class="text-xl font-black text-green-300">0$</div></div><div class="glass rounded-2xl p-4">Profit net<div id="finalProfit" class="text-xl font-black text-green-300">0$</div></div><div class="glass rounded-2xl p-4">Abonnés<div id="finalSubs" class="text-xl font-black text-yellow-300">0</div></div></div></section>
 
@@ -170,6 +305,34 @@
   <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Guichet Meyden Coins</h2><p class="text-white/60 text-sm">Demande d’échange trimestrielle.</p></div><button data-modal="coinsModal" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Ouvrir le guichet</button></div><div class="grid gap-4 lg:grid-cols-3"><div class="glass rounded-3xl p-4"><b>Statut</b><div id="coinsWindowStatus" class="text-2xl font-black text-green-300">Ouvert</div></div><div class="glass rounded-3xl p-4"><b>Règle</b><div class="text-2xl font-black text-yellow-300">1/3 provision</div></div><div class="glass rounded-3xl p-4"><b>Cycle</b><div id="coinsQuarterLabel" class="text-2xl font-black text-orange-300">T2</div></div></div></section>
 
   <section id="studio-lujamko" class="glass cyan-glow rounded-[32px] p-5"><div class="grid gap-6 lg:grid-cols-[1.05fr_.95fr] items-center"><div><div class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-cyan-300">Studio d’enregistrement intégré</div><h2 class="mt-5 text-4xl lg:text-6xl font-black leading-[.95]">LUJAMKO<br><span class="text-cyan-300">Production Studio</span></h2><p class="mt-5 text-lg leading-8 text-white/70 max-w-2xl">Studio immersif pour transformer une idée sonore en contenu exploitable.</p><div class="mt-6 flex flex-wrap gap-3"><button data-modal="sceneBookModal" class="rounded-2xl bg-[#0f52ba] px-5 py-3 font-black text-white">Réserver une session</button><button data-scroll="media" class="rounded-2xl bg-white/10 px-5 py-3 font-black">Voir le moniteur média</button><button data-scroll="dashboard" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Structurer avec Meyden</button></div></div><div class="rounded-[30px] overflow-hidden border border-cyan-400/20 bg-gradient-to-br from-[#091a3f] via-black to-[#0f52ba] p-5 cyan-glow"><div id="lujamkoMonitor" class="aspect-video rounded-[26px] border border-white/10 bg-black/50 flex items-center justify-center text-center p-6 overflow-hidden"><div><div class="text-xs uppercase tracking-[.25em] text-cyan-300">Lujamko x Meyden</div><div class="mt-3 text-3xl font-black">Son • Image • Contenu</div><p class="mt-3 text-white/60">Une session peut devenir un actif.</p></div></div><button id="lujamkoTunedBtn" class="w-full rounded-2xl bg-cyan-300 py-4 mt-4 text-lg font-black text-black hover:bg-white transition">Tuned On — Studio Lujamko</button><div class="grid grid-cols-3 gap-3 mt-4 text-sm"><button id="lujamkoPreviewBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Démo monitor</button><button id="lujamkoResetBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Reset studio</button><div class="rounded-2xl border border-cyan-400/20 bg-black/30 p-3"><div class="text-white/45">Tuned</div><div id="lujamkoTunedCount" class="text-xl font-black text-cyan-300">0</div></div></div></div></div></section>
+<section id="auditeur-central" class="glass rounded-[32px] p-5 mb-6">
+  <div class="flex flex-wrap justify-between gap-3 mb-4">
+    <div>
+      <h2 class="text-3xl font-black">Interface Auditeur</h2>
+      <p class="text-white/60 text-sm">Les auditeurs traversent les 5 Meyden Monitors et influencent directement l’évolution des contenus.</p>
+    </div>
+    <div class="rounded-2xl bg-cyan-300 px-4 py-3 text-black font-black">Public Gratuit • Premium 1.99$</div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-5">
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-cyan-300 font-black text-2xl">Fans</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-orange-300 font-black text-2xl">Public Ciblé</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-yellow-300 font-black text-2xl">Petit Public</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-orange-200 font-black text-2xl">Grand Public</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-green-300 font-black text-2xl">International</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+  </div>
+
+  <div class="mt-6 rounded-3xl border border-white/10 bg-black/30 p-5">
+    <div class="text-xl font-black mb-3">Analyse comportementale auditeur</div>
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="glass rounded-2xl p-4"><div class="text-white/50 text-sm">Temps regardé</div><div class="text-3xl font-black text-green-300">62%</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-white/50 text-sm">Tuned On</div><div class="text-3xl font-black text-orange-300">41%</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-white/50 text-sm">Moyenne comportementale</div><div class="text-3xl font-black text-yellow-300">52%</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-white/50 text-sm">Décision système</div><div class="text-xl font-black text-cyan-300">Relance monitor</div></div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <div id="toast" class="fixed bottom-4 left-1/2 z-[80] hidden -translate-x-1/2 rounded-2xl bg-white text-black px-5 py-3 font-black shadow-2xl"></div>
@@ -183,6 +346,23 @@
 <script>
 const $=id=>document.getElementById(id);
 const safeScroll=id=>{const el=$(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});else toast('Section introuvable : '+id)};
+
+function stopAllPlayback(exceptId=''){
+  document.querySelectorAll('video').forEach(v=>{
+    if(v.id!==exceptId){try{v.pause()}catch(e){}}
+  });
+  document.querySelectorAll('iframe[data-player="meyden"]').forEach(frame=>{
+    if(frame.id!==exceptId){
+      const src=frame.src;
+      frame.src='about:blank';
+      setTimeout(()=>{frame.src=src},10);
+    }
+  });
+  Object.keys(monitorRuntime||{}).forEach(name=>{
+    const id='video_'+safeMonitorId(name);
+    if(id!==exceptId) monitorRuntime[name].playing=false;
+  });
+}
 
 const monitors=[
   {name:'Fans',audience:'Communauté engagée',reward:0,rewardText:'Validation communauté',color:'cyan'},
@@ -258,7 +438,7 @@ function youtubeEmbedUrl(url=''){const t=url.trim();const list=t.match(/[?&]list
 function getYt(){try{return JSON.parse(localStorage.getItem('meydenYoutubeHistory')||'[]')}catch{return[]}}
 function saveYt(h){localStorage.setItem('meydenYoutubeHistory',JSON.stringify(h.slice(0,30)))}
 function clearMonitor(){const m=$('monitor');if(m)m.innerHTML='';state.currentVideo=null}
-function launchYoutube(url){const use=url||$('youtubeInput')?.value||'';const embed=youtubeEmbedUrl(use);if(!embed){setErr('Lien YouTube invalide.');return}clearMonitor();setErr('');const h=getYt().filter(x=>x.url!==use);h.unshift({url:use,date:new Date().toLocaleString('fr-CA')});saveYt(h);renderLibraries();$('monitor').innerHTML=`<iframe src="${embed}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;mediaStatus('Diffusion YouTube activée.');setText('monitorMainLabel','YouTube actif');toast('YouTube activé')}
+function launchYoutube(url){const use=url||$('youtubeInput')?.value||'';const embed=youtubeEmbedUrl(use);if(!embed){setErr('Lien YouTube invalide.');return}clearMonitor();setErr('');const h=getYt().filter(x=>x.url!==use);h.unshift({url:use,date:new Date().toLocaleString('fr-CA')});saveYt(h);renderLibraries();stopAllPlayback('mainYoutubePlayer');$('monitor').innerHTML=`<iframe id="mainYoutubePlayer" data-player="meyden" src="${embed}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;mediaStatus('Diffusion YouTube activée.');setText('monitorMainLabel','YouTube actif');toast('YouTube activé')}
 function fileType(f){const n=f.name.toLowerCase();return f.type||(n.endsWith('.gif')?'image/gif':n.endsWith('.png')?'image/png':n.endsWith('.jpg')||n.endsWith('.jpeg')?'image/jpeg':n.endsWith('.mp4')?'video/mp4':n.endsWith('.mov')?'video/quicktime':'application/octet-stream')}
 
 function renderLibraries(){const up=$('uploadLibrary'),yt=$('youtubeLibrary');if(!up||!yt)return;up.innerHTML='';yt.innerHTML='';if(!state.files.length)up.innerHTML='<div class="glass rounded-2xl p-3 text-white/55">Aucun média téléversé.</div>';state.files.forEach((f,i)=>{const b=document.createElement('button');b.className='glass rounded-2xl p-3 text-left';b.innerHTML=`<b>${i+1}. ${f.name}</b><div class="text-xs text-white/45">${f.type}</div>`;b.onclick=()=>renderLocal(i);up.appendChild(b)});const h=getYt();if(!h.length)yt.innerHTML='<div class="glass rounded-2xl p-3 text-white/55">Aucun lien YouTube visionné.</div>';h.forEach((item,i)=>{const b=document.createElement('button');b.className='glass rounded-2xl p-3 text-left';b.innerHTML=`<b>${i+1}. YouTube</b><div class="text-xs text-white/45 break-all">${item.url}</div><div class="text-xs text-white/35">${item.date}</div>`;b.onclick=()=>launchYoutube(item.url);yt.appendChild(b)})}
@@ -266,7 +446,7 @@ function renderLibraries(){const up=$('uploadLibrary'),yt=$('youtubeLibrary');if
 async function handleFiles(){
   const input=$('fileInput');const selected=Array.from(input?.files||[]).slice(0,5);
   if(!selected.length){setErr('Aucun fichier sélectionné.');return}
-  const destination=$('uploadMonitorSelect')?.value||state.monitor||'Fans';
+  const destination='Fans';
   setErr('');
   for(const f of selected){
     const type=fileType(f);let url='';
@@ -282,14 +462,14 @@ async function handleFiles(){
   if(input)input.value='';toast('Média ajouté à '+destination);
 }
 
-function renderLocal(i){if(!state.files.length){setErr('Bibliothèque vide.');return}state.currentIndex=(i+state.files.length)%state.files.length;const f=state.files[state.currentIndex];clearMonitor();if(f.type.startsWith('image/')){$('monitor').innerHTML=`<img src="${f.url}" alt="${f.name}">`;mediaStatus('Image/GIF diffusé : '+f.name)}else if(f.type.startsWith('video/')){const wrap=document.createElement('div');wrap.className='relative w-full h-full bg-black';const v=document.createElement('video');v.src=f.url;v.controls=true;v.playsInline=true;v.preload='metadata';v.style.width='100%';v.style.height='100%';v.style.objectFit='contain';v.onended=nextMedia;v.onerror=()=>setErr('Vidéo locale refusée ou codec non supporté. Essaie MP4 H.264/AAC.');state.currentVideo=v;wrap.appendChild(v);const btn=document.createElement('button');btn.className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-orange-500 px-8 py-5 text-black font-black shadow-2xl';btn.textContent='Lire le média';btn.onclick=()=>v.play().then(()=>btn.style.display='none').catch(()=>setErr('Lecture bloquée. Clique sur Play dans le lecteur.'));wrap.appendChild(btn);$('monitor').appendChild(wrap);mediaStatus('Vidéo chargée : '+f.name)}setText('monitorMainLabel','Lecture locale');renderLibraries()}
-function playMedia(){state.currentVideo?state.currentVideo.play().catch(()=>setErr('Lecture bloquée. Clique directement sur le lecteur.')):toast('Aucune vidéo locale active')}
+function renderLocal(i){if(!state.files.length){setErr('Bibliothèque vide.');return}state.currentIndex=(i+state.files.length)%state.files.length;const f=state.files[state.currentIndex];clearMonitor();if(f.type.startsWith('image/')){$('monitor').innerHTML=`<img src="${f.url}" alt="${f.name}">`;mediaStatus('Image/GIF diffusé : '+f.name)}else if(f.type.startsWith('video/')){const wrap=document.createElement('div');wrap.className='relative w-full h-full bg-black';const v=document.createElement('video');v.src=f.url;v.controls=true;v.playsInline=true;v.preload='metadata';v.style.width='100%';v.style.height='100%';v.style.objectFit='contain';v.onended=nextMedia;v.onerror=()=>setErr('Vidéo locale refusée ou codec non supporté. Essaie MP4 H.264/AAC.');v.id='meydenMainLocalPlayer';v.onplay=()=>stopAllPlayback('meydenMainLocalPlayer');state.currentVideo=v;wrap.appendChild(v);const btn=document.createElement('button');btn.className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-orange-500 px-8 py-5 text-black font-black shadow-2xl';btn.textContent='Lire le média';btn.onclick=()=>v.play().then(()=>btn.style.display='none').catch(()=>setErr('Lecture bloquée. Clique sur Play dans le lecteur.'));wrap.appendChild(btn);$('monitor').appendChild(wrap);mediaStatus('Vidéo chargée : '+f.name)}setText('monitorMainLabel','Lecture locale');renderLibraries()}
+function playMedia(){if(state.currentVideo){stopAllPlayback(state.currentVideo.id||'meydenMainLocalPlayer');state.currentVideo.play().catch(()=>setErr('Lecture bloquée. Clique directement sur le lecteur.'))}else toast('Aucune vidéo locale active')}
 function pauseMedia(){if(state.currentVideo){state.currentVideo.pause();toast('Pause')}}
 function reloadMedia(){state.currentVideo?state.currentVideo.load():launchYoutube()}
 function nextMedia(){renderLocal(state.currentIndex+1)}function prevMedia(){renderLocal(state.currentIndex-1)}
 
 function playerMarkup(name,item){if(!item)return '<div class="text-white/35">Aucun contenu actif</div>';if(item.url&&item.type&&item.type.startsWith('video/'))return `<video id="video_${safeMonitorId(name)}" src="${item.url}" controls playsinline preload="metadata"></video>`;if(item.url&&item.type&&item.type.startsWith('image/'))return `<img src="${item.url}" alt="${item.title}">`;return `<div><div class="text-lg font-black text-orange-300">${item.title}</div><div class="mt-2 text-sm text-white/50">Démo monitor — ajoute un MP4 pour lire une vraie vidéo</div></div>`}
-function monitorPlay(name){monitorRuntime[name].playing=true;renderFiveCentralMonitors();setTimeout(()=>{const v=$('video_'+safeMonitorId(name));if(v)v.play().catch(()=>setErr('Lecture bloquée : clique directement sur le lecteur du monitor.'))},30);toast(name+' en lecture')}
+function monitorPlay(name){monitorRuntime[name].playing=true;renderFiveCentralMonitors();setTimeout(()=>{const id='video_'+safeMonitorId(name);const v=$(id);if(v){stopAllPlayback(id);monitorRuntime[name].playing=true;v.play().catch(()=>setErr('Lecture bloquée : clique directement sur le lecteur du monitor.'))}},30);toast(name+' en lecture')}
 function monitorPause(name){monitorRuntime[name].playing=false;const v=$('video_'+safeMonitorId(name));if(v)v.pause();toast(name+' en pause')}
 function monitorNext(name){const list=monitorLibraries[name]||[];if(!list.length)return;monitorRuntime[name].index=(monitorRuntime[name].index+1)%list.length;monitorRuntime[name].playing=true;renderFiveCentralMonitors();toast(name+' : contenu suivant')}
 function monitorTuned(name){state.tuned++;state.coins++;const item=currentMonitorItem(name);if(item){item.tuned=Math.min(100,(item.tuned||0)+8);item.retention=Math.max(item.retention||0,55);item.average=Math.round(((item.retention||0)+(item.tuned||0))/2);item.status=item.average>=70?'Solide':item.average>=50?'À surveiller':'À retravailler'}sync();renderMonitorLibraries();renderFiveCentralMonitors();toast('Tuned On ajouté à '+name)}
@@ -305,7 +485,7 @@ function renderFiveCentralMonitors(){
     const card=document.createElement('div');card.className=`rounded-[30px] overflow-hidden border ${colorClass(m.color,'border')} bg-black/30`;
     card.innerHTML=`<div class="p-4 border-b border-white/10 bg-gradient-to-r from-orange-500/20 to-cyan-500/10"><div class="text-xs uppercase tracking-[.18em] text-white/45">Meyden Monitor central</div><div class="text-2xl font-black ${colorClass(m.color,'text')} mt-1">${m.name}</div><div class="text-sm text-white/50 mt-1">${m.audience}</div></div><div class="aspect-video bg-black flex items-center justify-center text-center p-2">${playerMarkup(m.name,item)}</div><div class="p-3 border-t border-white/10"><div class="h-2 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${colorClass(m.color,'bar')}" style="width:${pct}%"></div></div><div class="mt-2 flex justify-between text-xs text-white/50"><span>${minutes}/120 min</span><span>${items.length} contenus</span></div></div><div class="p-4 border-t border-white/10 grid grid-cols-2 gap-2 text-xs"><div class="glass rounded-xl p-2">Rétention<br><b class="text-green-300 text-lg">${retention}%</b></div><div class="glass rounded-xl p-2">Tuned On<br><b class="text-orange-300 text-lg">${tuned}%</b></div><div class="glass rounded-xl p-2">Moyenne<br><b class="text-yellow-300 text-lg">${avg}%</b></div><div class="glass rounded-xl p-2">Prochain<br><b class="text-cyan-300 text-sm">${next}</b></div></div><div class="p-3 border-t border-white/10 text-xs text-white/55">Actif : <b class="text-white">${item?item.title:'Aucun'}</b><br>${item?(item.hours||0)+'h/24h • '+(item.average||0)+'% • '+(item.status||'En test'):''}</div><div class="grid grid-cols-3 border-t border-white/10"><button data-monitor-play="${m.name}" class="bg-orange-500 py-3 font-black text-black">Play</button><button data-monitor-pause="${m.name}" class="bg-white/10 py-3 font-black">Pause</button><button data-monitor-next="${m.name}" class="bg-white/10 py-3 font-black">Suivant</button></div><button data-monitor-tuned="${m.name}" class="w-full border-t border-orange-500/20 bg-orange-500 py-3 font-black text-black hover:bg-orange-400 transition">Tuned On — ${m.name}</button>`;
     root.appendChild(card);
-    setTimeout(()=>{const v=$('video_'+safeMonitorId(m.name));if(v){v.onended=()=>monitorNext(m.name);if(monitorRuntime[m.name]?.playing)v.play().catch(()=>{})}},0)
+    setTimeout(()=>{const id='video_'+safeMonitorId(m.name);const v=$(id);if(v){v.onplay=()=>stopAllPlayback(id);v.onended=()=>monitorNext(m.name);if(monitorRuntime[m.name]?.playing){stopAllPlayback(id);v.play().catch(()=>{})}}},0)
   });
   document.querySelectorAll('[data-monitor-play]').forEach(btn=>btn.onclick=()=>monitorPlay(btn.dataset.monitorPlay));
   document.querySelectorAll('[data-monitor-pause]').forEach(btn=>btn.onclick=()=>monitorPause(btn.dataset.monitorPause));
@@ -314,7 +494,7 @@ function renderFiveCentralMonitors(){
 }
 
 function renderMonitorLibraries(){const grid=$('monitorLibrariesGrid');if(!grid)return;grid.innerHTML='';let total=0,count=0;monitors.forEach(m=>{const items=monitorLibraries[m.name]||[];const minutes=monitorLibraryTotal(m.name);total+=minutes;count+=items.length;const pct=Math.min(100,Math.round(minutes/120*100));const full=minutes>=120;const card=document.createElement('div');card.className=`glass rounded-3xl p-4 border ${colorClass(m.color,'border')}`;card.innerHTML=`<div class="text-xs text-white/45 uppercase">Bibliothèque</div><div class="text-xl font-black ${colorClass(m.color,'text')}">${m.name}</div><div class="mt-4 flex items-center gap-3"><div class="h-2 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${colorClass(m.color,'bar')}" style="width:${pct}%"></div></div><div class="text-xs font-black ${full?'text-red-300':'text-white/70'}">${minutes} / 120 min</div></div><div class="mt-4 text-xs text-white/45 uppercase">Contenus</div><div class="mt-2 space-y-2 max-h-48 overflow-auto">${items.length?items.map(it=>`<div class="text-sm rounded-xl bg-black/20 p-2"><div class="flex justify-between gap-2"><span>▶ ${it.title}</span><b>${it.duration} min</b></div><div class="text-xs text-white/45 mt-1">${it.hours||0}h / 24h • Moyenne ${it.average||0}% • ${it.status||'En test'}</div></div>`).join(''):'<div class="text-white/40 text-sm">Aucun contenu.</div>'}</div><div class="mt-4 pt-3 border-t border-white/10 flex justify-between"><b>Total</b><b class="${colorClass(m.color,'text')}">${minutes}:00</b></div>`;grid.appendChild(card)});setText('totalLibraryCapacity',`${total} / 600 min`);setText('activeContentCount',count);setText('symbiosisStatus',total>0?'EN SYMBIOSE':'EN ATTENTE')}
-function addToMonitorLibrary(){const name=$('uploadMonitorSelect')?.value||'Fans';const title=($('monitorUploadTitle')?.value||'Nouveau contenu Meyden').trim();const duration=Math.max(1,Math.min(120,Number($('monitorUploadDuration')?.value||1)));if(monitorLibraryTotal(name)+duration>120){toast('Capacité dépassée : maximum 120 minutes dans '+name);return}monitorLibraries[name].push(makeItem(title,duration,'','demo'));state.monitor=name;const m=monitors.find(x=>x.name===name);if(m)state.audience=m.audience;sync();renderMonitorLibraries();renderFiveCentralMonitors();const titleInput=$('monitorUploadTitle');if(titleInput)titleInput.value='';toast('Contenu ajouté à '+name+' : '+duration+' min')}
+function addToMonitorLibrary(){const name='Fans';const title=($('monitorUploadTitle')?.value||'Nouveau contenu Meyden').trim();const duration=Math.max(1,Math.min(120,Number($('monitorUploadDuration')?.value||1)));if(monitorLibraryTotal(name)+duration>120){toast('Capacité dépassée : maximum 120 minutes dans '+name);return}monitorLibraries[name].push(makeItem(title,duration,'','demo'));state.monitor=name;const m=monitors.find(x=>x.name===name);if(m)state.audience=m.audience;sync();renderMonitorLibraries();renderFiveCentralMonitors();const titleInput=$('monitorUploadTitle');if(titleInput)titleInput.value='';toast('Contenu ajouté à '+name+' : '+duration+' min')}
 
 function renderMonitors(){const g=$('monitorGrid');if(!g)return;g.innerHTML='';monitors.forEach(m=>{const b=document.createElement('button');b.className='glass rounded-3xl p-4 text-left hover:bg-white/10';b.innerHTML=`<div class="text-white/45 text-sm">${m.audience}</div><div class="text-2xl font-black text-orange-300">${m.name}</div><div class="text-xs text-white/50 mt-2">${m.rewardText}</div>`;b.onclick=()=>{state.monitor=m.name;state.audience=m.audience;state.coins+=m.reward;sync();toast('Monitor : '+m.name);safeScroll('monitor-libraries')};g.appendChild(b)})}
 function engineLog(message){engine.log.unshift(new Date().toLocaleTimeString('fr-CA',{hour:'2-digit',minute:'2-digit'})+' — '+message);engine.log=engine.log.slice(0,12);const el=$('engineLog');if(el)el.innerHTML=engine.log.join('<br>')}
@@ -328,7 +508,7 @@ function resetCirculation(){monitorLibraries['Fans']=[makeItem('Vidéo A — dé
 
 function simulateRealAlgo(){const a=state.algo;a.cycleCount++;a.hoursInLevel+=2;a.retention=Math.min(100,Math.max(12,Math.round(45+Math.random()*45+(state.score-78)/3)));a.tunedPercent=Math.min(100,Math.max(5,Math.round(20+Math.random()*60+(state.tuned-1200)/120)));a.average=Math.round((a.retention+a.tunedPercent)/2);const current=monitors[a.levelIndex];state.monitor=current.name;state.audience=current.audience;const email=$('algoEmail');if(email)email.classList.add('hidden');if(a.average>=70){state.coins+=current.reward+2;state.score=Math.min(100,state.score+2);if(a.hoursInLevel>=24&&a.levelIndex<monitors.length-1){a.levelIndex++;a.hoursInLevel=0;const next=monitors[a.levelIndex];state.monitor=next.name;state.audience=next.audience;a.decision='Monte vers '+next.name;toast('24h validées : monte vers '+next.name)}else{a.decision='Relancé dans la boucle suivante';toast('Score fort : contenu relancé')}}else if(a.average>=50){state.score=Math.max(0,state.score-1);a.decision='Relance test — à surveiller';toast('Score moyen : relance test')}else{state.score=Math.max(0,state.score-5);a.hoursInLevel=0;a.decision='Rejet constructif';if(email){email.classList.remove('hidden');email.innerHTML='<b>Courriel constructif envoyé :</b><br>Renforcer les 3 premières secondes, clarifier le hook, réduire la durée et soumettre une nouvelle version.'}toast('Score faible : courriel constructif envoyé')}sync()}
 function renderArtists(){const grid=$('artistsGrid');if(!grid)return;grid.innerHTML='';realArtists.forEach((artist,index)=>{const card=document.createElement('div');card.className='glass rounded-[30px] overflow-hidden';card.innerHTML=`<div class="aspect-video bg-black"><iframe src="${artist.video}" allowfullscreen></iframe></div><div class="p-5"><div class="text-2xl font-black text-orange-300">${artist.name}</div><div class="text-sm text-white/50 mt-1">${artist.style}</div><div class="mt-4 grid grid-cols-2 gap-3 text-sm"><div class="glass rounded-2xl p-3"><div class="text-white/40">Projet</div><div class="font-black">${artist.content}</div></div><div class="glass rounded-2xl p-3"><div class="text-white/40">Audience</div><div class="font-black text-cyan-300">${artist.audience}</div></div><div class="glass rounded-2xl p-3"><div class="text-white/40">Coins</div><div class="font-black text-yellow-300">${artist.coins}</div></div><div class="glass rounded-2xl p-3"><div class="text-white/40">Performance</div><div class="font-black text-green-300">${artist.performance}</div></div></div><div class="grid grid-cols-2 gap-3 mt-5"><button onclick="contactArtist('${artist.name}')" class="rounded-2xl bg-cyan-300 py-3 font-black text-black">Contact</button><button onclick="bookArtist('${artist.name}')" class="rounded-2xl bg-orange-500 py-3 font-black text-black">Rendez-vous</button><button onclick="watchArtist(${index})" class="rounded-2xl bg-white/10 py-3 font-black">Lecture vidéo</button><button onclick="payArtist('${artist.name}')" class="rounded-2xl bg-[#0f52ba] py-3 font-black">Paiement</button></div></div>`;grid.appendChild(card)})}
-function contactArtist(name){toast('Contact préparé pour '+name);openModal('sceneBookModal')}function bookArtist(name){openModal('sceneBookModal');toast('Rendez-vous avec '+name)}function payArtist(name){toast('Paiement démo préparé pour '+name)}function watchArtist(index){const artist=realArtists[index];$('monitor').innerHTML=`<iframe src="${artist.video}" allowfullscreen></iframe>`;mediaStatus('Lecture : '+artist.name);state.monitor=artist.audience;state.audience=artist.audience;state.score=artist.performance;state.coins+=artist.coins;sync();toast('Lecture vidéo : '+artist.name);safeScroll('media')}
+function contactArtist(name){toast('Contact préparé pour '+name);openModal('sceneBookModal')}function bookArtist(name){openModal('sceneBookModal');toast('Rendez-vous avec '+name)}function payArtist(name){toast('Paiement démo préparé pour '+name)}function watchArtist(index){const artist=realArtists[index];stopAllPlayback('artistPlayer');$('monitor').innerHTML=`<iframe id="artistPlayer" data-player="meyden" src="${artist.video}" allowfullscreen></iframe>`;mediaStatus('Lecture : '+artist.name);state.monitor=artist.audience;state.audience=artist.audience;state.score=artist.performance;state.coins+=artist.coins;sync();toast('Lecture vidéo : '+artist.name);safeScroll('media')}
 function renderFlow(){const g=$('flowGrid');if(!g)return;g.innerHTML='';flowSteps.forEach((s,i)=>{const b=document.createElement('button');b.className=`rounded-2xl p-3 border text-left transition ${i===flowIndex?'bg-orange-500 text-black border-orange-500':'bg-white/5 border-white/10 hover:bg-white/10'}`;b.innerHTML=`<div class="text-xs opacity-70">Étape ${i+1}</div><div class="font-black">${s.name}</div>`;b.onclick=()=>{flowIndex=i;updateFlow(true);restartFlowLoop()};g.appendChild(b)})}
 function applyFlow(step){if(step.effect==='score')state.score=Math.min(100,state.score+1);if(step.effect==='monitor'){const m=monitors[flowIndex%monitors.length];state.monitor=m.name;state.audience=m.audience}if(step.effect==='performance'){state.tuned+=3;state.score=Math.min(100,state.score+2)}if(step.effect==='coins')state.coins+=3;if(step.effect==='version')state.version++;sync()}
 function updateFlow(manual=false){const s=flowSteps[flowIndex];renderFlow();const pct=Math.round(((flowIndex+1)/flowSteps.length)*100);setText('flowPercent',pct+'%');const p=$('flowProgress');if(p)p.style.width=pct+'%';setText('flowText',s.text);const e=$('emailBox');if(e)e.classList.toggle('hidden',s.effect!=='email');applyFlow(s);if(manual)toast('Cycle : '+s.name)}
@@ -341,8 +521,22 @@ function scenarioData(k){const mult=k==='conservative'?1:k==='realistic'?2.1:4;r
 function simulateCycle(){state.creator.weekly+=8;state.creator.daily+=3;state.public.premium+=35;const revenue=state.creator.weekly*14.99+state.creator.daily*65.99+state.public.premium*1.99;const net=revenue-revenue/3-(state.coins*.15);setText('simCreatorTotal',state.creator.free+state.creator.weekly+state.creator.daily);setText('simCreatorMix',`Gratuit ${state.creator.free} • 14.99$ ${state.creator.weekly} • 65.99$ ${state.creator.daily}`);setText('simNetProfit',money(net));toast('Cycle simulé')}
 function openModal(id){const el=$(id);if(el)el.classList.add('open');else toast('Modal introuvable : '+id)}function closeModal(id){const el=$(id);if(el)el.classList.remove('open')}
 function setupAdhesionForms(){const creatorForm=$('creatorJoinForm');if(creatorForm)creatorForm.onsubmit=e=>{e.preventDefault();const data=Object.fromEntries(new FormData(creatorForm).entries());setText('dashboardCreatorPlan',data.creatorPlan||'Créateur');const n=$('creatorNameInput'),em=$('creatorEmailInput');if(n)n.value=data.artistName||'';if(em)em.value=data.email||'';setText('dashboardStatus','Adhésion créateur reçue');const r=$('creatorJoinResult');if(r){r.classList.remove('hidden');r.innerHTML='<b>Adhésion créateur créée en mode démo.</b><br>Nom : '+data.artistName+'<br>Forfait : '+data.creatorPlan}toast('Adhésion créateur reçue')};const publicForm=$('publicJoinForm');if(publicForm)publicForm.onsubmit=e=>{e.preventDefault();const data=Object.fromEntries(new FormData(publicForm).entries());setText('dashboardPublicPlan',data.publicPlan||'Public');const r=$('publicJoinResult');if(r){r.classList.remove('hidden');r.innerHTML='<b>Accès public créé en mode démo.</b><br>Nom : '+data.fullName+'<br>Forfait : '+data.publicPlan+'<br>Intérêt : '+data.interest}toast('Adhésion public reçue')}}
+function handleCreatorUpload(){
+  const input=$('creatorUploadInput');
+  const mainInput=$('fileInput');
+  if(!input||!input.files||!input.files.length){toast('Choisis une vidéo créateur.');return}
+  if(mainInput){
+    const dt=new DataTransfer();
+    Array.from(input.files).forEach(file=>dt.items.add(file));
+    mainInput.files=dt.files;
+    const destination=$('uploadMonitorSelect');
+    if(destination)destination.value='Fans';
+    handleFiles();
+    safeScroll('monitor-libraries');
+  }
+}
 function bindClick(id,fn){const el=$(id);if(el)el.onclick=fn;else console.warn('Bouton manquant:',id)}
-function bindAll(){document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>safeScroll(b.dataset.scroll));document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>openModal(b.dataset.modal));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.querySelectorAll('.localForm').forEach(f=>f.onsubmit=e=>{e.preventDefault();toast(f.dataset.success);f.reset();f.closest('.modal')?.classList.remove('open')});document.querySelectorAll('.panelBtn').forEach(b=>b.onclick=()=>{$(b.dataset.panel)?.classList.toggle('open');renderLibraries()});document.querySelectorAll('.scenarioBtn').forEach(b=>b.onclick=()=>updateScenario(b.dataset.scenario));bindClick('addFilesBtn',handleFiles);bindClick('launchYoutubeBtn',()=>launchYoutube());bindClick('youtubeFallbackBtn',()=>launchYoutube());bindClick('clearYoutubeHistoryBtn',()=>{saveYt([]);renderLibraries();toast('Historique effacé')});bindClick('playBtn',playMedia);bindClick('pauseBtn',pauseMedia);bindClick('reloadBtn',reloadMedia);bindClick('prevBtn',prevMedia);bindClick('nextBtn',nextMedia);bindClick('tunedBtn',tunedOn);bindClick('monitorTunedBtn',tunedOn);bindClick('lujamkoTunedBtn',lujamkoTunedOn);bindClick('lujamkoPreviewBtn',lujamkoPreview);bindClick('lujamkoResetBtn',lujamkoReset);bindClick('submitVersionBtn',submitVersion);bindClick('flowPlayBtn',toggleFlowLoop);bindClick('flowStepBtn',()=>{autoFlow();restartFlowLoop()});bindClick('flowResetBtn',resetFlow);bindClick('growthTickBtn',simulateCycle);bindClick('realAlgoBtn',simulateRealAlgo);bindClick('addToMonitorLibraryBtn',addToMonitorLibrary);bindClick('run2hCycleBtn',runMonitorEngineCycle);bindClick('run24hCycleBtn',run24hEngine);bindClick('resetCirculationBtn',resetCirculation)}
+function bindAll(){document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>safeScroll(b.dataset.scroll));document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>openModal(b.dataset.modal));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.querySelectorAll('.localForm').forEach(f=>f.onsubmit=e=>{e.preventDefault();toast(f.dataset.success);f.reset();f.closest('.modal')?.classList.remove('open')});document.querySelectorAll('.panelBtn').forEach(b=>b.onclick=()=>{$(b.dataset.panel)?.classList.toggle('open');renderLibraries()});document.querySelectorAll('.scenarioBtn').forEach(b=>b.onclick=()=>updateScenario(b.dataset.scenario));bindClick('addFilesBtn',handleFiles);bindClick('launchYoutubeBtn',()=>launchYoutube());bindClick('youtubeFallbackBtn',()=>launchYoutube());bindClick('clearYoutubeHistoryBtn',()=>{saveYt([]);renderLibraries();toast('Historique effacé')});bindClick('playBtn',playMedia);bindClick('pauseBtn',pauseMedia);bindClick('reloadBtn',reloadMedia);bindClick('prevBtn',prevMedia);bindClick('nextBtn',nextMedia);bindClick('tunedBtn',tunedOn);bindClick('monitorTunedBtn',tunedOn);bindClick('lujamkoTunedBtn',lujamkoTunedOn);bindClick('lujamkoPreviewBtn',lujamkoPreview);bindClick('lujamkoResetBtn',lujamkoReset);bindClick('submitVersionBtn',submitVersion);bindClick('flowPlayBtn',toggleFlowLoop);bindClick('flowStepBtn',()=>{autoFlow();restartFlowLoop()});bindClick('flowResetBtn',resetFlow);bindClick('growthTickBtn',simulateCycle);bindClick('realAlgoBtn',simulateRealAlgo);bindClick('addToMonitorLibraryBtn',addToMonitorLibrary);bindClick('run2hCycleBtn',runMonitorEngineCycle);bindClick('run24hCycleBtn',run24hEngine);bindClick('resetCirculationBtn',resetCirculation);bindClick('creatorUploadBtn',handleCreatorUpload)}
 function runSelfTests(){const required=['media','monitor','creatorJoinModal','publicJoinModal','creatorJoinForm','publicJoinForm','artistsGrid','dashboard','scene','studio-lujamko','sponsorModal','monitor-libraries','monitorLibrariesGrid','fiveCentralMonitors','addToMonitorLibraryBtn','run2hCycleBtn','run24hCycleBtn','resetCirculationBtn','engineLog'];const missing=required.filter(id=>!$(id));if(missing.length){console.error('MEYDEN TEST FAIL — éléments manquants:',missing);toast('Test interne : éléments manquants');return false}console.log('MEYDEN TEST OK — éléments essentiels présents');return true}
 function init(){bindAll();renderMonitors();renderMonitorLibraries();renderFiveCentralMonitors();renderArtists();setupAdhesionForms();renderFlow();updateFlow(false);renderPlans();renderLibraries();updateScenario('realistic');sync();runSelfTests();launchYoutube($('youtubeInput')?.value||'');startFlowLoop()}
 init();
