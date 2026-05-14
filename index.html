@@ -3,231 +3,686 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MEYDEN OS — Stable Architecture Test</title>
+  <title>MEYDEN OS — Fusion Monitor + Média</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    :root{--orange:#ff8a2a;--cyan:#63e6ff;--green:#7cffb2;--yellow:#ffd45f;--red:#ff6b78;--panel:rgba(255,255,255,.075);--line:rgba(255,255,255,.14)}
-    html{scroll-behavior:smooth}
-    body{background:radial-gradient(circle at 20% 0%,rgba(255,138,42,.22),transparent 28%),radial-gradient(circle at 82% 10%,rgba(99,230,255,.12),transparent 28%),linear-gradient(180deg,#090909,#050505 45%,#000);color:white;font-family:Arial,Helvetica,sans-serif}
-    .glass{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(14px);box-shadow:0 24px 80px rgba(0,0,0,.35)}
-    .btn{border-radius:1rem;padding:.85rem 1.05rem;font-weight:900;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.10);transition:.15s}.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
-    .btn-orange{background:linear-gradient(135deg,#ff7a1a,#ffbe45);color:#180900}.btn-cyan{background:linear-gradient(135deg,#63e6ff,#9df5ff);color:#00151a}.btn-blue{background:linear-gradient(135deg,#0f67d8,#42a3ff);color:white}.btn-red{background:rgba(255,80,95,.18);border-color:rgba(255,80,95,.3);color:#ffc9ce}.btn-green{background:linear-gradient(135deg,#7cffb2,#c4ffd9);color:#00180d}
-    .input{width:100%;border-radius:1rem;background:rgba(0,0,0,.38);border:1px solid var(--line);padding:.9rem 1rem;color:white;outline:none}.input:focus{border-color:rgba(255,138,42,.7);box-shadow:0 0 0 3px rgba(255,138,42,.12)}
-    .section{scroll-margin-top:145px}.card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:1.5rem;padding:1.25rem}.small{color:rgba(255,255,255,.58);font-size:.88rem}.modal{display:none}.modal.open{display:flex}.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}.bar span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--orange),var(--cyan),var(--green))}video{width:100%;height:260px;background:#000;border-radius:1rem;border:1px solid var(--line);object-fit:contain}.tab.active{background:var(--orange);color:#180900}.chip{border-radius:999px;padding:.45rem .7rem;background:rgba(255,255,255,.10);border:1px solid var(--line);font-size:.78rem;font-weight:900}.log{max-height:220px;overflow:auto;background:rgba(0,0,0,.34);border:1px solid var(--line);border-radius:1rem;padding:1rem;font-size:.85rem;color:rgba(255,255,255,.72);line-height:1.5}.sticky-nav{position:sticky;top:0;z-index:60;background:rgba(0,0,0,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+    body{background:radial-gradient(circle at 15% 5%,rgba(255,90,0,.24),transparent 30%),radial-gradient(circle at 85% 8%,rgba(0,191,255,.16),transparent 28%),linear-gradient(180deg,#050505 0%,#101014 48%,#000 100%)}
+    .glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(14px)}
+    .orange-glow{box-shadow:0 0 55px rgba(255,90,0,.16)}
+    .cyan-glow{box-shadow:0 0 55px rgba(0,191,255,.12)}
+    video,iframe,img{width:100%;height:100%;background:#000;border:0;object-fit:contain}
+    .modal{display:none}.modal.open{display:flex}.panel{display:none}.panel.open{display:block}
+    .maf-shirt-part{border:1px solid rgba(255,255,255,.10)}
+    .maf-panel{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(14px)}
+    .maf-btn{border-radius:1rem;padding:.75rem 1rem;font-weight:900;background:rgba(255,255,255,.10)}
+    .maf-btn.active,.maf-btn.orange{background:#f97316;color:#000}
+
   </style>
 </head>
-<body>
-  <header class="sticky-nav">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
-      <div>
-        <div class="text-3xl font-black tracking-[.28em] text-orange-400">MEYDEN</div>
-        <div class="text-xs uppercase tracking-[.30em] text-white/45">Mouvement Artistique du Québec • OS Stable</div>
-      </div>
-      <nav class="flex flex-wrap gap-2 text-sm font-bold" id="mainNav">
-        <button class="btn btn-orange" data-go="media">Média</button>
-        <button class="btn" data-go="monitor">Meyden Monitor</button>
-        <button class="btn" data-go="bibliotheques">Bibliothèques</button>
-        <button class="btn" data-go="adhesion">Adhésion</button>
-        <button class="btn" data-go="dashboard">Dashboard</button>
-        <button class="btn" data-go="scene">Scène</button>
-        <button class="btn" data-go="studio">Studio</button>
-        <button class="btn btn-orange" data-go="artfact">Meyden Art & Fact</button>
-        <button class="btn btn-orange" data-modal="creatorModal">Créateur</button>
-        <button class="btn btn-cyan" data-modal="publicModal">Public</button>
-        <button class="btn btn-blue" data-modal="bookingModal">Réserver</button>
-      </nav>
+<body class="min-h-screen text-white selection:bg-orange-500 selection:text-black">
+<header class="sticky top-0 z-50 border-b border-white/10 bg-black/75 backdrop-blur-xl">
+  <div class="mx-auto max-w-7xl px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <div class="text-3xl font-black tracking-[.28em] text-orange-400">MEYDEN</div>
+      <div class="text-xs uppercase tracking-[.32em] text-white/45">Mouvement Artistique du Québec • OS Fusion</div>
     </div>
-  </header>
+    <nav class="flex flex-wrap gap-2 text-sm font-bold">
+      <button data-scroll="media" class="rounded-2xl bg-orange-500 px-4 py-3 text-black">Média</button>
+      <button data-scroll="meyden-monitor-page" class="rounded-2xl bg-white/10 px-4 py-3">Meyden Monitor</button>
+      <button data-scroll="monitor-libraries" class="rounded-2xl bg-white/10 px-4 py-3">Bibliothèques</button>
+      <button data-scroll="adhesion" class="rounded-2xl bg-white/10 px-4 py-3">Adhésion</button>
+      <button data-scroll="dashboard" class="rounded-2xl bg-white/10 px-4 py-3">Dashboard</button>
+      <button data-scroll="scene" class="rounded-2xl bg-white/10 px-4 py-3">Scène</button>
+      <button data-scroll="studio-lujamko" class="rounded-2xl bg-white/10 px-4 py-3">Studio</button>
+      <button data-scroll="meyden-art-fact" class="rounded-2xl bg-orange-500 px-4 py-3 text-black">Meyden Art & Fact</button>
+      <button data-modal="creatorJoinModal" class="rounded-2xl bg-orange-500 px-4 py-3 text-black">Créateur</button>
+      <button data-modal="publicJoinModal" class="rounded-2xl bg-cyan-300 px-4 py-3 text-black">Public</button>
+      <button data-modal="sceneBookModal" class="rounded-2xl bg-[#0f52ba] px-4 py-3">Réserver</button>
+    </nav>
+  </div>
+</header>
 
-  <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-    <section id="media" class="section grid gap-6 lg:grid-cols-[1.05fr_.95fr]">
-      <div class="glass rounded-[2rem] p-6 lg:p-8">
-        <div class="chip text-orange-300">MEYDEN MONITOR + MÉDIA</div>
-        <h1 class="text-5xl lg:text-7xl font-black mt-5 leading-none">MEYDEN OS</h1>
-        <p class="text-white/65 mt-5 text-lg max-w-2xl leading-8">Version stable : navigation, exécution, architecture, comptes créateurs, upload local testable, monitors, coins, panier et simulations connectées.</p>
-        <div class="grid sm:grid-cols-4 gap-4 mt-7">
-          <div class="card"><div class="small">Signal public</div><div id="kpiTuned" class="text-3xl font-black text-orange-300 mt-2">0</div><button id="btnGlobalTuned" class="btn btn-orange w-full mt-3">Tuned On</button></div>
-          <div class="card"><div class="small">Meyden Coins</div><div id="kpiCoins" class="text-3xl font-black text-yellow-300 mt-2">0</div><div id="kpiCoinValue" class="small mt-2">Valeur : 0.00$</div></div>
-          <div class="card"><div class="small">Performance</div><div id="kpiScore" class="text-3xl font-black text-green-300 mt-2">0%</div><div class="small mt-2">Lecture comportementale</div></div>
-          <div class="card"><div class="small">Monitor actif</div><div id="kpiMonitor" class="text-2xl font-black text-cyan-300 mt-2">Fans</div><div class="small mt-2">Cycle 2h actif</div></div>
+<main class="mx-auto max-w-7xl px-4 py-6 space-y-6">
+  <section class="grid gap-6 lg:grid-cols-[1.05fr_.95fr]">
+    <div class="glass orange-glow rounded-[32px] p-6 lg:p-8">
+      <div class="inline-flex rounded-full border border-orange-400/30 bg-orange-500/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-orange-300">Meyden Monitor + Média</div>
+      <h1 class="mt-5 text-5xl lg:text-7xl font-black leading-[.92]">MEYDEN OS</h1>
+      <p class="mt-5 text-lg leading-8 text-white/70 max-w-2xl">Une plateforme fusionnée : diffusion média, bibliothèques de monitors, coins, dashboard créateur, scène, sponsors, guichet et simulation économique.</p>
+      <div class="mt-7 grid sm:grid-cols-4 gap-4">
+        <div class="glass rounded-3xl p-4"><div class="text-white/45 text-sm">Signal public</div><div id="topTuned" class="text-3xl font-black text-orange-300">1200</div><button id="tunedBtn" class="mt-3 w-full rounded-2xl bg-orange-500 py-3 font-black text-black">Tuned On</button></div>
+        <div class="glass rounded-3xl p-4"><div class="text-white/45 text-sm">Meyden Coins</div><div id="topCoins" class="text-3xl font-black text-yellow-300">148</div><div class="mt-3 text-sm text-white/60">Valeur : <span id="coinValue">22.20$</span></div></div>
+        <div class="glass rounded-3xl p-4"><div class="text-white/45 text-sm">Performance</div><div id="topScore" class="text-3xl font-black text-green-300">78</div><div class="mt-3 text-sm text-white/60">Lecture comportementale</div></div>
+        <div class="glass rounded-3xl p-4"><div class="text-white/45 text-sm">Monitor actif</div><div id="activeMonitorName" class="text-2xl font-black text-cyan-300">Fans</div><div id="activeMonitorAudience" class="mt-3 text-sm text-white/60">Communauté engagée</div></div>
+      </div>
+    </div>
+
+    <section id="media" class="glass cyan-glow rounded-[32px] overflow-hidden">
+      <div class="p-4 border-b border-white/10 flex flex-wrap gap-3 justify-between items-center">
+        <div><h2 class="text-2xl font-black">Moniteur média central</h2><p id="mediaStatus" class="text-sm text-white/55">Playlist YouTube prête.</p></div>
+        <div class="flex gap-2 flex-wrap"><button data-panel="mediaPanel" class="panelBtn rounded-2xl bg-cyan-300 px-4 py-3 font-black text-black">Choisir un média</button><button data-panel="libraryPanel" class="panelBtn rounded-2xl bg-white/10 px-4 py-3 font-black">Bibliothèque</button></div>
+      </div>
+      <div id="mediaPanel" class="panel p-4 border-b border-white/10">
+        <div class="grid gap-4 lg:grid-cols-2">
+          <div class="glass rounded-3xl p-4"><h3 class="font-black text-orange-300 mb-3">Fichiers locaux</h3><input id="fileInput" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif" class="block w-full text-sm text-white/70"><button id="addFilesBtn" class="mt-4 w-full rounded-2xl bg-orange-500 py-3 font-black text-black">Ajouter à la bibliothèque</button><p class="mt-3 text-sm text-white/50">Les fichiers restent disponibles tant que la page reste ouverte.</p></div>
+          <div class="glass rounded-3xl p-4"><h3 class="font-black text-cyan-300 mb-3">YouTube / Playlist</h3><input id="youtubeInput" class="w-full rounded-2xl bg-black border border-cyan-400/30 px-4 py-3" value="https://youtube.com/playlist?list=PL73OuET0k-fsAMRsMlTDQLAkYSEt11cdO&si=D36sXLIPO2dB7DNl"><button id="launchYoutubeBtn" class="mt-4 w-full rounded-2xl bg-[#0f52ba] py-3 font-black">Diffuser via YouTube</button><p class="mt-3 text-sm text-white/50">Historique YouTube conservé dans le navigateur.</p></div>
         </div>
       </div>
-
-      <div class="glass rounded-[2rem] overflow-hidden">
-        <div class="p-5 border-b border-white/10 flex flex-wrap justify-between gap-3 items-center">
-          <div><h2 class="text-2xl font-black">Moniteur média central</h2><p id="mediaStatus" class="small">Aucun média chargé.</p></div>
-          <div class="flex gap-2 flex-wrap"><button class="btn btn-cyan" data-panel="mediaControls">Choisir un média</button><button class="btn" data-panel="localLibraryPanel">Bibliothèque</button></div>
-        </div>
-        <div id="mediaControls" class="hidden p-5 border-b border-white/10 grid md:grid-cols-2 gap-4">
-          <div class="card"><h3 class="font-black text-orange-300 mb-3">Fichier local</h3><input id="mediaFileInput" class="input" type="file" accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/gif"><button id="btnAddMedia" class="btn btn-orange w-full mt-3">Ajouter au monitor Fans</button><p class="small mt-3">Test local : les fichiers restent dans la session du navigateur.</p></div>
-          <div class="card"><h3 class="font-black text-cyan-300 mb-3">YouTube</h3><input id="youtubeUrl" class="input" placeholder="Lien YouTube ou playlist"><button id="btnLoadYoutube" class="btn btn-blue w-full mt-3">Diffuser YouTube</button><p class="small mt-3">Historique conservé localement.</p></div>
-        </div>
-        <div id="localLibraryPanel" class="hidden p-5 border-b border-white/10"><h3 class="font-black mb-3">Bibliothèque locale</h3><div id="mediaLibrary" class="grid gap-2"></div></div>
-        <div id="centralPlayer" class="aspect-video bg-black flex items-center justify-center text-center p-8"><div><div class="text-4xl font-black text-orange-300">MEYDEN MONITOR</div><p class="small mt-2">Ajoute une vidéo, une image ou un lien YouTube.</p></div></div>
-        <button id="btnCentralTuned" class="w-full bg-orange-500 text-black font-black py-4 text-lg">Tuned On — Monitor</button>
-        <div class="p-4 border-t border-white/10 flex flex-wrap gap-2"><button id="btnPlay" class="btn btn-orange">Play</button><button id="btnPause" class="btn">Pause</button><button id="btnPrev" class="btn">Précédent</button><button id="btnNext" class="btn">Suivant</button><button id="btnClearMedia" class="btn btn-red">Vider média</button></div>
-      </div>
+      <div id="libraryPanel" class="panel p-4 border-b border-white/10"><div class="flex justify-between gap-3 flex-wrap mb-4"><h3 class="text-xl font-black">Bibliothèque locale</h3><button id="clearYoutubeHistoryBtn" class="rounded-2xl bg-red-500/20 border border-red-400/30 px-4 py-3 font-black text-red-200">Effacer YouTube</button></div><div class="grid gap-5 lg:grid-cols-2"><div><h4 class="text-orange-300 font-black mb-3">Médias téléversés</h4><div id="uploadLibrary" class="grid gap-2"></div></div><div><h4 class="text-cyan-300 font-black mb-3">Historique YouTube</h4><div id="youtubeLibrary" class="grid gap-2"></div></div></div></div>
+      <div id="errorBox" class="hidden m-4 rounded-2xl border border-red-400/30 bg-red-500/10 p-3 text-red-200 text-sm"></div>
+      <div id="monitor" class="aspect-video bg-black flex items-center justify-center"><div class="text-center p-8"><div class="text-5xl font-black text-orange-400">MEYDEN MONITOR</div><p class="mt-3 text-white/50">Chargement YouTube...</p></div></div>
+      <button id="monitorTunedBtn" class="w-full border-t border-orange-500/30 bg-orange-500 py-4 text-xl font-black text-black hover:bg-orange-400 transition">Tuned On — Monitor</button>
+      <div class="p-4 border-t border-white/10"><div class="flex flex-wrap gap-2"><button id="playBtn" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Play</button><button id="pauseBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Pause</button><button id="reloadBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Recharger</button><button id="prevBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Précédent</button><button id="nextBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Suivant</button><button id="youtubeFallbackBtn" class="rounded-2xl bg-[#0f52ba] px-4 py-3 font-black">YouTube secours</button></div></div>
     </section>
+  </section>
 
-    <section id="monitor" class="section glass rounded-[2rem] p-6">
+  <section id="meyden-monitor-page" class="glass rounded-[32px] p-6">
+    <div class="flex flex-wrap justify-between gap-4 mb-6">
+      <div><h2 class="text-4xl font-black">MEYDEN MONITOR</h2><p class="text-white/60 mt-2">Système de circulation, performance et valorisation des contenus Meyden.</p></div>
+      <div class="glass rounded-3xl px-5 py-4"><div class="text-white/40 text-sm">Monitor actif</div><div id="monitorMainLabel" class="text-2xl font-black text-orange-300">Fans</div></div>
+    </div>
+    <div class="grid gap-4 lg:grid-cols-4 mb-6">
+      <div class="glass rounded-3xl p-4"><b>1. Upload</b><p class="text-white/55 mt-2 text-sm">Le contenu entre dans le monitor choisi.</p></div>
+      <div class="glass rounded-3xl p-4"><b>2. Cycle 2h</b><p class="text-white/55 mt-2 text-sm">Chaque bibliothèque tourne en boucle jusqu’à 120 min.</p></div>
+      <div class="glass rounded-3xl p-4"><b>3. Score moyen</b><p class="text-white/55 mt-2 text-sm">Rétention % + Tuned On % = moyenne.</p></div>
+      <div class="glass rounded-3xl p-4"><b>4. Décision 24h</b><p class="text-white/55 mt-2 text-sm">Relance, montée de monitor ou rejet constructif.</p></div>
+    </div>
+    <div class="glass rounded-[30px] p-5 mb-6 border-orange-400/20">
+      <div class="flex flex-wrap justify-between gap-4 items-start"><div><h3 class="text-2xl font-black">Algorithme réel Meyden</h3><p class="text-white/60 mt-2 max-w-3xl">Un contenu commence dans Fans. Chaque cycle de 2h mesure la rétention et les Tuned On. Si la moyenne est assez forte, il est relancé. Après 24h solide dans un niveau, il monte au monitor suivant. Sinon, il est rejeté avec un courriel constructif au créateur.</p></div><button id="realAlgoBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Simuler un cycle réel</button></div>
+      <div class="grid gap-4 md:grid-cols-5 mt-5"><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Niveau actuel</div><div id="algoLevel" class="text-xl font-black text-cyan-300">Fans</div></div><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Temps regardé</div><div id="algoRetention" class="text-xl font-black text-green-300">0%</div></div><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Tuned On</div><div id="algoTuned" class="text-xl font-black text-orange-300">0%</div></div><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Moyenne</div><div id="algoAverage" class="text-xl font-black text-yellow-300">0%</div></div><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Décision</div><div id="algoDecision" class="text-xl font-black text-orange-300">En attente</div></div></div>
+      <div id="algoEmail" class="hidden mt-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-4 text-sm text-red-100"></div>
+    </div>
+    <h3 class="text-2xl font-black mb-4">Artistes réels intégrés</h3><div id="artistsGrid" class="grid gap-4 lg:grid-cols-3"></div>
+  </section>
+
+  <section id="monitor-section" class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black">Les 5 Meyden Monitors</h2><p class="text-white/60 text-sm mb-4">Chaque monitor représente un niveau de circulation.</p><div id="monitorGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div></section>
+
+  <section id="monitor-libraries" class="glass rounded-[32px] p-6">
+    <div class="flex flex-wrap justify-between gap-4 mb-6">
+      <div><h2 class="text-4xl font-black text-orange-300">Bibliothèques Meyden Monitor</h2><p class="text-white/60 mt-2 max-w-3xl">Chaque contenu est ajouté à la bibliothèque du monitor sélectionné. Chaque bibliothèque compile jusqu’à 120 minutes. Les 5 monitors tournent en boucle de 120 minutes et convergent ensemble.</p></div>
+      <div class="glass rounded-3xl p-5 min-w-52"><div class="text-white/40 text-sm">Capacité par bibliothèque</div><div class="text-5xl font-black text-orange-300">120<span class="text-xl"> min</span></div></div>
+    </div>
+    <div class="glass rounded-[28px] p-5 mb-6 border-orange-500/20">
       <div class="flex flex-wrap justify-between gap-4 items-start">
-        <div><h2 class="text-4xl font-black">MEYDEN MONITOR</h2><p class="text-white/60 mt-2">Moteur de circulation réel côté prototype : toute vidéo entre dans Fans, puis évolue selon la moyenne et les cycles.</p></div>
-        <div class="card min-w-48"><div class="small">Monitor actif</div><div id="monitorActiveLabel" class="text-2xl font-black text-orange-300">Fans</div></div>
-      </div>
-      <div class="grid md:grid-cols-4 gap-4 mt-6">
-        <div class="card"><b>1. Upload</b><p class="small mt-2">Le contenu entre dans Fans.</p></div>
-        <div class="card"><b>2. Cycle 2h</b><p class="small mt-2">Rétention + Tuned On sont mesurés.</p></div>
-        <div class="card"><b>3. Score moyen</b><p class="small mt-2">La moyenne détermine la force.</p></div>
-        <div class="card"><b>4. Décision 24h</b><p class="small mt-2">Promotion ou recommandation.</p></div>
-      </div>
-      <div class="card mt-6">
-        <div class="flex flex-wrap justify-between gap-4 items-center"><div><h3 class="text-2xl font-black text-orange-300">Moteur de circulation des 5 monitors</h3><p class="small mt-1">Les boutons ci-dessous changent vraiment l’état global et les contenus.</p></div><div class="flex gap-2 flex-wrap"><button id="btnCycle2h" class="btn btn-orange">Simuler 2h</button><button id="btnCycle24h" class="btn">Simuler 24h</button><button id="btnResetEngine" class="btn btn-red">Reset moteur</button></div></div>
-        <div class="grid md:grid-cols-5 gap-3 mt-5">
-          <div class="card"><div class="small">Cycles 2h</div><div id="engineCycles" class="text-3xl font-black text-orange-300">0</div></div>
-          <div class="card"><div class="small">Promotions</div><div id="enginePromotions" class="text-3xl font-black text-green-300">0</div></div>
-          <div class="card"><div class="small">Recommandations</div><div id="engineRecommendations" class="text-3xl font-black text-red-300">0</div></div>
-          <div class="card"><div class="small">Score minimum</div><div class="text-3xl font-black text-yellow-300">70%</div></div>
-          <div class="card"><div class="small">Durée montée</div><div class="text-3xl font-black text-cyan-300">24h</div></div>
+        <div>
+          <h3 class="text-3xl font-black text-orange-300">Moteur de circulation des 5 monitors</h3>
+          <p class="text-white/60 mt-2 max-w-4xl">Chaque contenu traverse des cycles de 2h. Après 12 cycles solides, soit 24h, il peut monter au monitor suivant. S’il échoue, il retourne au créateur avec une recommandation constructive.</p>
         </div>
-        <div id="engineLog" class="log mt-5">Moteur prêt.</div>
+        <div class="flex flex-wrap gap-2">
+          <button id="run2hCycleBtn" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Simuler 2h</button>
+          <button id="run24hCycleBtn" class="rounded-2xl bg-white/10 px-5 py-3 font-black">Simuler 24h</button>
+          <button id="resetCirculationBtn" class="rounded-2xl bg-red-500/20 border border-red-400/30 px-5 py-3 font-black text-red-200">Reset</button>
+        </div>
       </div>
-    </section>
-
-    <section id="bibliotheques" class="section glass rounded-[2rem] p-6">
-      <h2 class="text-4xl font-black text-orange-300">Bibliothèques Meyden Monitor</h2>
-      <p class="text-white/60 mt-2">Chaque bibliothèque compile jusqu’à 120 minutes. Le contenu téléversé est toujours envoyé vers Fans.</p>
-      <div id="monitorCards" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5 mt-6"></div>
-      <div class="grid lg:grid-cols-[.8fr_1.2fr] gap-5 mt-6">
-        <div class="card"><h3 class="text-2xl font-black mb-4">Téléverser vers un monitor</h3><div class="input mb-3 text-orange-300 font-black">Fans — entrée obligatoire du système</div><input id="uploadTitle" class="input mb-3" placeholder="Titre du contenu"><input id="uploadDuration" class="input mb-3" type="number" min="1" max="120" value="4"><input id="uploadFile" class="input mb-3" type="file" accept="video/mp4,video/webm,video/quicktime"><button id="btnUploadToMonitor" class="btn btn-orange w-full">Ajouter à la bibliothèque du monitor</button><p class="small mt-3">Le fichier est lisible dans ce navigateur. En backend réel, il faut Supabase Storage/Firebase Storage.</p></div>
-        <div class="card"><h3 class="text-2xl font-black mb-4">Convergence & symbiose</h3><div class="grid grid-cols-3 gap-3 items-center text-center"><div class="rounded-full border border-cyan-300/40 bg-cyan-300/10 p-5 font-black text-cyan-300">Fans</div><div class="text-4xl">→</div><div class="rounded-full border border-green-300/40 bg-green-300/10 p-5 font-black text-green-300">Public cible</div><div class="text-4xl">↘</div><div class="rounded-full border border-orange-300/40 bg-orange-500/10 p-8 font-black text-orange-300">SYMBIOSE<br>MEYDEN</div><div class="text-4xl">↗</div><div class="rounded-full border border-orange-300/40 bg-orange-500/10 p-5 font-black text-orange-300">Grand public</div><div class="text-4xl">←</div><div class="rounded-full border border-yellow-300/40 bg-yellow-300/10 p-5 font-black text-yellow-300">International</div></div><div class="grid md:grid-cols-4 gap-3 mt-6"><div class="card"><div class="small">Capacité totale</div><div id="totalCapacity" class="text-2xl font-black text-orange-300">0 / 600</div></div><div class="card"><div class="small">Contenus actifs</div><div id="totalItems" class="text-2xl font-black text-cyan-300">0</div></div><div class="card"><div class="small">Boucle</div><div class="text-2xl font-black text-green-300">120 min</div></div><div class="card"><div class="small">Système</div><div id="systemStatus" class="text-2xl font-black text-green-300">STABLE</div></div></div></div>
+      <div class="grid gap-3 md:grid-cols-5 mt-5">
+        <div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Cycles 2h simulés</div><div id="engineCycles" class="text-2xl font-black text-orange-300">0</div></div>
+        <div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Promotions</div><div id="enginePromotions" class="text-2xl font-black text-green-300">0</div></div>
+        <div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Rejets</div><div id="engineRejects" class="text-2xl font-black text-red-300">0</div></div>
+        <div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Score minimum</div><div class="text-2xl font-black text-yellow-300">70%</div></div>
+        <div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Temps pour monter</div><div class="text-2xl font-black text-cyan-300">24h</div></div>
       </div>
-    </section>
+      <div id="engineLog" class="mt-5 rounded-2xl bg-black/30 border border-white/10 p-4 text-sm text-white/70 max-h-48 overflow-auto">Moteur prêt. Ajoute du contenu ou simule un cycle.</div>
+    </div>
 
-    <section id="adhesion" class="section glass rounded-[2rem] p-6">
-      <h2 class="text-4xl font-black">Adhésion Meyden</h2><p class="small mt-2 mb-5">Deux entrées claires : créateurs et public auditeur.</p>
-      <div class="grid lg:grid-cols-2 gap-5"><div class="card"><h3 class="text-2xl font-black text-orange-300">Créateur / Artiste</h3><p class="small mt-2">Créer un profil, déposer du contenu, suivre ses coins.</p><button data-modal="creatorModal" class="btn btn-orange w-full mt-5">Remplir le formulaire créateur</button></div><div class="card"><h3 class="text-2xl font-black text-cyan-300">Public auditeur</h3><p class="small mt-2">Écouter, suivre les artistes et participer au signal culturel.</p><button data-modal="publicModal" class="btn btn-cyan w-full mt-5">Remplir le formulaire public</button></div></div>
-    </section>
+    <div class="glass rounded-[28px] p-5 mb-6 border-cyan-400/20">
+      <h3 class="text-3xl font-black text-cyan-300">5 moniteurs centraux synchronisés</h3>
+      <p class="text-white/60 mt-2 mb-5 max-w-4xl">Chaque monitor ci-dessous agit comme un vrai moniteur central : boucle 120 min, contenus actifs, rétention, Tuned On, moyenne et décision. Ils ne sont pas séparés : le bouton Simuler 2h fait évoluer toute la chaîne en même temps.</p>
+      <div id="fiveCentralMonitors" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
+    </div>
 
-    <section id="dashboard" class="section space-y-6">
-      <div class="glass rounded-[2rem] p-6"><div class="flex flex-wrap justify-between gap-4 items-start"><div><div class="chip text-orange-300">DASHBOARD GLOBAL</div><h2 class="text-4xl font-black mt-3">Stabilité, exécution, logique réelle</h2><p class="small mt-2 max-w-3xl">Tous les boutons principaux changent un état central, sauvegardé localement. La couche backend est isolée pour migration Supabase/Firebase.</p></div><button id="btnExportState" class="btn btn-cyan">Exporter JSON</button></div></div>
-      <div class="grid md:grid-cols-4 gap-4"><div class="card"><div class="small">Backend actuel</div><div id="backendMode" class="text-2xl font-black text-cyan-300 mt-2">LocalStorage</div></div><div class="card"><div class="small">Comptes créateurs</div><div id="dashCreators" class="text-2xl font-black text-orange-300 mt-2">0</div></div><div class="card"><div class="small">Uploads</div><div id="dashUploads" class="text-2xl font-black text-green-300 mt-2">0</div></div><div class="card"><div class="small">Panier Art & Fact</div><div id="dashCart" class="text-2xl font-black text-yellow-300 mt-2">0$</div></div></div>
-      <div class="grid lg:grid-cols-[1fr_.8fr] gap-5"><div class="card"><h3 class="text-2xl font-black mb-4">Projection 24 mois</h3><canvas id="projectionCanvas" height="260"></canvas><div class="flex flex-wrap gap-2 mt-4"><button class="btn" data-scenario="conservative">Conservateur</button><button class="btn btn-orange" data-scenario="realistic">Réaliste</button><button class="btn" data-scenario="ambitious">Ambitieux</button></div></div><div class="card"><h3 class="text-2xl font-black mb-4">Journal système</h3><div id="globalLog" class="log">Journal prêt.</div></div></div>
-    </section>
+    <div class="grid gap-4 lg:grid-cols-[.8fr_1.2fr] mb-6">
+      <div class="glass rounded-[28px] p-5">
+        <h3 class="text-2xl font-black mb-4">Téléverser vers un monitor</h3>
+        <label class="block text-white/50 text-sm mb-2">Monitor d’entrée obligatoire</label>
+        <div class="w-full rounded-2xl bg-black/40 border border-orange-500/30 px-4 py-3 mb-3 font-black text-orange-300">Fans — entrée obligatoire du système</div>
+        <input id="uploadMonitorSelect" type="hidden" value="Fans">
+        <label class="block text-white/50 text-sm mb-2">Titre du contenu</label>
+        <input id="monitorUploadTitle" class="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 mb-3" placeholder="Ex: clip officiel, live session, reel...">
+        <label class="block text-white/50 text-sm mb-2">Durée en minutes</label>
 
-    <section id="scene" class="section glass rounded-[2rem] p-6"><div class="flex flex-wrap justify-between gap-4 items-start"><div><h2 class="text-4xl font-black">Scène Meyden ici</h2><p class="small mt-2">Booking, public, shows, livestream, billets et captation.</p></div><div class="flex gap-2"><button data-modal="bookingModal" class="btn btn-orange">Booker un show</button><button id="btnAttendShow" class="btn">Assister à un show</button></div></div><div class="grid md:grid-cols-3 gap-4 mt-5"><div class="card"><h3 class="font-black text-xl">Événements</h3><p class="small mt-2">Shows live, lancements, soirées thématiques.</p></div><div class="card"><h3 class="font-black text-xl">Retombées</h3><p class="small mt-2">Visibilité, captation, achalandage.</p></div><div class="card"><h3 class="font-black text-xl">Activation</h3><p class="small mt-2">Booking, sponsors, diffusion numérique.</p></div></div></section>
+      <div class="mt-4 mb-4">
+        <label class="block text-white/50 text-sm mb-2">Fichier vidéo</label>
+        <input id="creatorVideoFile" type="file" accept="video/mp4,video/webm,video/quicktime" class="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-white">
+      </div>
+        <input id="monitorUploadDuration" type="number" min="1" max="120" value="4" class="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 mb-4">
+        <button id="addToMonitorLibraryBtn" class="w-full rounded-2xl bg-orange-500 py-4 font-black text-black">Ajouter à la bibliothèque du monitor</button>
+        <p class="text-white/45 text-sm mt-3">Démo : tu peux simuler l’ajout même sans fichier vidéo réel.</p>
+      </div>
+      <div class="glass rounded-[28px] p-5">
+        <h3 class="text-2xl font-black mb-4">Convergence & symbiose</h3>
+        <div class="grid grid-cols-3 gap-3 items-center text-center">
+          <div class="rounded-full border border-cyan-300/40 bg-cyan-300/10 p-5 font-black text-cyan-300">Fans</div><div class="text-4xl">→</div><div class="rounded-full border border-green-300/40 bg-green-300/10 p-5 font-black text-green-300">Public Ciblé</div><div class="text-4xl">↘</div><div class="rounded-full border border-orange-300/50 bg-orange-500/10 p-8 font-black text-orange-300">SYMBIOSE<br>MEYDEN</div><div class="text-4xl">↗</div><div class="rounded-full border border-orange-500/50 bg-orange-500/10 p-5 font-black text-orange-300">Grand Public</div><div class="text-4xl">←</div><div class="rounded-full border border-yellow-300/50 bg-yellow-300/10 p-5 font-black text-yellow-300">International</div>
+        </div>
+        <div class="grid md:grid-cols-4 gap-3 mt-6"><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Capacité totale</div><div id="totalLibraryCapacity" class="text-2xl font-black text-orange-300">0 / 600 min</div></div><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Contenus actifs</div><div id="activeContentCount" class="text-2xl font-black text-cyan-300">0</div></div><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Boucle</div><div class="text-2xl font-black text-green-300">120 min</div></div><div class="glass rounded-2xl p-4"><div class="text-white/40 text-sm">Système</div><div id="symbiosisStatus" class="text-2xl font-black text-green-300">EN SYMBIOSE</div></div></div>
+      </div>
+    </div>
+    <div id="monitorLibrariesGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
+  </section>
 
-    <section id="studio" class="section glass rounded-[2rem] p-6 border border-cyan-400/20"><div class="grid lg:grid-cols-[.9fr_1.1fr] gap-6"><div><div class="chip text-cyan-300">STUDIO D'ENREGISTREMENT INTÉGRÉ</div><h2 class="text-5xl font-black mt-5">LUJAMKO<br><span class="text-cyan-300">Production Studio</span></h2><p class="small mt-5">Studio immersif pour transformer une idée sonore en contenu exploitable.</p><div class="flex flex-wrap gap-2 mt-5"><button data-modal="bookingModal" class="btn btn-blue">Réserver une session</button><button class="btn" data-go="media">Voir le moniteur média</button><button class="btn btn-orange" data-go="adhesion">Structurer avec Meyden</button></div></div><div class="rounded-[2rem] border border-cyan-400/30 bg-blue-500/10 p-6"><div class="aspect-video rounded-[1.5rem] border border-cyan-300/20 bg-black/40 flex items-center justify-center text-center"><div><div class="text-cyan-300 tracking-[.2em] text-sm font-black">LUJAMKO X MEYDEN</div><div class="text-3xl font-black mt-3">Son • Image • Contenu</div><p class="small mt-3">Une session peut devenir un actif.</p></div></div><button id="studioTuned" class="btn btn-cyan w-full mt-4">Tuned On — Studio Lujamko</button><div class="grid grid-cols-3 gap-3 mt-4"><button id="btnStudioDemo" class="btn">Démo monitor</button><button id="btnStudioReset" class="btn">Reset studio</button><div class="card"><div class="small">Tuned</div><div id="studioTunedCount" class="text-2xl font-black text-cyan-300">0</div></div></div></div></div></section>
+  <section class="grid gap-6 xl:grid-cols-[1fr_.9fr]">
+    <div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black">Flow d’évolution du contenu</h2><p class="text-white/60 text-sm mb-4">Cycle automatique en boucle.</p><div class="flex flex-wrap gap-2 mb-4"><button id="flowPlayBtn" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Cycle automatique ON</button><button id="flowStepBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Avancer 1 étape</button><button id="flowResetBtn" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Réinitialiser</button></div><div class="rounded-3xl border border-white/10 bg-black/30 p-3 mb-4"><div class="flex items-center justify-between text-xs text-white/50 mb-2"><span>Cycle Meyden Monitor</span><span id="flowPercent">0%</span></div><div class="h-3 rounded-full bg-white/10 overflow-hidden"><div id="flowProgress" class="h-full w-0 rounded-full bg-orange-500 transition-all duration-700"></div></div></div><div id="flowGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div><div id="flowText" class="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm leading-7 text-white/75"></div><div id="emailBox" class="hidden mt-4 rounded-2xl border border-orange-500 bg-orange-500/10 p-4"><div class="font-bold">Courriel de recommandation</div><div class="mt-2 text-sm text-white/80">Ton contenu manque d’impact dans les premières secondes. Coupe l’intro, renforce le hook et clarifie immédiatement l’audience.</div></div></div>
+    <div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black mb-4">Lien stratégique</h2><div class="grid grid-cols-2 gap-3 text-sm"><div class="glass rounded-2xl p-4">Audience<div id="linkAudience" class="mt-2 text-xl font-black text-cyan-300">Fans</div></div><div class="glass rounded-2xl p-4">Performance<div id="linkPerformance" class="mt-2 text-xl font-black text-green-300">78</div></div><div class="glass rounded-2xl p-4">Coins<div id="linkCoins" class="mt-2 text-xl font-black text-yellow-300">148</div></div><div class="glass rounded-2xl p-4">Amélioration<div id="linkImprovement" class="mt-2 text-xl font-black text-orange-300">Version 1</div></div></div><div class="mt-4 rounded-2xl border border-orange-500/30 bg-orange-500/10 p-4 text-sm leading-7 text-white/75">Le système récompense la clarté, la rétention et la pertinence.</div></div>
+  </section>
 
-    <section id="artfact" class="section glass rounded-[2rem] p-6 border border-orange-500/20">
-      <div class="flex flex-wrap justify-between gap-4 items-start"><div><div class="chip text-orange-300">MEYDEN MALL INTÉGRÉ</div><h2 class="text-5xl font-black mt-4">Meyden Art & Fact</h2><p class="small mt-2 max-w-4xl">Centre commercial culturel : forfaits, services à la carte, production vidéo, merch, incubateur, événements et panier testable.</p></div><button id="cartTop" class="btn btn-orange">Panier — 0 article • 0$</button></div>
-      <div class="flex flex-wrap gap-2 mt-6" id="shopTabs"><button class="btn tab active" data-shop="forfaits">Forfaits</button><button class="btn tab" data-shop="carte">À la carte</button><button class="btn tab" data-shop="video">Production Vidéo</button><button class="btn tab" data-shop="merch">Merch</button><button class="btn tab" data-shop="incubateur">Incubateur</button><button class="btn tab" data-shop="evenements">Événements</button><button class="btn tab" data-shop="media">Média</button></div>
-      <div class="grid lg:grid-cols-[1fr_360px] gap-5 mt-6"><div id="shopProducts" class="grid md:grid-cols-2 gap-4"></div><aside class="card"><div class="flex justify-between items-center"><h3 class="text-2xl font-black text-orange-300">Panier</h3><button id="btnClearCart" class="text-white/60 font-bold">Vider</button></div><div id="cartItems" class="grid gap-3 mt-4"></div><div class="border-t border-white/10 mt-4 pt-4 flex justify-between text-2xl font-black"><span>Total</span><span id="cartTotal">0$</span></div><button id="btnCheckout" class="btn btn-orange w-full mt-4">Passer au paiement</button></aside></div>
-    </section>
-  </main>
+  <section id="adhesion" class="glass rounded-[32px] p-6"><h2 class="text-4xl font-black">Adhésion Meyden</h2><p class="text-white/60 mt-2 mb-6">Deux entrées claires : créateurs et public auditeur.</p><div class="grid gap-5 lg:grid-cols-2"><div class="glass rounded-[30px] p-5"><h3 class="text-2xl font-black text-orange-300">Créateur / Artiste</h3><p class="text-white/60 mt-2">Déposer du contenu, suivre ses coins, recevoir des recommandations.</p><button data-modal="creatorJoinModal" class="mt-5 w-full rounded-2xl bg-orange-500 py-4 font-black text-black">Remplir le formulaire créateur</button></div><div class="glass rounded-[30px] p-5"><h3 class="text-2xl font-black text-cyan-300">Public auditeur</h3><p class="text-white/60 mt-2">Écouter, suivre les artistes et participer au signal culturel.</p><button data-modal="publicJoinModal" class="mt-5 w-full rounded-2xl bg-cyan-300 py-4 font-black text-black">Remplir le formulaire public</button></div></div></section>
 
-  <div id="creatorModal" class="modal fixed inset-0 z-[100] items-center justify-center bg-black/85 p-4"><div class="glass rounded-[2rem] max-w-6xl w-full max-h-[92vh] overflow-auto p-5"><div class="flex justify-between gap-4 items-start mb-5"><div><div class="chip text-orange-300">INTERFACE CRÉATEUR</div><h2 class="text-4xl font-black mt-3">Dashboard Meyden Créateur</h2><p class="small mt-1">Profil, NIP, téléversement, bibliothèque, score et coins.</p></div><button class="btn btn-red" data-close="creatorModal">Fermer</button></div><div class="grid lg:grid-cols-[350px_1fr_340px] gap-5"><aside class="card"><div class="flex gap-4 items-center"><div id="creatorAvatar" class="w-20 h-20 rounded-2xl bg-orange-500 grid place-items-center text-black text-3xl font-black">MP</div><div><div id="creatorNameLabel" class="text-2xl font-black">Aucun profil</div><div id="creatorStatus" class="chip mt-2">Session fermée</div></div></div><div class="grid grid-cols-2 gap-2 mt-5"><button id="showCreateProfile" class="btn btn-orange">Créer profil</button><button id="showLoginProfile" class="btn">Log in</button><button id="showEditProfile" class="btn">Modifier</button><button id="logoutProfile" class="btn btn-red">Log out</button></div><div id="profileCreateBox" class="hidden mt-4 grid gap-3"><input id="newProfileName" class="input" placeholder="Nom du profil"><input id="newProfileArtist" class="input" placeholder="Artiste / projet"><input id="newProfileEmail" class="input" placeholder="Courriel"><select id="newProfilePlan" class="input"><option value="Gratuit">Gratuit</option><option value="14.99$">Créateur 14.99$</option><option value="65.99$">Créateur 65.99$</option></select><input id="newProfilePin" type="password" maxlength="4" class="input" placeholder="NIP 4 chiffres"><button id="saveProfile" class="btn btn-green">Créer et connecter</button></div><div id="profileLoginBox" class="hidden mt-4 grid gap-3"><input id="loginProfileName" class="input" placeholder="Nom du profil"><input id="loginProfilePin" type="password" maxlength="4" class="input" placeholder="NIP"><button id="loginProfile" class="btn btn-green">Connexion</button></div><div id="profileList" class="grid gap-2 mt-4"></div></aside><section class="grid gap-4"><div class="grid md:grid-cols-4 gap-3"><div class="card"><div class="small">Score</div><div id="creatorScore" class="text-3xl font-black text-green-300">0%</div></div><div class="card"><div class="small">Coins</div><div id="creatorCoins" class="text-3xl font-black text-yellow-300">0</div></div><div class="card"><div class="small">Vidéos</div><div id="creatorVideos" class="text-3xl font-black text-cyan-300">0</div></div><div class="card"><div class="small">Monitor</div><div id="creatorMonitor" class="text-2xl font-black text-orange-300">Fans</div></div></div><div class="card"><h3 class="text-2xl font-black mb-4">Mes conseils constructifs</h3><div id="creatorAdvice" class="grid gap-3"></div></div><div class="card"><h3 class="text-2xl font-black mb-4">Classement des vidéos</h3><div id="creatorVideoRank" class="grid gap-2"></div></div></section><aside class="card"><h3 class="text-2xl font-black">Téléverser une vidéo</h3><input id="creatorUploadFile" type="file" class="input mt-3" accept="video/mp4,video/webm,video/quicktime"><input id="creatorUploadTitle" class="input mt-3" placeholder="Titre"><button id="creatorAddVideo" class="btn btn-orange w-full mt-3">Ajouter au système Meyden</button><video id="creatorPreview" class="mt-4" controls loop muted playsinline></video><button id="creatorSimulate" class="btn w-full mt-3">Simuler 2h créateur</button></aside></div></div></div>
+  <section id="dashboard" class="space-y-6">
+  <div class="glass rounded-[32px] p-6 border border-orange-500/20">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="text-xs uppercase tracking-[.25em] text-orange-300">Interface créateur</div>
+        <h2 class="text-4xl font-black mt-2">Dashboard Meyden Créateur</h2>
+        <p class="text-white/60 mt-2 max-w-3xl">Téléversement, statistiques, tuned on, coins, recommandations constructives et évolution dans les 5 Meyden Monitors.</p>
+      </div>
+      <button class="rounded-2xl bg-orange-500 px-6 py-4 font-black text-black">Téléverser une vidéo</button>
+    </div>
+  </div>
 
-  <div id="publicModal" class="modal fixed inset-0 z-[100] items-center justify-center bg-black/85 p-4"><div class="glass rounded-[2rem] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-3xl font-black">Adhésion public</h2><button data-close="publicModal" class="btn btn-red">Fermer</button></div><div class="grid gap-3 mt-5"><input id="publicName" class="input" placeholder="Nom"><input id="publicEmail" class="input" placeholder="Courriel"><button id="savePublic" class="btn btn-cyan">Créer accès public</button></div></div></div>
-  <div id="bookingModal" class="modal fixed inset-0 z-[100] items-center justify-center bg-black/85 p-4"><div class="glass rounded-[2rem] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-3xl font-black">Réservation Meyden</h2><button data-close="bookingModal" class="btn btn-red">Fermer</button></div><div class="grid gap-3 mt-5"><input id="bookingName" class="input" placeholder="Nom / organisme"><input id="bookingEmail" class="input" placeholder="Courriel"><select id="bookingType" class="input"><option>Show</option><option>Studio Lujamko</option><option>Captation</option><option>Sponsor</option></select><button id="saveBooking" class="btn btn-blue">Envoyer la demande</button></div></div></div>
-  <div id="toast" class="fixed bottom-4 left-1/2 z-[200] hidden -translate-x-1/2 rounded-2xl bg-white text-black px-5 py-3 font-black shadow-2xl"></div>
+  <div class="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
+    <div class="glass rounded-[32px] p-5">
+      <div class="flex items-center gap-4 mb-5">
+        <div class="w-20 h-20 rounded-3xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-3xl font-black text-orange-300">MP</div>
+        <div>
+          <div class="text-2xl font-black">Mon profil</div>
+          <div class="text-white/50">Créateur Meyden actif</div>
+          <div class="mt-2 inline-flex rounded-full bg-green-500/20 border border-green-400/30 px-3 py-1 text-xs font-black text-green-300">En circulation</div>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div class="glass rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <div class="text-white/45">Niveau Gratuit</div>
+            <div class="text-xs text-white/40 mt-1">Accès limité</div>
+          </div>
+          <input type="checkbox" class="scale-125 accent-orange-500">
+        </div>
+
+        <div class="glass rounded-2xl p-4 border border-orange-500/30 flex items-center justify-between">
+          <div>
+            <div class="text-orange-300 font-black">Créateur 14.99$</div>
+            <div class="text-xs text-white/40 mt-1">4 vidéos par mois</div>
+          </div>
+          <input checked type="checkbox" class="scale-125 accent-orange-500">
+        </div>
+
+        <div class="glass rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <div class="text-cyan-300 font-black">Créateur 65.99$</div>
+            <div class="text-xs text-white/40 mt-1">Téléversement quotidien</div>
+          </div>
+          <input type="checkbox" class="scale-125 accent-cyan-400">
+        </div>
+      </div>
+
+      <div class="mt-6 rounded-3xl border border-dashed border-orange-500/30 bg-black/30 p-5 text-center">
+        <div class="text-lg font-black">Téléverser une vidéo</div>
+        <div class="text-sm text-white/45 mt-2">MP4 • MOV • WEBM</div>
+        <input id="creatorUploadInput" type="file" accept="video/*" class="mt-4 block w-full text-sm text-white/70">
+        <button id="creatorUploadBtn" class="mt-4 w-full rounded-2xl bg-orange-500 py-4 font-black text-black">Ajouter au système Meyden</button>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="grid md:grid-cols-2 gap-5">
+        <div class="glass rounded-[28px] p-5">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="text-white/45 text-sm">Mes statistiques</div>
+              <div class="text-3xl font-black text-green-300 mt-1">78%</div>
+            </div>
+            <div class="w-20 h-20 rounded-2xl bg-green-500/10 border border-green-400/20 flex items-center justify-center">
+              📈
+            </div>
+          </div>
+          <div class="h-32 rounded-2xl bg-black/30 border border-white/10 p-3 flex items-end gap-2">
+            <div class="w-full bg-orange-500 rounded-t-xl h-[35%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[70%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[48%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[85%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[62%]"></div>
+            <div class="w-full bg-orange-500 rounded-t-xl h-[95%]"></div>
+          </div>
+        </div>
+
+        <div class="glass rounded-[28px] p-5">
+          <div class="text-white/45 text-sm">Mes Coins</div>
+          <div class="text-5xl font-black text-yellow-300 mt-2">148</div>
+          <div class="mt-4 text-sm text-white/55">Valeur estimée : 22.20$</div>
+          <div class="mt-5 h-3 rounded-full bg-white/10 overflow-hidden">
+            <div class="h-full bg-yellow-300 w-[72%]"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="glass rounded-[28px] p-5 text-center">
+          <div class="text-white/45 text-sm">Mes vidéos téléversées</div>
+          <div class="text-5xl font-black text-cyan-300 mt-3">12</div>
+          <div class="text-xs text-white/45 mt-2">Contenus actifs</div>
+        </div>
+
+        <div class="glass rounded-[28px] p-5 text-center border border-orange-500/20">
+          <div class="text-white/45 text-sm">Mes vidéos Tuned On</div>
+          <div class="text-5xl font-black text-orange-300 mt-3">84%</div>
+          <div class="text-xs text-white/45 mt-2">Engagement public</div>
+        </div>
+
+        <div class="glass rounded-[28px] p-5 text-center">
+          <div class="text-white/45 text-sm">Monitor actif</div>
+          <div class="text-4xl font-black text-green-300 mt-3">Fans</div>
+          <div class="text-xs text-white/45 mt-2">Cycle 2h actif</div>
+        </div>
+      </div>
+
+      <div class="glass rounded-[32px] p-6 border border-orange-500/20">
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <div>
+            <div class="text-2xl font-black">Mes conseils constructifs</div>
+            <div class="text-sm text-white/50 mt-1">Courriels générés automatiquement par le système Meyden</div>
+          </div>
+          <div class="rounded-full bg-orange-500/20 border border-orange-500/30 px-4 py-2 text-xs font-black text-orange-300">Analyse active</div>
+        </div>
+
+        <div class="space-y-3 text-sm leading-7">
+          <div class="rounded-2xl border border-orange-500/20 bg-orange-500/10 p-4">
+            <b class="text-orange-300">Conseil #1</b><br>
+            Les 5 premières secondes doivent créer un impact immédiat. Le taux de rétention descend après 7 secondes.
+          </div>
+
+          <div class="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 p-4">
+            <b class="text-cyan-300">Conseil #2</b><br>
+            Les vidéos avec visage humain et mouvement rapide obtiennent plus de Tuned On dans Fans et Public Ciblé.
+          </div>
+
+          <div class="rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
+            <b class="text-green-300">Conseil #3</b><br>
+            Ton contenu approche une promotion vers Petit Public. Maintiens une moyenne supérieure à 70% pendant 24h.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Projection 24 mois</h2><p class="text-white/60 text-sm">Scénarios investisseur.</p></div><div class="flex flex-wrap gap-2"><button data-scenario="conservative" class="scenarioBtn rounded-2xl bg-white/10 px-4 py-3 font-black">Conservateur</button><button data-scenario="realistic" class="scenarioBtn rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Réaliste</button><button data-scenario="ambitious" class="scenarioBtn rounded-2xl bg-white/10 px-4 py-3 font-black">Ambitieux</button></div></div><div class="rounded-3xl bg-black/40 border border-white/10 p-4"><canvas id="growthChart" height="100"></canvas></div><div class="grid md:grid-cols-4 gap-3 mt-4"><div class="glass rounded-2xl p-4">Scénario<div id="activeScenarioLabel" class="text-xl font-black text-orange-300">Réaliste</div></div><div class="glass rounded-2xl p-4">Revenu final<div id="finalRevenue" class="text-xl font-black text-green-300">0$</div></div><div class="glass rounded-2xl p-4">Profit net<div id="finalProfit" class="text-xl font-black text-green-300">0$</div></div><div class="glass rounded-2xl p-4">Abonnés<div id="finalSubs" class="text-xl font-black text-yellow-300">0</div></div></div></section>
+
+  <section class="grid gap-6 xl:grid-cols-3"><div class="glass rounded-[32px] p-5"><h2 class="text-2xl font-black">Simulation financière</h2><p class="text-white/65 mt-2">Cycle local des abonnements.</p><button id="growthTickBtn" class="mt-4 w-full rounded-2xl bg-orange-500 py-3 font-black text-black">Simuler 1 cycle</button></div><div class="glass rounded-[32px] p-5"><div class="text-white/45">Créateurs abonnés</div><div id="simCreatorTotal" class="text-3xl font-black text-orange-300">410</div><div id="simCreatorMix" class="text-sm text-white/60 mt-2">Gratuit 260 • 14.99$ 110 • 65.99$ 40</div></div><div class="glass rounded-[32px] p-5"><div class="text-white/45">Bénéfice net simulé</div><div id="simNetProfit" class="text-3xl font-black text-green-300">0$</div><div class="text-sm text-white/60 mt-2">Après provision, coins et coussin.</div></div></section>
+
+  <section id="scene" class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Scène Meyden ici</h2><p class="text-white/60 text-sm">Booking, public, shows, livestream, billets et captation.</p></div><div class="flex gap-2 flex-wrap"><button data-modal="sceneBookModal" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Booker un show</button><button data-modal="sceneAttendModal" class="rounded-2xl bg-white/10 px-4 py-3 font-black">Assister à un show</button></div></div><div class="grid gap-4 lg:grid-cols-3"><div class="glass rounded-3xl p-4"><b>Événements</b><p class="text-white/60 mt-2">Shows live, lancements, soirées thématiques.</p></div><div class="glass rounded-3xl p-4"><b>Retombées</b><p class="text-white/60 mt-2">Visibilité, captation, achalandage.</p></div><div class="glass rounded-3xl p-4"><b>Activation</b><p class="text-white/60 mt-2">Booking, sponsors, diffusion numérique.</p></div></div></section>
+
+  <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Espace sponsors</h2><p class="text-white/60 text-sm">Présence de marque et activation mesurable.</p></div><button data-modal="sponsorModal" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Devenir sponsor</button></div><div class="grid gap-4 lg:grid-cols-3"><div class="glass rounded-3xl p-4"><b>Sponsor principal</b><p class="text-white/60 mt-2">Visibilité premium.</p></div><div class="glass rounded-3xl p-4"><b>Partenaire officiel</b><p class="text-white/60 mt-2">Mention campagnes et événements.</p></div><div class="glass rounded-3xl p-4"><b>Sponsor soutien</b><p class="text-white/60 mt-2">Entrée accessible.</p></div></div></section>
+
+  <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Guichet Meyden Coins</h2><p class="text-white/60 text-sm">Demande d’échange trimestrielle.</p></div><button data-modal="coinsModal" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Ouvrir le guichet</button></div><div class="grid gap-4 lg:grid-cols-3"><div class="glass rounded-3xl p-4"><b>Statut</b><div id="coinsWindowStatus" class="text-2xl font-black text-green-300">Ouvert</div></div><div class="glass rounded-3xl p-4"><b>Règle</b><div class="text-2xl font-black text-yellow-300">1/3 provision</div></div><div class="glass rounded-3xl p-4"><b>Cycle</b><div id="coinsQuarterLabel" class="text-2xl font-black text-orange-300">T2</div></div></div></section>
+
+  <section id="studio-lujamko" class="glass cyan-glow rounded-[32px] p-5"><div class="grid gap-6 lg:grid-cols-[1.05fr_.95fr] items-center"><div><div class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-cyan-300">Studio d’enregistrement intégré</div><h2 class="mt-5 text-4xl lg:text-6xl font-black leading-[.95]">LUJAMKO<br><span class="text-cyan-300">Production Studio</span></h2><p class="mt-5 text-lg leading-8 text-white/70 max-w-2xl">Studio immersif pour transformer une idée sonore en contenu exploitable.</p><div class="mt-6 flex flex-wrap gap-3"><button data-modal="sceneBookModal" class="rounded-2xl bg-[#0f52ba] px-5 py-3 font-black text-white">Réserver une session</button><button data-scroll="media" class="rounded-2xl bg-white/10 px-5 py-3 font-black">Voir le moniteur média</button><button data-scroll="dashboard" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Structurer avec Meyden</button></div></div><div class="rounded-[30px] overflow-hidden border border-cyan-400/20 bg-gradient-to-br from-[#091a3f] via-black to-[#0f52ba] p-5 cyan-glow"><div id="lujamkoMonitor" class="aspect-video rounded-[26px] border border-white/10 bg-black/50 flex items-center justify-center text-center p-6 overflow-hidden"><div><div class="text-xs uppercase tracking-[.25em] text-cyan-300">Lujamko x Meyden</div><div class="mt-3 text-3xl font-black">Son • Image • Contenu</div><p class="mt-3 text-white/60">Une session peut devenir un actif.</p></div></div><button id="lujamkoTunedBtn" class="w-full rounded-2xl bg-cyan-300 py-4 mt-4 text-lg font-black text-black hover:bg-white transition">Tuned On — Studio Lujamko</button><div class="grid grid-cols-3 gap-3 mt-4 text-sm"><button id="lujamkoPreviewBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Démo monitor</button><button id="lujamkoResetBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Reset studio</button><div class="rounded-2xl border border-cyan-400/20 bg-black/30 p-3"><div class="text-white/45">Tuned</div><div id="lujamkoTunedCount" class="text-xl font-black text-cyan-300">0</div></div></div></div></div></section>
+<section id="auditeur-central" class="glass rounded-[32px] p-5 mb-6">
+  <div class="flex flex-wrap justify-between gap-3 mb-4">
+    <div>
+      <h2 class="text-3xl font-black">Interface Auditeur</h2>
+      <p class="text-white/60 text-sm">Les auditeurs traversent les 5 Meyden Monitors et influencent directement l’évolution des contenus.</p>
+    </div>
+    <div class="rounded-2xl bg-cyan-300 px-4 py-3 text-black font-black">Public Gratuit • Premium 1.99$</div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-5">
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-cyan-300 font-black text-2xl">Fans</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-orange-300 font-black text-2xl">Public Ciblé</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-yellow-300 font-black text-2xl">Petit Public</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-orange-200 font-black text-2xl">Grand Public</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+    <div class="glass rounded-3xl p-4 text-center"><div class="text-green-300 font-black text-2xl">International</div><div class="text-white/50 text-sm mt-2">Boucle 120 min</div><div class="mt-4 text-3xl font-black">120m</div></div>
+  </div>
+
+  <div class="mt-6 rounded-3xl border border-white/10 bg-black/30 p-5">
+    <div class="text-xl font-black mb-3">Analyse comportementale auditeur</div>
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="glass rounded-2xl p-4"><div class="text-white/50 text-sm">Temps regardé</div><div class="text-3xl font-black text-green-300">62%</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-white/50 text-sm">Tuned On</div><div class="text-3xl font-black text-orange-300">41%</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-white/50 text-sm">Moyenne comportementale</div><div class="text-3xl font-black text-yellow-300">52%</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-white/50 text-sm">Décision système</div><div class="text-xl font-black text-cyan-300">Relance monitor</div></div>
+    </div>
+  </div>
+</section>
+
+
+  <section id="meyden-art-fact" class="glass rounded-[32px] p-5 border border-orange-500/20 orange-glow">
+    <div class="flex flex-wrap justify-between gap-4 items-start mb-5">
+      <div>
+        <div class="inline-flex rounded-full border border-orange-400/30 bg-orange-500/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-orange-300">Meyden Mall intégré</div>
+        <h2 class="mt-4 text-4xl lg:text-5xl font-black">Meyden Art & Fact</h2>
+        <p class="text-white/60 mt-2 max-w-3xl">Mini centre commercial culturel Meyden : forfaits, services à la carte, production vidéo, incubation, événements et configurateur merch testable.</p>
+      </div>
+      <button onclick="mafOpenCheckout()" class="rounded-2xl bg-orange-500 px-5 py-4 font-black text-black">Panier Art & Fact — <span id="mafTopCart">0 article • 0$</span></button>
+    </div>
+    <div class="flex flex-wrap gap-2 mb-5 text-sm font-black" id="mafZoneNav"></div>
+    <div id="mafApp"></div>
+  </section>
+
+</main>
+
+<div id="toast" class="fixed bottom-4 left-1/2 z-[80] hidden -translate-x-1/2 rounded-2xl bg-white text-black px-5 py-3 font-black shadow-2xl"></div>
+<div id="creatorJoinModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-2xl w-full p-5 max-h-[92vh] overflow-auto"><div class="flex justify-between gap-4"><div><h2 class="text-2xl font-black">Adhésion créateur Meyden</h2><p class="text-white/55 text-sm mt-1">Formulaire testable.</p></div><button data-close="creatorJoinModal" class="text-2xl">×</button></div><form id="creatorJoinForm" class="grid gap-3 mt-4"><input required name="artistName" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom d’artiste / projet"><input required type="email" name="email" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><select required name="creatorPlan" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3"><option value="">Choisir un forfait créateur</option><option>Créateur Gratuit — 0$/mois</option><option>Créateur 14.99$ — 4 contenus / mois</option><option>Créateur 65.99$ — 1 contenu / jour</option></select><textarea required name="description" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Décris ton projet"></textarea><label class="flex gap-3 text-sm text-white/70"><input required type="checkbox" class="mt-1"> J’accepte l’analyse du contenu.</label><button class="rounded-2xl bg-orange-500 py-4 font-black text-black">Créer mon adhésion créateur</button></form><div id="creatorJoinResult" class="hidden mt-4 rounded-2xl border border-orange-400/30 bg-orange-500/10 p-4 text-sm"></div></div></div>
+<div id="publicJoinModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-2xl w-full p-5 max-h-[92vh] overflow-auto"><div class="flex justify-between gap-4"><div><h2 class="text-2xl font-black">Adhésion public auditeur</h2><p class="text-white/55 text-sm mt-1">Formulaire testable.</p></div><button data-close="publicJoinModal" class="text-2xl">×</button></div><form id="publicJoinForm" class="grid gap-3 mt-4"><input required name="fullName" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom complet"><input required type="email" name="email" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><select required name="publicPlan" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3"><option value="">Choisir un forfait public</option><option>Public Gratuit — 0$/mois</option><option>Public 1.99$ — accès complet</option></select><select name="interest" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3"><option>Metal / Rock</option><option>Électro / Cinématique</option><option>Art visuel</option><option>Événements live</option><option>Découverte générale</option></select><button class="rounded-2xl bg-cyan-300 py-4 font-black text-black">Créer mon accès public</button></form><div id="publicJoinResult" class="hidden mt-4 rounded-2xl border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm"></div></div></div>
+<div id="sponsorModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-2xl font-black">Demande sponsor</h2><button data-close="sponsorModal" class="text-2xl">×</button></div><form class="localForm grid gap-3 mt-4" data-success="Demande sponsor envoyée localement."><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom / marque"><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><textarea required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Objectif de commandite"></textarea><button class="rounded-2xl bg-orange-500 py-3 font-black text-black">Envoyer</button></form></div></div>
+<div id="sceneBookModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-2xl font-black">Réserver / rendez-vous</h2><button data-close="sceneBookModal" class="text-2xl">×</button></div><form class="localForm grid gap-3 mt-4" data-success="Demande de rendez-vous envoyée localement."><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom / salle / organisme"><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><input class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Date souhaitée"><textarea required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Description"></textarea><button class="rounded-2xl bg-orange-500 py-3 font-black text-black">Envoyer</button></form></div></div>
+<div id="sceneAttendModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-2xl font-black">Assister à un show</h2><button data-close="sceneAttendModal" class="text-2xl">×</button></div><form class="localForm grid gap-3 mt-4" data-success="Inscription public enregistrée localement."><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom"><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Courriel"><button class="rounded-2xl bg-orange-500 py-3 font-black text-black">M’inscrire</button></form></div></div>
+<div id="coinsModal" class="modal fixed inset-0 z-[70] items-center justify-center bg-black/80 p-4"><div class="glass rounded-[32px] max-w-xl w-full p-5"><div class="flex justify-between"><h2 class="text-2xl font-black">Guichet Meyden Coins</h2><button data-close="coinsModal" class="text-2xl">×</button></div><form class="localForm grid gap-3 mt-4" data-success="Demande de guichet envoyée localement."><input required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nom du créateur"><input required type="number" min="1" class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Nombre de coins"><textarea required class="rounded-2xl bg-black/40 border border-white/10 px-4 py-3" placeholder="Justification"></textarea><button class="rounded-2xl bg-orange-500 py-3 font-black text-black">Déposer la demande</button></form></div></div>
 
 <script>
-(function(){
-'use strict';
-const CONFIG={backend:'localStorage',storage:'objectURL-session',version:'stable-1.0'};
-const $=id=>document.getElementById(id);const $$=s=>Array.from(document.querySelectorAll(s));
-function esc(v){return String(v||'').replace(/[&<>\"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))}
-function money(v){return Math.round(Number(v||0)).toLocaleString('fr-CA')+'$'}
-function toast(t){const el=$('toast'); if(!el) return console.log(t); el.textContent=t; el.classList.remove('hidden'); clearTimeout(window.__toast); window.__toast=setTimeout(()=>el.classList.add('hidden'),2200)}
-function log(id,msg){const el=$(id); if(!el)return; const time=new Date().toLocaleTimeString('fr-CA',{hour:'2-digit',minute:'2-digit'}); el.innerHTML='['+time+'] '+esc(msg)+'<br>'+el.innerHTML}
-function uid(){return 'id_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7)}
-function validPin(pin){return /^[0-9]{4}$/.test(String(pin||''))}
-function videoUrl(file){return file?URL.createObjectURL(file):''}
-function embedYoutube(url){const u=String(url||'');const list=u.match(/[?&]list=([\w-]+)/)?.[1];const shorts=u.match(/youtube\.com\/shorts\/([\w-]+)/)?.[1];const watch=u.match(/[?&]v=([\w-]+)/)?.[1];const short=u.match(/youtu\.be\/([\w-]+)/)?.[1];const id=shorts||watch||short;if(list)return 'https://www.youtube.com/embed/videoseries?list='+list+'&autoplay=1&loop=1&rel=0';if(id)return 'https://www.youtube.com/embed/'+id+'?autoplay=1&loop=1&playlist='+id+'&rel=0';return ''}
+const $=id=>document.getElementById(id);
+const safeScroll=id=>{const el=$(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});else toast('Section introuvable : '+id)};
 
-const Backend={
-  key:'meyden_stable_state_v1',
-  load(){try{return JSON.parse(localStorage.getItem(this.key)||'null')}catch{return null}},
-  save(data){try{localStorage.setItem(this.key,JSON.stringify(data));return true}catch(e){toast('Stockage local plein. Session gardée en mémoire.');return false}},
-  export(data){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='meyden-os-state.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
-};
-
-const defaults=()=>({
-  global:{tuned:1200,coins:148,score:78,monitor:'Fans',revenue:0,studioTuned:0},
-  engine:{cycles:0,promotions:0,recommendations:0},
-  creators:[],currentCreatorId:null,session:false,
-  publicUsers:[],bookings:[],media:[],youtubeHistory:[],cart:[],shopTab:'forfaits',scenario:'realistic',
-  monitors:{
-    'Fans':[demo('Vidéo A — démo Fans',12),demo('Vidéo B — démo Fans',16)],
-    'Public cible':[demo('Vidéo C — démo Ciblé',14)],
-    'Petit public':[demo('Vidéo D — démo Petit Public',9)],
-    'Grand public':[demo('Vidéo E — démo Grand Public',22)],
-    'International':[demo('Vidéo F — démo International',17)]
-  }
-});
-function demo(title,duration){return{id:uid(),title,duration,url:'',type:'demo',monitor:'Fans',tuned:0,retention:0,average:0,hours:0,cycles:0,status:'En test',createdAt:new Date().toISOString()}}
-let state=Backend.load()||defaults();
-const runtime={objectURLs:{},centralVideo:null,currentMediaIndex:0,creatorFile:null,creatorFileUrl:''};
-const monitorNames=['Fans','Public cible','Petit public','Grand public','International'];
-const monitorWeights={'Fans':10,'Public cible':25,'Petit public':45,'Grand public':70,'International':95};
-const monitorColors={'Fans':'text-cyan-300','Public cible':'text-green-300','Petit public':'text-purple-200','Grand public':'text-orange-300','International':'text-yellow-300'};
-function persist(){Backend.save(state)}
-function currentCreator(){return state.session?state.creators.find(c=>c.id===state.currentCreatorId):null}
-function monitorTotal(name){return(state.monitors[name]||[]).reduce((s,i)=>s+Number(i.duration||0),0)}
-function totalContent(){return monitorNames.reduce((s,n)=>s+(state.monitors[n]||[]).length,0)}
-function totalMinutes(){return monitorNames.reduce((s,n)=>s+monitorTotal(n),0)}
-function itemScore(item){return Math.max(0,Math.min(100,Math.round((Number(item.tuned||0)*.55)+(Number(item.retention||0)*.45))))}
-function creatorVideoScore(v){return Math.round((Number(v.tuned||0)*.65)+(monitorWeights[v.monitor||'Fans']*.35))}
-function syncGlobal(){
-  $('kpiTuned').textContent=state.global.tuned;$('kpiCoins').textContent=state.global.coins;$('kpiCoinValue').textContent='Valeur : '+(state.global.coins*.15).toFixed(2)+'$';$('kpiScore').textContent=state.global.score+'%';$('kpiMonitor').textContent=state.global.monitor;$('monitorActiveLabel').textContent=state.global.monitor;$('backendMode').textContent=CONFIG.backend;$('dashCreators').textContent=state.creators.length;$('dashUploads').textContent=totalContent();$('dashCart').textContent=money(cartTotal());$('totalCapacity').textContent=totalMinutes()+' / 600';$('totalItems').textContent=totalContent();$('systemStatus').textContent=totalContent()?'STABLE':'VIDE';$('engineCycles').textContent=state.engine.cycles;$('enginePromotions').textContent=state.engine.promotions;$('engineRecommendations').textContent=state.engine.recommendations;$('studioTunedCount').textContent=state.global.studioTuned;renderProjection();}
-function addCoins(n,reason){state.global.coins+=n;log('globalLog',reason+' +'+n+' coins.');}
-function addTuned(n=1){state.global.tuned+=n;state.global.score=Math.min(100,state.global.score+1);addCoins(1,'Tuned On');persist();renderAll();}
-
-function renderMonitorCards(){const root=$('monitorCards');root.innerHTML='';monitorNames.forEach((name,idx)=>{const list=state.monitors[name]||[];const total=monitorTotal(name);const pct=Math.min(100,Math.round(total/120*100));const avg=list.length?Math.round(list.reduce((s,i)=>s+itemScore(i),0)/list.length):0;const card=document.createElement('div');card.className='card';card.innerHTML=`<div class="text-xs uppercase text-white/45">Bibliothèque</div><h3 class="text-2xl font-black ${monitorColors[name]||'text-orange-300'}">${name}</h3><div class="bar mt-3"><span style="width:${pct}%"></span></div><div class="small mt-2">${total}/120 min • ${list.length} contenus • moyenne ${avg}%</div><div class="grid gap-2 mt-4">${list.map(item=>`<div class="rounded-xl bg-black/30 p-3 text-sm"><b>▶ ${esc(item.title)}</b><div class="small">${item.duration} min • ${item.hours}/24h • ${item.status}</div></div>`).join('')||'<div class="small">Aucun contenu.</div>'}</div><button class="btn btn-orange w-full mt-4" data-monitor-tuned="${name}">Tuned On — ${name}</button>`;root.appendChild(card)});$$('[data-monitor-tuned]').forEach(b=>b.onclick=()=>{const name=b.dataset.monitorTuned;const item=(state.monitors[name]||[])[0];if(item){item.tuned=Math.min(100,item.tuned+8);item.average=itemScore(item);state.global.monitor=name;state.global.tuned++;addCoins(1,'Tuned On '+name);persist();renderAll();}})}
-function runCycle(){state.engine.cycles++;monitorNames.forEach((name,idx)=>{const list=[...(state.monitors[name]||[])];list.forEach(item=>{item.cycles++;item.hours+=2;item.retention=Math.max(item.retention||0,Math.floor(45+Math.random()*45));item.tuned=Math.min(100,(item.tuned||0)+Math.floor(Math.random()*12));item.average=itemScore(item);item.status=item.average>=70?'Solide':item.average>=50?'À surveiller':'À retravailler';if(item.hours>=24){if(item.average>=70&&idx<monitorNames.length-1){state.monitors[name]=state.monitors[name].filter(x=>x.id!==item.id);item.monitor=monitorNames[idx+1];item.hours=0;item.status='Promu';state.monitors[item.monitor].push(item);state.engine.promotions++;state.global.monitor=item.monitor;addCoins(12,'Promotion vers '+item.monitor);}else if(item.average<50){item.status='Recommandation envoyée';state.engine.recommendations++;addCoins(1,'Recommandation constructive générée');}}});});state.global.score=Math.min(100,state.global.score+Math.floor(Math.random()*3)+1);state.global.revenue+=Math.round(state.global.score*2.5+state.global.coins*.1);log('engineLog','Cycle 2h simulé : contenus analysés, scores recalculés.');persist();renderAll();}
-function runDay(){for(let i=0;i<12;i++)runCycle();log('engineLog','Simulation 24h terminée.');}
-function resetEngine(){state=defaults();persist();log('engineLog','Moteur réinitialisé.');renderAll();}
-function uploadToMonitor(){const title=$('uploadTitle').value.trim()||'Contenu Meyden';const duration=Math.max(1,Math.min(120,Number($('uploadDuration').value||4)));const file=$('uploadFile').files[0];let url='',type='demo';if(file){url=videoUrl(file);type=file.type||'video/mp4';runtime.objectURLs[uid()]=url}if(monitorTotal('Fans')+duration>120){toast('Fans dépasserait 120 minutes.');return}const item={id:uid(),title,duration,url,type,monitor:'Fans',tuned:0,retention:0,average:0,hours:0,cycles:0,status:'En test',createdAt:new Date().toISOString()};state.monitors.Fans.push(item);state.media.push({id:item.id,title,url,type,source:'monitor'});$('uploadTitle').value='';$('uploadFile').value='';state.global.monitor='Fans';addCoins(2,'Upload vers Fans');persist();renderAll();toast('Contenu ajouté dans Fans')}
-
-function renderMediaLibrary(){const root=$('mediaLibrary');root.innerHTML='';if(!state.media.length){root.innerHTML='<div class="small">Aucun média local.</div>';return}state.media.forEach((m,i)=>{const b=document.createElement('button');b.className='btn text-left';b.innerHTML=`${i+1}. ${esc(m.title||m.name||'Média')}<br><span class="small">${esc(m.type||'')}</span>`;b.onclick=()=>loadMedia(i);root.appendChild(b)})}
-function setCentral(html,status){$('centralPlayer').innerHTML=html;$('mediaStatus').textContent=status||''}
-function loadMedia(i){if(!state.media.length)return;runtime.currentMediaIndex=(i+state.media.length)%state.media.length;const m=state.media[runtime.currentMediaIndex];if(m.type&&m.type.startsWith('image/'))setCentral(`<img src="${m.url}" style="width:100%;height:100%;object-fit:contain" alt="">`,'Lecture : '+m.title);else if(m.type&&m.type.startsWith('video/'))setCentral(`<video id="centralVideo" src="${m.url}" controls loop playsinline></video>`,'Lecture : '+m.title);else if(m.type==='youtube')setCentral(`<iframe width="100%" height="100%" src="${m.url}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`,'Lecture YouTube');runtime.centralVideo=$('centralVideo');}
-function addMedia(){const file=$('mediaFileInput').files[0];if(!file){toast('Choisis un fichier.');return}const url=videoUrl(file);const m={id:uid(),title:file.name,url,type:file.type||'video/mp4',source:'local'};state.media.push(m);state.monitors.Fans.push({id:m.id,title:file.name,duration:4,url,type:m.type,monitor:'Fans',tuned:0,retention:0,average:0,hours:0,cycles:0,status:'En test',createdAt:new Date().toISOString()});$('mediaFileInput').value='';addCoins(2,'Média ajouté');persist();renderAll();loadMedia(state.media.length-1)}
-function loadYoutube(){const embed=embedYoutube($('youtubeUrl').value);if(!embed){toast('Lien YouTube invalide.');return}const m={id:uid(),title:'YouTube',url:embed,type:'youtube',source:'youtube'};state.media.unshift(m);state.youtubeHistory.unshift(m);persist();renderAll();loadMedia(0)}
-function clearMedia(){state.media=[];$('centralPlayer').innerHTML='<div><div class="text-4xl font-black text-orange-300">MEYDEN MONITOR</div><p class="small mt-2">Bibliothèque vidée.</p></div>';persist();renderAll()}
-
-const products={
-  forfaits:[['Niveau 1 — Structuration','Analyse, plan d’action, direction artistique de base, SOCAN/droits.',100,25],['Niveau 2 — Déploiement','Branding avancé, visibilité, préparation scène, reels/shorts.',250,15],['Niveau 3 — Expansion','Déploiement + stratégie revenus et % projet.',250,8]],
-  carte:[['Audit artistique','Lecture complète du projet.',75,20],['Plan médias','Plan de sortie 30 jours.',120,12],['Bio professionnelle','Bio courte + longue.',80,15]],
-  video:[['Captation Vidéo 4H','Bloc 4h : caméra, trépied, mouvements de base.',350,8],['Montage Vidéo','Montage dynamique à partir des images du client.',250,20]],
-  merch:[['T-Shirt 25 unités','Impression DTG, noir, logo avant.',212,10],['Macarons','Lot promotionnel.',120,15]],
-  incubateur:[['Incubation Niveau 1','Structure mensuelle.',100,30],['Incubation Niveau 2','Déploiement mensuel.',250,20]],
-  evenements:[['Organisation de spectacle','Coordination complète ou partielle.',500,6],['Meyden Prestige Event','Expérience événementielle immersive.',2500,2]],
-  media:[['Playlist officielle','Structure et diffusion playlist.',100,30],['Sponsor média','Activation et visibilité.',300,10]]
-};
-function renderShop(){const root=$('shopProducts');const tab=state.shopTab||'forfaits';root.innerHTML='';(products[tab]||[]).forEach((p,idx)=>{const card=document.createElement('div');card.className='card';card.innerHTML=`<div class="h-32 rounded-2xl bg-gradient-to-br from-orange-500 to-blue-600 grid place-items-center font-black text-2xl mb-5">${esc(p[0])}</div><h3 class="text-2xl font-black">${esc(p[0])}</h3><p class="small mt-2">${esc(p[1])}</p><div class="small mt-5">Stock disponible : ${p[3]}</div><div class="flex justify-between items-end mt-3"><div class="text-3xl font-black text-orange-300">${money(p[2])}</div><button class="btn btn-orange" data-add-product="${idx}">Ajouter</button></div>`;root.appendChild(card)});$$('[data-add-product]').forEach(b=>b.onclick=()=>{const product=products[state.shopTab][Number(b.dataset.addProduct)];addCart(product[0],product[2]);});renderCart();}
-function addCart(name,price){const existing=state.cart.find(i=>i.name===name);if(existing)existing.qty++;else state.cart.push({id:uid(),name,price,qty:1});persist();renderCart();toast('Ajouté au panier')}
-function cartTotal(){return state.cart.reduce((s,i)=>s+i.price*i.qty,0)}
-function renderCart(){const root=$('cartItems');root.innerHTML='';if(!state.cart.length)root.innerHTML='<div class="small">Panier vide.</div>';state.cart.forEach(item=>{const div=document.createElement('div');div.className='rounded-2xl border border-white/10 bg-black/20 p-3';div.innerHTML=`<b>${esc(item.name)}</b><div class="flex justify-between items-center mt-3"><div><button class="btn" data-minus="${item.id}">−</button> <b class="px-2">${item.qty}</b> <button class="btn" data-plus="${item.id}">+</button></div><button class="text-red-200 font-bold" data-remove="${item.id}">Retirer</button></div><div class="font-black text-orange-300 mt-2">${money(item.price*item.qty)}</div>`;root.appendChild(div)});$$('[data-plus]').forEach(b=>b.onclick=()=>{state.cart.find(i=>i.id===b.dataset.plus).qty++;persist();renderCart()});$$('[data-minus]').forEach(b=>b.onclick=()=>{const it=state.cart.find(i=>i.id===b.dataset.minus);if(it){it.qty=Math.max(1,it.qty-1);persist();renderCart()}});$$('[data-remove]').forEach(b=>b.onclick=()=>{state.cart=state.cart.filter(i=>i.id!==b.dataset.remove);persist();renderCart()});$('cartTotal').textContent=money(cartTotal());$('cartTop').textContent='Panier — '+state.cart.reduce((s,i)=>s+i.qty,0)+' article(s) • '+money(cartTotal());syncGlobal();}
-
-function renderCreator(){const c=currentCreator();$('creatorNameLabel').textContent=c?c.name:'Aucun profil';$('creatorStatus').textContent=c?'Session ouverte':'Session fermée';$('creatorScore').textContent=(c?c.score:0)+'%';$('creatorCoins').textContent=c?c.coins:0;$('creatorVideos').textContent=c?c.videos.length:0;$('creatorMonitor').textContent=c?c.monitor:'Fans';const list=$('profileList');list.innerHTML='';state.creators.forEach(p=>{const b=document.createElement('button');b.className='btn text-left';b.innerHTML=`<b>${esc(p.name)}</b><br><span class="small">${esc(p.plan)} • ${p.videos.length} vidéo(s)</span>`;b.onclick=()=>{$('loginProfileName').value=p.name;$('profileLoginBox').classList.remove('hidden')};list.appendChild(b)});const rank=$('creatorVideoRank');rank.innerHTML='';if(!c||!c.videos.length)rank.innerHTML='<div class="small">Aucune vidéo.</div>';else c.videos.slice().sort((a,b)=>creatorVideoScore(b)-creatorVideoScore(a)).forEach((v,i)=>{rank.innerHTML+=`<div class="rounded-xl bg-black/25 p-3"><b>#${i+1} ${esc(v.title)}</b><div class="small">${v.monitor} • score ${creatorVideoScore(v)}%</div></div>`});$('creatorAdvice').innerHTML='<div class="rounded-xl bg-orange-500/15 border border-orange-500/25 p-3"><b>Conseil #1</b><br>Les 5 premières secondes doivent créer un impact immédiat.</div><div class="rounded-xl bg-cyan-500/15 border border-cyan-500/25 p-3"><b>Conseil #2</b><br>Les vidéos avec visage humain et mouvement rapide performent mieux.</div>';}
-function createProfile(){const name=$('newProfileName').value.trim();const pin=$('newProfilePin').value.trim();if(!name)return toast('Nom obligatoire');if(!validPin(pin))return toast('NIP 4 chiffres obligatoire');if(state.creators.some(c=>c.name.toLowerCase()===name.toLowerCase()))return toast('Profil déjà existant');const c={id:uid(),name,artist:$('newProfileArtist').value.trim(),email:$('newProfileEmail').value.trim(),plan:$('newProfilePlan').value,pin,coins:0,score:78,monitor:'Fans',videos:[]};state.creators.push(c);state.currentCreatorId=c.id;state.session=true;['newProfileName','newProfileArtist','newProfileEmail','newProfilePin'].forEach(id=>$(id).value='');$('profileCreateBox').classList.add('hidden');persist();renderAll();toast('Profil créé')}
-function loginProfile(){const name=$('loginProfileName').value.trim().toLowerCase();const pin=$('loginProfilePin').value.trim();const c=state.creators.find(x=>x.name.toLowerCase()===name&&x.pin===pin);if(!c)return toast('Accès refusé');state.currentCreatorId=c.id;state.session=true;$('profileLoginBox').classList.add('hidden');$('loginProfilePin').value='';persist();renderAll();toast('Connexion créateur')}
-function addCreatorVideo(){const c=currentCreator();if(!c)return toast('Connecte un profil créateur');const f=$('creatorUploadFile').files[0];if(!f)return toast('Choisis une vidéo');const url=videoUrl(f);runtime.creatorFileUrl=url;$('creatorPreview').src=url;const title=$('creatorUploadTitle').value.trim()||f.name;const v={id:uid(),title,url,type:f.type||'video/mp4',monitor:'Fans',tuned:84,createdAt:new Date().toISOString()};c.videos.push(v);c.coins+=7;c.score=Math.min(99,c.score+1);c.monitor='Fans';state.monitors.Fans.push({id:v.id,title,duration:4,url,type:v.type,monitor:'Fans',tuned:84,retention:50,average:67,hours:0,cycles:0,status:'Créateur'});state.media.push({id:v.id,title,url,type:v.type,source:'creator'});$('creatorUploadFile').value='';$('creatorUploadTitle').value='';persist();renderAll();toast('Vidéo créateur ajoutée dans Fans')}
-function simulateCreator(){const c=currentCreator();if(!c)return toast('Connecte un profil créateur');c.score=Math.min(99,c.score+Math.floor(Math.random()*8)+2);c.coins+=10;if(c.score>=88)c.monitor='Public cible';persist();renderAll();toast('Cycle créateur simulé')}
-
-function renderProjection(){const c=$('projectionCanvas');if(!c)return;const ctx=c.getContext('2d');const w=c.width=c.clientWidth;const h=c.height=260;ctx.clearRect(0,0,w,h);const mult=state.scenario==='conservative'?1:state.scenario==='ambitious'?2.1:1.45;const data=Array.from({length:24},(_,i)=>Math.round((800+i*i*60+i*380)*mult));const profit=data.map(v=>Math.round(v*.47));const max=Math.max(...data);function line(arr,color){ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=4;arr.forEach((v,i)=>{const x=30+i*(w-60)/23;const y=h-25-(v/max)*(h-50);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke()}ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1;for(let i=0;i<5;i++){const y=25+i*(h-50)/4;ctx.beginPath();ctx.moveTo(30,y);ctx.lineTo(w-30,y);ctx.stroke()}line(data,'#63e6ff');line(profit,'#ff7c8a');ctx.fillStyle='#fff';ctx.font='12px Arial';for(let i=0;i<24;i+=3){ctx.fillText('M'+(i+1),30+i*(w-60)/23,h-5)}}
-
-function renderAll(){syncGlobal();renderMonitorCards();renderMediaLibrary();renderShop();renderCreator();}
-function bind(){
-  $$('[data-go]').forEach(b=>b.onclick=()=>{$(b.dataset.go)?.scrollIntoView({behavior:'smooth',block:'start'})});$$('[data-modal]').forEach(b=>b.onclick=()=>$(b.dataset.modal)?.classList.add('open'));$$('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close)?.classList.remove('open'));$$('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)m.classList.remove('open')});$$('[data-panel]').forEach(b=>b.onclick=()=>$(b.dataset.panel)?.classList.toggle('hidden'));
-  $('btnGlobalTuned').onclick=()=>addTuned();$('btnCentralTuned').onclick=()=>addTuned();$('btnCycle2h').onclick=runCycle;$('btnCycle24h').onclick=runDay;$('btnResetEngine').onclick=resetEngine;$('btnUploadToMonitor').onclick=uploadToMonitor;$('btnAddMedia').onclick=addMedia;$('btnLoadYoutube').onclick=loadYoutube;$('btnClearMedia').onclick=clearMedia;$('btnPlay').onclick=()=>runtime.centralVideo&&runtime.centralVideo.play().catch(()=>toast('Clique sur le lecteur'));$('btnPause').onclick=()=>runtime.centralVideo&&runtime.centralVideo.pause();$('btnNext').onclick=()=>state.media.length&&loadMedia(runtime.currentMediaIndex+1);$('btnPrev').onclick=()=>state.media.length&&loadMedia(runtime.currentMediaIndex-1);$('btnExportState').onclick=()=>Backend.export(state);$('btnAttendShow').onclick=()=>toast('Mode auditeur show activé');$('studioTuned').onclick=()=>{state.global.studioTuned++;addCoins(1,'Tuned On Studio Lujamko');persist();renderAll()};$('btnStudioDemo').onclick=()=>toast('Démo Studio Lujamko activée');$('btnStudioReset').onclick=()=>{state.global.studioTuned=0;persist();renderAll()};
-  $$('[data-scenario]').forEach(b=>b.onclick=()=>{state.scenario=b.dataset.scenario;$$('[data-scenario]').forEach(x=>x.classList.remove('btn-orange'));b.classList.add('btn-orange');persist();renderProjection()});$$('#shopTabs [data-shop]').forEach(b=>b.onclick=()=>{state.shopTab=b.dataset.shop;$$('#shopTabs .tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');persist();renderShop()});$('btnClearCart').onclick=()=>{state.cart=[];persist();renderCart()};$('btnCheckout').onclick=()=>toast('Paiement réel à connecter : Stripe ou lien Interac Meyden');
-  $('showCreateProfile').onclick=()=>$('profileCreateBox').classList.toggle('hidden');$('showLoginProfile').onclick=()=>$('profileLoginBox').classList.toggle('hidden');$('showEditProfile').onclick=()=>toast('Édition complète à connecter au profil actif');$('logoutProfile').onclick=()=>{state.session=false;state.currentCreatorId=null;persist();renderAll()};$('saveProfile').onclick=createProfile;$('loginProfile').onclick=loginProfile;$('creatorAddVideo').onclick=addCreatorVideo;$('creatorSimulate').onclick=simulateCreator;
-  $('savePublic').onclick=()=>{state.publicUsers.push({id:uid(),name:$('publicName').value,email:$('publicEmail').value,createdAt:new Date().toISOString()});$('publicName').value='';$('publicEmail').value='';persist();toast('Accès public créé')};$('saveBooking').onclick=()=>{state.bookings.push({id:uid(),name:$('bookingName').value,email:$('bookingEmail').value,type:$('bookingType').value,createdAt:new Date().toISOString()});$('bookingName').value='';$('bookingEmail').value='';persist();toast('Demande enregistrée')};
+function stopAllPlayback(exceptId=''){
+  document.querySelectorAll('video').forEach(v=>{
+    if(v.id!==exceptId){try{v.pause()}catch(e){}}
+  });
+  document.querySelectorAll('iframe[data-player="meyden"]').forEach(frame=>{
+    if(frame.id!==exceptId){
+      const src=frame.src;
+      frame.src='about:blank';
+      setTimeout(()=>{frame.src=src},10);
+    }
+  });
+  Object.keys(monitorRuntime||{}).forEach(name=>{
+    const id='video_'+safeMonitorId(name);
+    if(id!==exceptId) monitorRuntime[name].playing=false;
+  });
 }
-bind();renderAll();console.log('MEYDEN OS Stable Architecture prêt à tester',CONFIG);console.assert(validPin('1234')&&!validPin('12a4'),'PIN tests');console.assert(typeof Backend.save==='function','Backend adapter ok');
-})();
+
+const monitors=[
+  {name:'Fans',audience:'Communauté engagée',reward:0,rewardText:'Validation communauté',color:'cyan'},
+  {name:'Public Ciblé',audience:'Public précis',reward:0,rewardText:'Optimisation audience',color:'green'},
+  {name:'Petit Public',audience:'Audience restreinte',reward:.5,rewardText:'0.5 coin / 24h',color:'purple'},
+  {name:'Grand Public',audience:'Grand public',reward:1.5,rewardText:'1.5 coin / 24h',color:'orange'},
+  {name:'International',audience:'Audience large',reward:3,rewardText:'3 coins / 24h',color:'yellow'}
+];
+
+const state={
+  files:[],currentIndex:0,currentVideo:null,tuned:1200,lujamkoTuned:0,coins:148,score:78,version:1,
+  monitor:'Fans',audience:'Communauté engagée',creator:{free:260,weekly:110,daily:40},public:{free:4800,premium:400},
+  algo:{levelIndex:0,hoursInLevel:0,cycleCount:0,retention:0,tunedPercent:0,average:0,decision:'En attente'}
+};
+
+const makeItem=(title,duration,url='',type='demo')=>({
+  id:Math.random().toString(36).slice(2),title,duration,url,type,cycles:0,hours:0,retention:0,tuned:0,average:0,status:'En test'
+});
+
+const monitorLibraries={
+  'Fans':[makeItem('Vidéo A — démo Fans',12),makeItem('Vidéo B — démo Fans',16)],
+  'Public Ciblé':[makeItem('Vidéo C — démo Ciblé',14)],
+  'Petit Public':[makeItem('Vidéo D — démo Petit Public',9)],
+  'Grand Public':[makeItem('Vidéo E — démo Grand Public',22)],
+  'International':[makeItem('Vidéo F — démo International',17)]
+};
+
+const monitorRuntime={
+  'Fans':{index:0,playing:false},
+  'Public Ciblé':{index:0,playing:false},
+  'Petit Public':{index:0,playing:false},
+  'Grand Public':{index:0,playing:false},
+  'International':{index:0,playing:false}
+};
+
+const engine={cycles:0,promotions:0,rejects:0,log:[]};
+const realArtists=[
+  {name:'Matante Mutante',style:'Metal alternatif / chaos visuel',content:'Playlist officielle Matante Mutante',audience:'Grand Public',coins:245,performance:91,video:'https://www.youtube.com/embed/videoseries?list=PLCRmQFBLFiIYhxFOaZnZotiGbiW3RP65p&autoplay=0&rel=0'},
+  {name:'Symbioz 2.0',style:'Fusion cinématographique',content:'Vidéo officielle Symbioz 2.0',audience:'Public Ciblé',coins:410,performance:96,video:'https://www.youtube.com/embed/Jz4-9NkkMvU?autoplay=0&rel=0'},
+  {name:'Sommdays',style:'Rock alternatif atmosphérique',content:'Playlist officielle Sommdays',audience:'Petit Public',coins:188,performance:84,video:'https://www.youtube.com/embed/videoseries?list=PLuy1YVJSRPWiGOD3RayZ1zSeunO88Sx9N&autoplay=0&rel=0'}
+];
+const flowSteps=[
+  {name:'Upload',text:'Le contenu entre dans le système Meyden.',effect:'entry'},
+  {name:'Analyse',text:'Le système observe le hook, la clarté et la rétention.',effect:'score'},
+  {name:'Circulation',text:'Le contenu tourne dans les monitors.',effect:'monitor'},
+  {name:'Performance',text:'Les signaux publics sont mesurés.',effect:'performance'},
+  {name:'Meyden Coins',text:'Les coins sont accumulés selon le monitor.',effect:'coins'},
+  {name:'Recommandation',text:'Une recommandation est générée.',effect:'email'},
+  {name:'Nouvelle version',text:'Le créateur soumet une version améliorée.',effect:'version'},
+  {name:'Relance',text:'La version repart dans la boucle.',effect:'restart'}
+];
+let flowIndex=0,flowAuto=true,flowTimer=null,growthChart=null;
+
+function toast(t){const el=$('toast');if(!el)return;el.textContent=t;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200)}
+function money(v){return Math.round(v).toLocaleString('fr-CA')+'$'}
+function setErr(t){const e=$('errorBox');if(e){e.textContent=t||'';e.classList.toggle('hidden',!t)}}
+function mediaStatus(t){const el=$('mediaStatus');if(el)el.textContent=t}
+function setText(id,val){const el=$(id);if(el)el.textContent=val}
+function colorClass(color,type){const map={cyan:{text:'text-cyan-300',bar:'bg-cyan-300',border:'border-cyan-300/30'},green:{text:'text-green-300',bar:'bg-green-300',border:'border-green-300/30'},purple:{text:'text-purple-300',bar:'bg-purple-300',border:'border-purple-300/30'},orange:{text:'text-orange-300',bar:'bg-orange-500',border:'border-orange-500/30'},yellow:{text:'text-yellow-300',bar:'bg-yellow-300',border:'border-yellow-300/30'}};return (map[color]||map.orange)[type]}
+function safeMonitorId(name){return name.replace(/[^a-zA-Z0-9]/g,'_')}
+function monitorLibraryTotal(name){return (monitorLibraries[name]||[]).reduce((sum,item)=>sum+Number(item.duration||0),0)}
+function currentMonitorItem(name){const list=monitorLibraries[name]||[];if(!list.length)return null;const rt=monitorRuntime[name]||{index:0,playing:false};if(rt.index>=list.length)rt.index=0;monitorRuntime[name]=rt;return list[rt.index]}
+
+function sync(){
+  ['topCoins','dashboardCoins','linkCoins'].forEach(id=>setText(id,Math.round(state.coins)));
+  setText('topTuned',state.tuned);setText('topScore',state.score);setText('dashboardPerformance',state.score);setText('linkPerformance',state.score);
+  setText('coinValue',(state.coins*.15).toFixed(2)+'$');setText('dashboardVersion',state.version);setText('linkImprovement','Version '+state.version);
+  setText('activeMonitorName',state.monitor);setText('activeMonitorAudience',state.audience);setText('dashboardAudience',state.monitor);setText('linkAudience',state.monitor);setText('monitorMainLabel',state.monitor);
+  setText('algoLevel',monitors[state.algo.levelIndex].name);setText('algoRetention',state.algo.retention+'%');setText('algoTuned',state.algo.tunedPercent+'%');setText('algoAverage',state.algo.average+'%');setText('algoDecision',state.algo.decision);
+}
+
+function youtubeEmbedUrl(url=''){const t=url.trim();const list=t.match(/[?&]list=([a-zA-Z0-9_-]+)/)?.[1]||'';const shorts=t.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/)?.[1]||'';const watch=t.match(/[?&]v=([a-zA-Z0-9_-]+)/)?.[1]||'';const short=t.match(/youtu\.be\/([a-zA-Z0-9_-]+)/)?.[1]||'';const id=shorts||watch||short;if(list)return`https://www.youtube.com/embed/videoseries?list=${list}&autoplay=1&loop=1&rel=0`;if(id)return`https://www.youtube.com/embed/${id}?autoplay=1&loop=1&playlist=${id}&rel=0`;return''}
+function getYt(){try{return JSON.parse(localStorage.getItem('meydenYoutubeHistory')||'[]')}catch{return[]}}
+function saveYt(h){localStorage.setItem('meydenYoutubeHistory',JSON.stringify(h.slice(0,30)))}
+function clearMonitor(){const m=$('monitor');if(m)m.innerHTML='';state.currentVideo=null}
+function launchYoutube(url){const use=url||$('youtubeInput')?.value||'';const embed=youtubeEmbedUrl(use);if(!embed){setErr('Lien YouTube invalide.');return}clearMonitor();setErr('');const h=getYt().filter(x=>x.url!==use);h.unshift({url:use,date:new Date().toLocaleString('fr-CA')});saveYt(h);renderLibraries();stopAllPlayback('mainYoutubePlayer');$('monitor').innerHTML=`<iframe id="mainYoutubePlayer" data-player="meyden" src="${embed}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;mediaStatus('Diffusion YouTube activée.');setText('monitorMainLabel','YouTube actif');toast('YouTube activé')}
+function fileType(f){const n=f.name.toLowerCase();return f.type||(n.endsWith('.gif')?'image/gif':n.endsWith('.png')?'image/png':n.endsWith('.jpg')||n.endsWith('.jpeg')?'image/jpeg':n.endsWith('.mp4')?'video/mp4':n.endsWith('.mov')?'video/quicktime':'application/octet-stream')}
+
+function renderLibraries(){const up=$('uploadLibrary'),yt=$('youtubeLibrary');if(!up||!yt)return;up.innerHTML='';yt.innerHTML='';if(!state.files.length)up.innerHTML='<div class="glass rounded-2xl p-3 text-white/55">Aucun média téléversé.</div>';state.files.forEach((f,i)=>{const b=document.createElement('button');b.className='glass rounded-2xl p-3 text-left';b.innerHTML=`<b>${i+1}. ${f.name}</b><div class="text-xs text-white/45">${f.type}</div>`;b.onclick=()=>renderLocal(i);up.appendChild(b)});const h=getYt();if(!h.length)yt.innerHTML='<div class="glass rounded-2xl p-3 text-white/55">Aucun lien YouTube visionné.</div>';h.forEach((item,i)=>{const b=document.createElement('button');b.className='glass rounded-2xl p-3 text-left';b.innerHTML=`<b>${i+1}. YouTube</b><div class="text-xs text-white/45 break-all">${item.url}</div><div class="text-xs text-white/35">${item.date}</div>`;b.onclick=()=>launchYoutube(item.url);yt.appendChild(b)})}
+
+async function handleFiles(){
+  const input=$('fileInput');const selected=Array.from(input?.files||[]).slice(0,5);
+  if(!selected.length){setErr('Aucun fichier sélectionné.');return}
+  const destination='Fans';
+  setErr('');
+  for(const f of selected){
+    const type=fileType(f);let url='';
+    if(type.startsWith('image/'))url=await new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(f)});
+    else if(type.startsWith('video/'))url=URL.createObjectURL(f);
+    const media={name:f.name,type,size:f.size,url};
+    state.files.push(media);
+    const guessed=Math.max(1,Math.min(10,Math.round((f.size||1000000)/1000000)));
+    if(monitorLibraryTotal(destination)+guessed<=120){monitorLibraries[destination].push(makeItem(f.name,guessed,url,type));}
+  }
+  state.currentIndex=Math.max(0,state.files.length-selected.length);
+  renderLocal(state.currentIndex);renderLibraries();renderMonitorLibraries();renderFiveCentralMonitors();
+  if(input)input.value='';toast('Média ajouté à '+destination);
+}
+
+function renderLocal(i){if(!state.files.length){setErr('Bibliothèque vide.');return}state.currentIndex=(i+state.files.length)%state.files.length;const f=state.files[state.currentIndex];clearMonitor();if(f.type.startsWith('image/')){$('monitor').innerHTML=`<img src="${f.url}" alt="${f.name}">`;mediaStatus('Image/GIF diffusé : '+f.name)}else if(f.type.startsWith('video/')){const wrap=document.createElement('div');wrap.className='relative w-full h-full bg-black';const v=document.createElement('video');v.src=f.url;v.controls=true;v.playsInline=true;v.preload='metadata';v.style.width='100%';v.style.height='100%';v.style.objectFit='contain';v.loop=false;v.onended=nextMedia;v.onerror=()=>setErr('Vidéo locale refusée ou codec non supporté. Essaie MP4 H.264/AAC.');v.id='meydenMainLocalPlayer';v.onplay=()=>stopAllPlayback('meydenMainLocalPlayer');state.currentVideo=v;wrap.appendChild(v);const btn=document.createElement('button');btn.className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-orange-500 px-8 py-5 text-black font-black shadow-2xl';btn.textContent='Lire le média';btn.onclick=()=>v.play().then(()=>btn.style.display='none').catch(()=>setErr('Lecture bloquée. Clique sur Play dans le lecteur.'));wrap.appendChild(btn);$('monitor').appendChild(wrap);mediaStatus('Vidéo chargée : '+f.name)}setText('monitorMainLabel','Lecture locale');renderLibraries()}
+function playMedia(){if(state.currentVideo){stopAllPlayback(state.currentVideo.id||'meydenMainLocalPlayer');state.currentVideo.play().catch(()=>setErr('Lecture bloquée. Clique directement sur le lecteur.'))}else toast('Aucune vidéo locale active')}
+function pauseMedia(){if(state.currentVideo){state.currentVideo.pause();toast('Pause')}}
+function reloadMedia(){state.currentVideo?state.currentVideo.load():launchYoutube()}
+function nextMedia(){if(state.files.length){renderLocal((state.currentIndex+1)%state.files.length);setTimeout(()=>{if(state.currentVideo)state.currentVideo.play().catch(()=>{})},80)}}function prevMedia(){renderLocal(state.currentIndex-1)}
+
+function playerMarkup(name,item){if(!item)return '<div class="text-white/35">Aucun contenu actif</div>';if(item.url&&item.type&&item.type.startsWith('video/'))return `<video id="video_${safeMonitorId(name)}" src="${item.url}" controls playsinline preload="metadata"></video>`;if(item.url&&item.type&&item.type.startsWith('image/'))return `<img src="${item.url}" alt="${item.title}">`;return `<div><div class="text-lg font-black text-orange-300">${item.title}</div><div class="mt-2 text-sm text-white/50">Démo monitor — ajoute un MP4 pour lire une vraie vidéo</div></div>`}
+function monitorPlay(name){monitorRuntime[name].playing=true;renderFiveCentralMonitors();setTimeout(()=>{const id='video_'+safeMonitorId(name);const v=$(id);if(v){stopAllPlayback(id);monitorRuntime[name].playing=true;v.play().catch(()=>setErr('Lecture bloquée : clique directement sur le lecteur du monitor.'))}},30);toast(name+' en lecture')}
+function monitorPause(name){monitorRuntime[name].playing=false;const v=$('video_'+safeMonitorId(name));if(v)v.pause();toast(name+' en pause')}
+function monitorNext(name){const list=monitorLibraries[name]||[];if(!list.length)return;monitorRuntime[name].index=(monitorRuntime[name].index+1)%list.length;monitorRuntime[name].playing=true;renderFiveCentralMonitors();setTimeout(()=>{const v=$('video_'+safeMonitorId(name));if(v)v.play().catch(()=>{})},80);toast(name+' : contenu suivant')}
+function monitorTuned(name){state.tuned++;state.coins++;const item=currentMonitorItem(name);if(item){item.tuned=Math.min(100,(item.tuned||0)+8);item.retention=Math.max(item.retention||0,55);item.average=Math.round(((item.retention||0)+(item.tuned||0))/2);item.status=item.average>=70?'Solide':item.average>=50?'À surveiller':'À retravailler'}sync();renderMonitorLibraries();renderFiveCentralMonitors();toast('Tuned On ajouté à '+name)}
+
+function renderFiveCentralMonitors(){
+  const root=$('fiveCentralMonitors');if(!root)return;root.innerHTML='';
+  monitors.forEach((m,index)=>{
+    const items=monitorLibraries[m.name]||[];const item=currentMonitorItem(m.name);const minutes=monitorLibraryTotal(m.name);
+    const avg=items.length?Math.round(items.reduce((sum,it)=>sum+(it.average||0),0)/items.length):0;
+    const retention=items.length?Math.round(items.reduce((sum,it)=>sum+(it.retention||0),0)/items.length):0;
+    const tuned=items.length?Math.round(items.reduce((sum,it)=>sum+(it.tuned||0),0)/items.length):0;
+    const pct=Math.min(100,Math.round(minutes/120*100));const next=monitors[index+1]?.name||'Sommet';
+    const card=document.createElement('div');card.className=`rounded-[30px] overflow-hidden border ${colorClass(m.color,'border')} bg-black/30`;
+    card.innerHTML=`<div class="p-4 border-b border-white/10 bg-gradient-to-r from-orange-500/20 to-cyan-500/10"><div class="text-xs uppercase tracking-[.18em] text-white/45">Meyden Monitor central</div><div class="text-2xl font-black ${colorClass(m.color,'text')} mt-1">${m.name}</div><div class="text-sm text-white/50 mt-1">${m.audience}</div></div><div class="aspect-video bg-black flex items-center justify-center text-center p-2">${playerMarkup(m.name,item)}</div><div class="p-3 border-t border-white/10"><div class="h-2 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${colorClass(m.color,'bar')}" style="width:${pct}%"></div></div><div class="mt-2 flex justify-between text-xs text-white/50"><span>${minutes}/120 min</span><span>${items.length} contenus</span></div></div><div class="p-4 border-t border-white/10 grid grid-cols-2 gap-2 text-xs"><div class="glass rounded-xl p-2">Rétention<br><b class="text-green-300 text-lg">${retention}%</b></div><div class="glass rounded-xl p-2">Tuned On<br><b class="text-orange-300 text-lg">${tuned}%</b></div><div class="glass rounded-xl p-2">Moyenne<br><b class="text-yellow-300 text-lg">${avg}%</b></div><div class="glass rounded-xl p-2">Prochain<br><b class="text-cyan-300 text-sm">${next}</b></div></div><div class="p-3 border-t border-white/10 text-xs text-white/55">Actif : <b class="text-white">${item?item.title:'Aucun'}</b><br>${item?(item.hours||0)+'h/24h • '+(item.average||0)+'% • '+(item.status||'En test'):''}</div><div class="grid grid-cols-3 border-t border-white/10"><button data-monitor-play="${m.name}" class="bg-orange-500 py-3 font-black text-black">Play</button><button data-monitor-pause="${m.name}" class="bg-white/10 py-3 font-black">Pause</button><button data-monitor-next="${m.name}" class="bg-white/10 py-3 font-black">Suivant</button></div><button data-monitor-tuned="${m.name}" class="w-full border-t border-orange-500/20 bg-orange-500 py-3 font-black text-black hover:bg-orange-400 transition">Tuned On — ${m.name}</button>`;
+    root.appendChild(card);
+    setTimeout(()=>{const id='video_'+safeMonitorId(m.name);const v=$(id);if(v){v.onplay=()=>stopAllPlayback(id);v.loop=false;v.onended=()=>monitorNext(m.name);if(monitorRuntime[m.name]?.playing){stopAllPlayback(id);v.play().catch(()=>{})}}},0)
+  });
+  document.querySelectorAll('[data-monitor-play]').forEach(btn=>btn.onclick=()=>monitorPlay(btn.dataset.monitorPlay));
+  document.querySelectorAll('[data-monitor-pause]').forEach(btn=>btn.onclick=()=>monitorPause(btn.dataset.monitorPause));
+  document.querySelectorAll('[data-monitor-next]').forEach(btn=>btn.onclick=()=>monitorNext(btn.dataset.monitorNext));
+  document.querySelectorAll('[data-monitor-tuned]').forEach(btn=>btn.onclick=()=>monitorTuned(btn.dataset.monitorTuned));
+}
+
+function renderMonitorLibraries(){const grid=$('monitorLibrariesGrid');if(!grid)return;grid.innerHTML='';let total=0,count=0;monitors.forEach(m=>{const items=monitorLibraries[m.name]||[];const minutes=monitorLibraryTotal(m.name);total+=minutes;count+=items.length;const pct=Math.min(100,Math.round(minutes/120*100));const full=minutes>=120;const card=document.createElement('div');card.className=`glass rounded-3xl p-4 border ${colorClass(m.color,'border')}`;card.innerHTML=`<div class="text-xs text-white/45 uppercase">Bibliothèque</div><div class="text-xl font-black ${colorClass(m.color,'text')}">${m.name}</div><div class="mt-4 flex items-center gap-3"><div class="h-2 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${colorClass(m.color,'bar')}" style="width:${pct}%"></div></div><div class="text-xs font-black ${full?'text-red-300':'text-white/70'}">${minutes} / 120 min</div></div><div class="mt-4 text-xs text-white/45 uppercase">Contenus</div><div class="mt-2 space-y-2 max-h-48 overflow-auto">${items.length?items.map(it=>`<div class="text-sm rounded-xl bg-black/20 p-2"><div class="flex justify-between gap-2"><span>▶ ${it.title}</span><b>${it.duration} min</b></div><div class="text-xs text-white/45 mt-1">${it.hours||0}h / 24h • Moyenne ${it.average||0}% • ${it.status||'En test'}</div></div>`).join(''):'<div class="text-white/40 text-sm">Aucun contenu.</div>'}</div><div class="mt-4 pt-3 border-t border-white/10 flex justify-between"><b>Total</b><b class="${colorClass(m.color,'text')}">${minutes}:00</b></div>`;grid.appendChild(card)});setText('totalLibraryCapacity',`${total} / 600 min`);setText('activeContentCount',count);setText('symbiosisStatus',total>0?'EN SYMBIOSE':'EN ATTENTE')}
+async function addToMonitorLibrary(){
+  const name='Fans';
+  const titleInput=$('monitorUploadTitle');
+  const durationInput=$('monitorUploadDuration');
+  const fileInput=$('creatorVideoFile');
+  const title=(titleInput?.value||'Nouveau contenu Meyden').trim();
+  const duration=Math.max(1,Math.min(120,Number(durationInput?.value||1)));
+
+  if(monitorLibraryTotal(name)+duration>120){
+    toast('Capacité dépassée : maximum 120 minutes dans Fans');
+    return;
+  }
+
+  if(fileInput&&fileInput.files&&fileInput.files.length){
+    const file=fileInput.files[0];
+    const type=fileType(file);
+    let url='';
+
+    if(type.startsWith('image/')){
+      url=await new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file)});
+    }else if(type.startsWith('video/')){
+      url=URL.createObjectURL(file);
+    }
+
+    const finalTitle=titleInput?.value?.trim()||file.name;
+    const media={name:file.name,type,size:file.size,url};
+    state.files.push(media);
+    monitorLibraries[name].push(makeItem(finalTitle,duration,url,type));
+    state.currentIndex=state.files.length-1;
+    renderLocal(state.currentIndex);
+  }else{
+    monitorLibraries[name].push(makeItem(title,duration,'','demo'));
+  }
+
+  state.monitor='Fans';
+  state.audience='Communauté engagée';
+  sync();
+  renderLibraries();
+  renderMonitorLibraries();
+  renderFiveCentralMonitors();
+  if(titleInput)titleInput.value='';
+  if(fileInput)fileInput.value='';
+  toast('Contenu ajouté dans Fans — entrée obligatoire');
+  safeScroll('fiveCentralMonitors');
+}
+
+function renderMonitors(){const g=$('monitorGrid');if(!g)return;g.innerHTML='';monitors.forEach(m=>{const b=document.createElement('button');b.className='glass rounded-3xl p-4 text-left hover:bg-white/10';b.innerHTML=`<div class="text-white/45 text-sm">${m.audience}</div><div class="text-2xl font-black text-orange-300">${m.name}</div><div class="text-xs text-white/50 mt-2">${m.rewardText}</div>`;b.onclick=()=>{state.monitor=m.name;state.audience=m.audience;state.coins+=m.reward;sync();toast('Monitor : '+m.name);safeScroll('monitor-libraries')};g.appendChild(b)})}
+function engineLog(message){engine.log.unshift(new Date().toLocaleTimeString('fr-CA',{hour:'2-digit',minute:'2-digit'})+' — '+message);engine.log=engine.log.slice(0,12);const el=$('engineLog');if(el)el.innerHTML=engine.log.join('<br>')}
+function updateEngineStats(){setText('engineCycles',engine.cycles);setText('enginePromotions',engine.promotions);setText('engineRejects',engine.rejects)}
+function scoreItem(item,levelIndex){item.cycles=(item.cycles||0)+1;item.hours=(item.hours||0)+2;const levelBonus=levelIndex*2;item.retention=Math.min(100,Math.max(15,Math.round(45+Math.random()*45+levelBonus)));item.tuned=Math.min(100,Math.max(5,Math.round(25+Math.random()*55+levelBonus)));item.average=Math.round((item.retention+item.tuned)/2);item.status=item.average>=70?'Solide':item.average>=50?'À surveiller':'À retravailler';return item.average}
+function promoteItem(fromIndex,itemIndex){const from=monitors[fromIndex].name;const to=monitors[fromIndex+1]?.name;if(!to)return false;const item=monitorLibraries[from][itemIndex];if(!item)return false;if(monitorLibraryTotal(to)+item.duration>120){item.status='Bloqué — bibliothèque suivante pleine';engineLog(item.title+' ne peut pas monter : '+to+' est plein.');return false}monitorLibraries[from].splice(itemIndex,1);item.hours=0;item.cycles=0;item.status='Promu vers '+to;monitorLibraries[to].push(item);engine.promotions++;engineLog(item.title+' monte de '+from+' vers '+to+'.');return true}
+function rejectItem(levelName,itemIndex){const item=monitorLibraries[levelName][itemIndex];if(!item)return;monitorLibraries[levelName].splice(itemIndex,1);engine.rejects++;engineLog(item.title+' rejeté de '+levelName+' : courriel constructif envoyé au créateur.');const email=$('algoEmail');if(email){email.classList.remove('hidden');email.innerHTML='<b>Courriel constructif envoyé :</b><br>'+item.title+' doit améliorer son hook, sa rétention et son appel au Tuned On avant une nouvelle soumission.'}}
+function runMonitorEngineCycle(){engine.cycles++;Object.keys(monitorRuntime).forEach(name=>{monitorRuntime[name].playing=true});for(let levelIndex=monitors.length-1;levelIndex>=0;levelIndex--){const level=monitors[levelIndex].name;const items=[...(monitorLibraries[level]||[])];for(let i=items.length-1;i>=0;i--){const realIndex=monitorLibraries[level].indexOf(items[i]);if(realIndex<0)continue;const item=monitorLibraries[level][realIndex];const avg=scoreItem(item,levelIndex);if(avg<45 && item.cycles>=2){rejectItem(level,realIndex);continue}if(avg>=70 && item.hours>=24 && levelIndex<monitors.length-1){promoteItem(levelIndex,realIndex)}}}state.tuned+=Math.round(Math.random()*8)+2;state.coins+=Math.round(Math.random()*4)+1;state.score=Math.min(100,state.score+1);sync();renderMonitorLibraries();renderFiveCentralMonitors();updateEngineStats();engineLog('Cycle 2h complété : les 5 monitors ont évolué ensemble.')}
+function run24hEngine(){for(let i=0;i<12;i++)runMonitorEngineCycle();toast('Simulation 24h complétée')}
+function resetCirculation(){monitorLibraries['Fans']=[makeItem('Vidéo A — démo Fans',12),makeItem('Vidéo B — démo Fans',16)];monitorLibraries['Public Ciblé']=[makeItem('Vidéo C — démo Ciblé',14)];monitorLibraries['Petit Public']=[makeItem('Vidéo D — démo Petit Public',9)];monitorLibraries['Grand Public']=[makeItem('Vidéo E — démo Grand Public',22)];monitorLibraries['International']=[makeItem('Vidéo F — démo International',17)];Object.keys(monitorRuntime).forEach(k=>monitorRuntime[k]={index:0,playing:false});engine.cycles=0;engine.promotions=0;engine.rejects=0;engine.log=[];renderMonitorLibraries();renderFiveCentralMonitors();updateEngineStats();engineLog('Système réinitialisé.');toast('Circulation réinitialisée')}
+
+function simulateRealAlgo(){const a=state.algo;a.cycleCount++;a.hoursInLevel+=2;a.retention=Math.min(100,Math.max(12,Math.round(45+Math.random()*45+(state.score-78)/3)));a.tunedPercent=Math.min(100,Math.max(5,Math.round(20+Math.random()*60+(state.tuned-1200)/120)));a.average=Math.round((a.retention+a.tunedPercent)/2);const current=monitors[a.levelIndex];state.monitor=current.name;state.audience=current.audience;const email=$('algoEmail');if(email)email.classList.add('hidden');if(a.average>=70){state.coins+=current.reward+2;state.score=Math.min(100,state.score+2);if(a.hoursInLevel>=24&&a.levelIndex<monitors.length-1){a.levelIndex++;a.hoursInLevel=0;const next=monitors[a.levelIndex];state.monitor=next.name;state.audience=next.audience;a.decision='Monte vers '+next.name;toast('24h validées : monte vers '+next.name)}else{a.decision='Relancé dans la boucle suivante';toast('Score fort : contenu relancé')}}else if(a.average>=50){state.score=Math.max(0,state.score-1);a.decision='Relance test — à surveiller';toast('Score moyen : relance test')}else{state.score=Math.max(0,state.score-5);a.hoursInLevel=0;a.decision='Rejet constructif';if(email){email.classList.remove('hidden');email.innerHTML='<b>Courriel constructif envoyé :</b><br>Renforcer les 3 premières secondes, clarifier le hook, réduire la durée et soumettre une nouvelle version.'}toast('Score faible : courriel constructif envoyé')}sync()}
+function renderArtists(){const grid=$('artistsGrid');if(!grid)return;grid.innerHTML='';realArtists.forEach((artist,index)=>{const card=document.createElement('div');card.className='glass rounded-[30px] overflow-hidden';card.innerHTML=`<div class="aspect-video bg-black"><iframe src="${artist.video}" allowfullscreen></iframe></div><div class="p-5"><div class="text-2xl font-black text-orange-300">${artist.name}</div><div class="text-sm text-white/50 mt-1">${artist.style}</div><div class="mt-4 grid grid-cols-2 gap-3 text-sm"><div class="glass rounded-2xl p-3"><div class="text-white/40">Projet</div><div class="font-black">${artist.content}</div></div><div class="glass rounded-2xl p-3"><div class="text-white/40">Audience</div><div class="font-black text-cyan-300">${artist.audience}</div></div><div class="glass rounded-2xl p-3"><div class="text-white/40">Coins</div><div class="font-black text-yellow-300">${artist.coins}</div></div><div class="glass rounded-2xl p-3"><div class="text-white/40">Performance</div><div class="font-black text-green-300">${artist.performance}</div></div></div><div class="grid grid-cols-2 gap-3 mt-5"><button onclick="contactArtist('${artist.name}')" class="rounded-2xl bg-cyan-300 py-3 font-black text-black">Contact</button><button onclick="bookArtist('${artist.name}')" class="rounded-2xl bg-orange-500 py-3 font-black text-black">Rendez-vous</button><button onclick="watchArtist(${index})" class="rounded-2xl bg-white/10 py-3 font-black">Lecture vidéo</button><button onclick="payArtist('${artist.name}')" class="rounded-2xl bg-[#0f52ba] py-3 font-black">Paiement</button></div></div>`;grid.appendChild(card)})}
+function contactArtist(name){toast('Contact préparé pour '+name);openModal('sceneBookModal')}function bookArtist(name){openModal('sceneBookModal');toast('Rendez-vous avec '+name)}function payArtist(name){toast('Paiement démo préparé pour '+name)}function watchArtist(index){const artist=realArtists[index];stopAllPlayback('artistPlayer');$('monitor').innerHTML=`<iframe id="artistPlayer" data-player="meyden" src="${artist.video}" allowfullscreen></iframe>`;mediaStatus('Lecture : '+artist.name);state.monitor=artist.audience;state.audience=artist.audience;state.score=artist.performance;state.coins+=artist.coins;sync();toast('Lecture vidéo : '+artist.name);safeScroll('media')}
+function renderFlow(){const g=$('flowGrid');if(!g)return;g.innerHTML='';flowSteps.forEach((s,i)=>{const b=document.createElement('button');b.className=`rounded-2xl p-3 border text-left transition ${i===flowIndex?'bg-orange-500 text-black border-orange-500':'bg-white/5 border-white/10 hover:bg-white/10'}`;b.innerHTML=`<div class="text-xs opacity-70">Étape ${i+1}</div><div class="font-black">${s.name}</div>`;b.onclick=()=>{flowIndex=i;updateFlow(true);restartFlowLoop();mafRender()};g.appendChild(b)})}
+function applyFlow(step){if(step.effect==='score')state.score=Math.min(100,state.score+1);if(step.effect==='monitor'){const m=monitors[flowIndex%monitors.length];state.monitor=m.name;state.audience=m.audience}if(step.effect==='performance'){state.tuned+=3;state.score=Math.min(100,state.score+2)}if(step.effect==='coins')state.coins+=3;if(step.effect==='version')state.version++;sync()}
+function updateFlow(manual=false){const s=flowSteps[flowIndex];renderFlow();const pct=Math.round(((flowIndex+1)/flowSteps.length)*100);setText('flowPercent',pct+'%');const p=$('flowProgress');if(p)p.style.width=pct+'%';setText('flowText',s.text);const e=$('emailBox');if(e)e.classList.toggle('hidden',s.effect!=='email');applyFlow(s);if(manual)toast('Cycle : '+s.name)}
+function autoFlow(){flowIndex=(flowIndex+1)%flowSteps.length;updateFlow(false)}function startFlowLoop(){stopFlowLoop();flowAuto=true;setText('flowPlayBtn','Cycle automatique ON');flowTimer=setInterval(autoFlow,2600)}function stopFlowLoop(){if(flowTimer)clearInterval(flowTimer);flowTimer=null}function toggleFlowLoop(){flowAuto=!flowAuto;if(flowAuto)startFlowLoop();else{stopFlowLoop();setText('flowPlayBtn','Cycle automatique OFF')}}function restartFlowLoop(){if(flowAuto)startFlowLoop();mafRender()}function resetFlow(){flowIndex=0;updateFlow(true);restartFlowLoop();mafRender()}
+function tunedOn(){state.tuned++;state.coins++;state.score=Math.min(100,state.score+1);sync();toast('Tuned On ajouté')}
+function lujamkoTunedOn(){state.lujamkoTuned++;state.tuned++;state.coins++;setText('lujamkoTunedCount',state.lujamkoTuned);sync();toast('Tuned On Studio')}function lujamkoPreview(){const el=$('lujamkoMonitor');if(el)el.innerHTML='<div><div class="text-xs uppercase tracking-[.25em] text-cyan-300">Démo Studio Active</div><div class="mt-3 text-3xl font-black">Session Lujamko en diffusion</div><p class="mt-3 text-white/60">Le studio produit le contenu. Meyden le valorise.</p></div>';toast('Démo monitor Lujamko activée')}function lujamkoReset(){state.lujamkoTuned=0;setText('lujamkoTunedCount','0');toast('Studio réinitialisé')}
+function submitVersion(){state.version++;state.score=Math.min(100,state.score+5);sync();toast('Nouvelle version soumise')}
+function renderPlans(){const creators=[['Créateur Gratuit','0$/mois','Accès limité'],['Créateur 14.99$','14.99$/mois','4 contenus / mois'],['Créateur 65.99$','65.99$/mois','1 contenu / jour']];const publics=[['Public Gratuit','0$/mois','Accès partiel'],['Public 1.99$','1.99$/mois','Accès complet']];const cg=$('creatorPlansGrid'),pg=$('publicPlansGrid');if(cg){cg.innerHTML='';creators.forEach(p=>{const b=document.createElement('button');b.className='glass rounded-2xl p-4 text-left';b.innerHTML=`<b>${p[0]}</b><div class="text-orange-300 font-black">${p[1]}</div><div class="text-white/55 text-sm">${p[2]}</div>`;b.onclick=()=>{setText('dashboardCreatorPlan',p[0]);toast('Paiement préparé : '+p[0])};cg.appendChild(b)})}if(pg){pg.innerHTML='';publics.forEach(p=>{const b=document.createElement('button');b.className='glass rounded-2xl p-4 text-left';b.innerHTML=`<b>${p[0]}</b><div class="text-cyan-300 font-black">${p[1]}</div><div class="text-white/55 text-sm">${p[2]}</div>`;b.onclick=()=>{setText('dashboardPublicPlan',p[0]);toast('Paiement public préparé : '+p[0])};pg.appendChild(b)})}}
+function scenarioData(k){const mult=k==='conservative'?1:k==='realistic'?2.1:4;return Array.from({length:24},(_,i)=>Math.round((i+1)*850*mult+Math.pow(i,1.7)*120*mult))}function updateScenario(k){if(!$('growthChart'))return;const data=scenarioData(k),labels=data.map((_,i)=>'M'+(i+1)),profit=data.map(v=>Math.round(v*.47));if(growthChart)growthChart.destroy();growthChart=new Chart($('growthChart'),{type:'line',data:{labels,datasets:[{label:'Revenus',data,borderWidth:3},{label:'Profit net',data:profit,borderWidth:3}]},options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'#aaa'}},y:{ticks:{color:'#aaa'}}}}});setText('activeScenarioLabel',k==='conservative'?'Conservateur':k==='realistic'?'Réaliste':'Ambitieux');setText('finalRevenue',money(data[23]));setText('finalProfit',money(profit[23]));setText('finalSubs',Math.round(data[23]/8))}
+function simulateCycle(){state.creator.weekly+=8;state.creator.daily+=3;state.public.premium+=35;const revenue=state.creator.weekly*14.99+state.creator.daily*65.99+state.public.premium*1.99;const net=revenue-revenue/3-(state.coins*.15);setText('simCreatorTotal',state.creator.free+state.creator.weekly+state.creator.daily);setText('simCreatorMix',`Gratuit ${state.creator.free} • 14.99$ ${state.creator.weekly} • 65.99$ ${state.creator.daily}`);setText('simNetProfit',money(net));toast('Cycle simulé')}
+function openModal(id){const el=$(id);if(el)el.classList.add('open');else toast('Modal introuvable : '+id)}function closeModal(id){const el=$(id);if(el)el.classList.remove('open')}
+function setupAdhesionForms(){const creatorForm=$('creatorJoinForm');if(creatorForm)creatorForm.onsubmit=e=>{e.preventDefault();const data=Object.fromEntries(new FormData(creatorForm).entries());setText('dashboardCreatorPlan',data.creatorPlan||'Créateur');const n=$('creatorNameInput'),em=$('creatorEmailInput');if(n)n.value=data.artistName||'';if(em)em.value=data.email||'';setText('dashboardStatus','Adhésion créateur reçue');const r=$('creatorJoinResult');if(r){r.classList.remove('hidden');r.innerHTML='<b>Adhésion créateur créée en mode démo.</b><br>Nom : '+data.artistName+'<br>Forfait : '+data.creatorPlan}toast('Adhésion créateur reçue')};const publicForm=$('publicJoinForm');if(publicForm)publicForm.onsubmit=e=>{e.preventDefault();const data=Object.fromEntries(new FormData(publicForm).entries());setText('dashboardPublicPlan',data.publicPlan||'Public');const r=$('publicJoinResult');if(r){r.classList.remove('hidden');r.innerHTML='<b>Accès public créé en mode démo.</b><br>Nom : '+data.fullName+'<br>Forfait : '+data.publicPlan+'<br>Intérêt : '+data.interest}toast('Adhésion public reçue')}}
+function handleCreatorUpload(){
+  const input=$('creatorUploadInput');
+  const mainInput=$('fileInput');
+  if(!input||!input.files||!input.files.length){toast('Choisis une vidéo créateur.');return}
+  if(mainInput){
+    const dt=new DataTransfer();
+    Array.from(input.files).forEach(file=>dt.items.add(file));
+    mainInput.files=dt.files;
+    const destination=$('uploadMonitorSelect');
+    if(destination)destination.value='Fans';
+    handleFiles();
+    safeScroll('monitor-libraries');
+  }
+}
+function bindClick(id,fn){const el=$(id);if(el)el.onclick=fn;else console.warn('Bouton manquant:',id)}
+function activateAllButtons(){
+  document.querySelectorAll('button').forEach(btn=>{
+    btn.dataset.ready='true';
+  });
+}
+
+function bindAll(){document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>safeScroll(b.dataset.scroll));document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>openModal(b.dataset.modal));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.querySelectorAll('.localForm').forEach(f=>f.onsubmit=e=>{e.preventDefault();toast(f.dataset.success);f.reset();f.closest('.modal')?.classList.remove('open')});document.querySelectorAll('.panelBtn').forEach(b=>b.onclick=()=>{$(b.dataset.panel)?.classList.toggle('open');renderLibraries()});document.querySelectorAll('.scenarioBtn').forEach(b=>b.onclick=()=>updateScenario(b.dataset.scenario));bindClick('addFilesBtn',handleFiles);bindClick('launchYoutubeBtn',()=>launchYoutube());bindClick('youtubeFallbackBtn',()=>launchYoutube());bindClick('clearYoutubeHistoryBtn',()=>{saveYt([]);renderLibraries();toast('Historique effacé')});bindClick('playBtn',playMedia);bindClick('pauseBtn',pauseMedia);bindClick('reloadBtn',reloadMedia);bindClick('prevBtn',prevMedia);bindClick('nextBtn',nextMedia);bindClick('tunedBtn',tunedOn);bindClick('monitorTunedBtn',tunedOn);bindClick('lujamkoTunedBtn',lujamkoTunedOn);bindClick('lujamkoPreviewBtn',lujamkoPreview);bindClick('lujamkoResetBtn',lujamkoReset);bindClick('submitVersionBtn',submitVersion);bindClick('flowPlayBtn',toggleFlowLoop);bindClick('flowStepBtn',()=>{autoFlow();restartFlowLoop();mafRender()});bindClick('flowResetBtn',resetFlow);bindClick('growthTickBtn',simulateCycle);bindClick('realAlgoBtn',simulateRealAlgo);bindClick('addToMonitorLibraryBtn',addToMonitorLibrary);bindClick('run2hCycleBtn',runMonitorEngineCycle);bindClick('run24hCycleBtn',run24hEngine);bindClick('resetCirculationBtn',resetCirculation);bindClick('creatorUploadBtn',handleCreatorUpload)}
+function runSelfTests(){const required=['media','monitor','creatorJoinModal','publicJoinModal','creatorJoinForm','publicJoinForm','artistsGrid','dashboard','scene','studio-lujamko','sponsorModal','monitor-libraries','monitorLibrariesGrid','fiveCentralMonitors','addToMonitorLibraryBtn','run2hCycleBtn','run24hCycleBtn','resetCirculationBtn','engineLog'];const missing=required.filter(id=>!$(id));if(missing.length){console.error('MEYDEN TEST FAIL — éléments manquants:',missing);toast('Test interne : éléments manquants');return false}console.log('MEYDEN TEST OK — éléments essentiels présents');return true}
+
+/* =========================
+   MEYDEN ART & FACT — MALL
+   Section ajoutée sans retirer la plateforme principale.
+========================= */
+const mafZones=['Forfaits','À la carte','Production Vidéo','Merch','Incubateur','Événements','Média'];
+let mafSelected='Merch', mafCart=[], mafLogoData=null, mafLogoName='Logo client', mafCategory='T-Shirt', mafColor='Noir', mafQty=25, mafLogoPosition='Avant', mafLogoSize=100, mafPrint='DTG', mafPreview='Avant', mafZoom=1;
+const mafPrices={'T-Shirt':{25:212,50:399,75:548,100:699},Hoodie:{10:550,25:1200,50:2200},Patch:{25:125,50:225,100:400},Autocollant:{25:75,50:125,100:220},Macaron:{25:100,50:175,100:300},Affiche:{10:150,25:300,50:525}};
+const mafProducts=[
+{zone:'Forfaits',name:'Forfait Starter',desc:'Bloc vidéo 4h accessible. 1 caméra, trépied, deux déplacements inclus. Montage non inclus.',price:350,stock:10},
+{zone:'Forfaits',name:'Forfait Content Creator',desc:'Captation 4h + montage prêt pour réseaux sociaux.',price:550,stock:8},
+{zone:'Forfaits',name:'Forfait Live Session',desc:'Session live immersive pour bands et artistes.',price:850,stock:5},
+{zone:'Forfaits',name:'Forfait Meyden Prestige',desc:'Production cinématographique premium avec direction artistique.',price:1500,stock:3},
+{zone:'À la carte',name:'Bloc Captation Vidéo 4H',desc:'Street vidéo de base. 2 déplacements inclus, second rayon 10 km. Fichiers bruts.',price:350,stock:12},
+{zone:'À la carte',name:'Montage vidéo client',desc:'Montage à partir des images fournies par le client.',price:250,stock:15},
+{zone:'À la carte',name:'Montage cinématographique',desc:'Montage avancé avec colorisation et ambiance premium.',price:450,stock:8},
+{zone:'À la carte',name:'Concept viral court',desc:'Idée courte pour reels, TikTok, shorts et attention rapide.',price:75,stock:25},
+{zone:'À la carte',name:'Scénario / script',desc:'Écriture structurée pour capsule, clip, publicité ou contenu promo.',price:100,stock:20},
+{zone:'À la carte',name:'Direction artistique',desc:'Image, univers visuel, branding et cohérence du projet.',price:150,stock:15},
+{zone:'À la carte',name:'Shooting photo',desc:'Séance photo de base pour artiste, entreprise ou événement.',price:150,stock:15},
+{zone:'À la carte',name:'Affiche officielle',desc:'Affiche professionnelle pour show, événement ou campagne.',price:75,stock:30},
+{zone:'À la carte',name:'Pencarte style cinéma',desc:'Visuel noir/orange inspiré affiche de film, version Meyden.',price:80,stock:30},
+{zone:'À la carte',name:'Captation live multicam',desc:'Captation à plusieurs angles pour spectacle ou podcast.',price:550,stock:6},
+{zone:'À la carte',name:'Livestream professionnel',desc:'Diffusion YouTube ou Facebook avec gestion live et replay.',price:650,stock:5},
+{zone:'À la carte',name:'Organisation de spectacle',desc:'Coordination complète ou partielle : salle, promo, technique, branding.',price:500,stock:6},
+{zone:'À la carte',name:'Kiosque merch',desc:'Mise en place d’un espace merchandising pour show ou événement.',price:150,stock:10},
+{zone:'À la carte',name:'Live painting',desc:'Intégration d’un artiste visuel en direct dans un événement Meyden.',price:300,stock:5},
+{zone:'À la carte',name:'Stratégie réseaux sociaux',desc:'Plan visibilité, hooks, contenu et positionnement numérique.',price:300,stock:10},
+{zone:'À la carte',name:'Protection / SOCAN / Droits',desc:'Droits d’auteur, propriété intellectuelle, SOCAN et exploitation.',price:550,stock:10},
+{zone:'À la carte',name:'Diagnostic Meyden',desc:'Analyse initiale du projet et recommandation du bon niveau ou forfait.',price:75,stock:30},
+{zone:'Production Vidéo',name:'Captation Vidéo 4H',desc:'Bloc 4h : caméra, trépied, mouvements de base, fichiers bruts.',price:350,stock:12},
+{zone:'Production Vidéo',name:'Montage Vidéo',desc:'Montage dynamique à partir des images du client.',price:250,stock:15},
+{zone:'Production Vidéo',name:'Livestream Professionnel',desc:'Diffusion multicam YouTube/Facebook.',price:650,stock:5},
+{zone:'Incubateur',name:'Niveau 1 — Structuration',desc:'Analyse, plan d’action, direction artistique de base, SOCAN/droits.',price:100,stock:25},
+{zone:'Incubateur',name:'Niveau 2 — Déploiement',desc:'Branding avancé, visibilité, préparation scène, reels/shorts.',price:250,stock:15},
+{zone:'Incubateur',name:'Niveau 3 — Expansion',desc:'Accompagnement 360, revenus, diffusion et stratégie long terme.',price:250,stock:8},
+{zone:'Événements',name:'Organisation de Spectacle',desc:'Coordination complète ou partielle : salle, promo, technique, branding.',price:500,stock:6},
+{zone:'Événements',name:'Meyden Prestige Event',desc:'Expérience événementielle immersive haut de gamme.',price:2500,stock:2},
+{zone:'Média',name:'Stratégie Réseaux Sociaux',desc:'Plan visibilité, hooks, contenu et positionnement numérique.',price:300,stock:10},
+{zone:'Média',name:'Consultation Stratégique',desc:'Analyse artistique et développement stratégique.',price:75,stock:30}
+].map((p,i)=>({...p,id:'maf-'+i}));
+
+function mafTotal(){return mafCart.reduce((s,i)=>s+i.price*i.qty,0)}
+function mafUpdateTop(){const el=$('mafTopCart');if(el)el.textContent=`${mafCart.length} article(s) • ${mafTotal()}$`}
+function mafRender(){mafUpdateTop();mafRenderNav();const app=$('mafApp');if(!app)return;app.innerHTML=mafSelected==='Merch'?mafRenderMerch():mafRenderList();const input=$('mafLogoInput');if(input)input.onchange=mafUploadLogo}
+function mafRenderNav(){const nav=$('mafZoneNav');if(!nav)return;nav.innerHTML=mafZones.map(z=>`<button onclick="mafShow('${z}')" class="rounded-2xl px-4 py-3 ${z===mafSelected?'bg-orange-500 text-black':'bg-white/10 text-white'}">${z}</button>`).join('')}
+function mafShow(z){mafSelected=z;mafRender()}
+function mafRenderList(){const cards=mafProducts.filter(p=>p.zone===mafSelected).map(p=>`<div class="glass rounded-[28px] p-5 border border-white/10"><div class="h-32 rounded-3xl bg-gradient-to-br from-orange-500 via-black to-[#0f52ba] flex items-center justify-center text-center p-4 font-black text-xl">${p.name}</div><h3 class="text-2xl font-black mt-4">${p.name}</h3><p class="text-white/60 mt-2 min-h-16">${p.desc}</p><div class="text-white/40 text-sm mt-3">Stock disponible : ${p.stock}</div><div class="mt-4 flex justify-between items-center"><div class="text-3xl font-black text-orange-300">${p.price}$</div><button onclick="mafAdd('${p.id}')" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Ajouter</button></div></div>`).join('');return `<div class="grid gap-5 lg:grid-cols-[1fr_330px]"><div class="grid gap-5 md:grid-cols-2">${cards}</div>${mafCartHtml()}</div>`}
+function mafColorHex(){return mafColor==='Blanc'?'#fff':mafColor==='Rouge'?'#451111':mafColor==='Gris'?'#52525b':'#050505'}
+function mafLogoPos(){return {'Avant':[92,120],'Poitrine gauche':[106,96],'Poitrine droite':[172,96],'Manche gauche':[42,92],'Manche droite':[222,92],'Arrière':[92,120]}[mafLogoPosition]||[92,120]}
+function mafRenderMerch(){const qs=Object.keys(mafPrices[mafCategory]).map(Number);const price=mafPrices[mafCategory][mafQty];const unit=(price/mafQty).toFixed(2);const pos=mafLogoPos();const size=mafLogoSize*1.5;return `<div class="grid gap-5 xl:grid-cols-[210px_1fr_330px]"><aside class="glass rounded-[28px] p-4"><h3 class="text-orange-300 font-black mb-3">CATÉGORIES MERCH</h3>${Object.keys(mafPrices).map(c=>`<button onclick="mafSetCategory('${c}')" class="w-full text-left rounded-2xl mb-2 px-4 py-3 font-black ${c===mafCategory?'bg-orange-500 text-black':'bg-white/10'}">${c}</button>`).join('')}</aside><section class="space-y-5"><div><h3 class="text-3xl font-black">Configurateur merch — ${mafCategory}</h3><p class="text-white/60">Upload logo, couleur, position, taille, quantité et ajout panier.</p></div><div class="grid gap-5 lg:grid-cols-2"><div class="glass rounded-[28px] p-5"><h4 class="font-black mb-3">Aperçu — ${mafPreview}</h4><div class="relative min-h-[500px] rounded-[28px] border border-white/10 bg-gradient-to-br from-black via-[#120900] to-black flex items-center justify-center overflow-hidden"><div class="absolute left-3 top-1/2 -translate-y-1/2 grid gap-2 z-10"><button onclick="mafZoomSet(.1)" class="rounded-xl bg-black/70 border border-white/20 p-3">+</button><button onclick="mafZoomSet(-.1)" class="rounded-xl bg-black/70 border border-white/20 p-3">−</button><button onclick="mafZoomReset()" class="rounded-xl bg-black/70 border border-white/20 p-3">□</button></div><div style="transform:scale(${mafZoom});" class="relative w-[330px] h-[420px] transition"><div style="background:${mafColorHex()}" class="absolute left-[55px] top-[20px] w-[220px] h-[310px] rounded-b-[70px] shadow-2xl maf-shirt-part"></div><div style="background:${mafColorHex()}" class="absolute left-[28px] top-[55px] w-[85px] h-[105px] rounded-[45px] rotate-[-24deg] maf-shirt-part"></div><div style="background:${mafColorHex()}" class="absolute right-[28px] top-[55px] w-[85px] h-[105px] rounded-[45px] rotate-[24deg] maf-shirt-part"></div><div class="absolute left-[125px] top-[22px] w-[80px] h-[45px] rounded-b-full border-b-4 border-white/20 bg-black/20"></div>${mafPreview==='Arrière'?'<div class="absolute left-[105px] top-[170px] text-white/40">Dos du produit</div>':`<div style="left:${pos[0]}px;top:${pos[1]}px;width:${size}px;height:${size}px" class="absolute z-10 flex items-center justify-center">${mafLogoData?`<img src="${mafLogoData}" class="max-w-full max-h-full object-contain drop-shadow-2xl">`:`<div class="border border-orange-500 text-orange-300 rounded-xl p-3 text-center font-black text-sm">${mafLogoName}</div>`}</div>`}</div></div><div class="grid grid-cols-4 gap-2 mt-3">${['Avant','Arrière','Côté gauche','Côté droit'].map(v=>`<button onclick="mafPreview='${v}';mafRender()" class="rounded-2xl px-2 py-3 ${v===mafPreview?'bg-orange-500 text-black':'bg-white/10'}">${v}</button>`).join('')}</div></div><div class="space-y-5"><div class="glass rounded-[28px] p-5"><h4 class="font-black mb-3">Téléverser un logo</h4><div class="flex gap-3 items-center"><div class="w-24 h-24 rounded-2xl border border-white/10 bg-black flex items-center justify-center overflow-hidden">${mafLogoData?`<img src="${mafLogoData}" class="w-full h-full object-contain">`:'Aucun'}</div><div><div class="text-white/50 text-sm">Fichier</div><b>${mafLogoData?mafLogoName:'Aucun fichier'}</b><label class="block text-orange-300 font-black cursor-pointer mt-2">${mafLogoData?'Remplacer':'Sélectionner'}<input id="mafLogoInput" type="file" accept="image/*" class="hidden"></label></div></div></div><div class="glass rounded-[28px] p-5 space-y-4">${mafChips('Position',['Avant','Arrière','Poitrine gauche','Poitrine droite','Manche gauche','Manche droite'],mafLogoPosition,'mafSetPosition')}<div><h4 class="font-black mb-2">Taille du logo : ${mafLogoSize}%</h4><input type="range" min="45" max="135" value="${mafLogoSize}" oninput="mafLogoSize=Number(this.value);mafRender()" class="w-full accent-orange-500"></div>${mafChips('Impression',['DTG','Sérigraphie','Transfert'],mafPrint,'mafSetPrint')}${mafChips('Couleur',['Noir','Blanc','Rouge','Gris'],mafColor,'mafSetColor')}</div></div></div></section><aside class="glass rounded-[28px] p-5 h-fit sticky top-28"><h3 class="font-black text-orange-300 mb-4">Résumé commande</h3><div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-white/50">Produit</span><b>${mafCategory}</b></div><div class="flex justify-between"><span class="text-white/50">Position</span><b>${mafLogoPosition}</b></div><div class="flex justify-between"><span class="text-white/50">Taille</span><b>${mafLogoSize}%</b></div><div class="flex justify-between"><span class="text-white/50">Couleur</span><b>${mafColor}</b></div><div class="flex justify-between"><span class="text-white/50">Impression</span><b>${mafPrint}</b></div></div><h4 class="font-black mt-5 mb-2">Quantité</h4><div class="grid grid-cols-2 gap-2">${qs.map(q=>`<button onclick="mafQty=${q};mafRender()" class="rounded-2xl p-3 text-left ${q===mafQty?'bg-orange-500 text-black':'bg-white/10'}"><b>${q} unités</b><br>${mafPrices[mafCategory][q]}$<br><small>${(mafPrices[mafCategory][q]/q).toFixed(2)}$/u</small></button>`).join('')}</div><div class="mt-5 border-t border-white/10 pt-5"><div class="flex justify-between items-end"><b>Total</b><div class="text-4xl font-black text-orange-300">${price}$</div></div><div class="text-white/50 text-sm">Unité : ${unit}$</div><button onclick="mafAddCustom()" class="w-full rounded-2xl bg-orange-500 py-4 font-black text-black mt-4">Ajouter au panier</button></div></aside></div><div class="mt-5">${mafCartHtml()}</div>`}
+function mafChips(title,items,active,fn){return `<div><h4 class="font-black mb-2">${title}</h4><div class="flex flex-wrap gap-2">${items.map(x=>`<button onclick="${fn}('${x}')" class="rounded-2xl px-3 py-2 ${x===active?'bg-orange-500 text-black':'bg-white/10'}">${x}</button>`).join('')}</div></div>`}
+function mafCartHtml(){return `<aside class="glass rounded-[28px] p-5"><div class="flex justify-between items-center"><h3 class="text-2xl font-black text-orange-300">Panier</h3><button onclick="mafClear()" class="text-white/45 hover:text-red-300">Vider</button></div>${mafCart.length?mafCart.map(i=>`<div class="rounded-2xl border border-white/10 p-3 mt-3"><b>${i.name}</b><p class="text-white/50 text-sm">${i.desc}</p><div class="flex gap-2 items-center mt-2"><button onclick="mafQtyChange('${i.id}',-1)" class="rounded-xl bg-white/10 w-9 h-9">−</button><span>${i.qty}</span><button onclick="mafQtyChange('${i.id}',1)" class="rounded-xl bg-white/10 w-9 h-9">+</button><button onclick="mafRemove('${i.id}')" class="ml-auto text-red-300">Retirer</button></div><div class="text-orange-300 font-black mt-2">${i.price*i.qty}$</div></div>`).join(''):'<p class="text-white/40 mt-4">Aucun article ajouté.</p>'}<div class="border-t border-white/10 mt-4 pt-4 flex justify-between text-2xl font-black"><span>Total</span><span class="text-orange-300">${mafTotal()}$</span></div><button onclick="mafOpenCheckout()" class="w-full rounded-2xl bg-orange-500 py-4 font-black text-black mt-4">Passer au paiement</button></aside>`}
+function mafSetCategory(c){mafCategory=c;mafQty=Number(Object.keys(mafPrices[c])[0]);mafRender()}
+function mafSetPosition(x){mafLogoPosition=x;mafRender()}
+function mafSetPrint(x){mafPrint=x;mafRender()}
+function mafSetColor(x){mafColor=x;mafRender()}
+function mafZoomSet(d){mafZoom=Math.max(.75,Math.min(1.4,mafZoom+d));mafRender()}
+function mafZoomReset(){mafZoom=1;mafRender()}
+function mafUploadLogo(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{mafLogoData=r.result;mafLogoName=f.name;mafRender()};r.readAsDataURL(f)}
+function mafAdd(id){const p=mafProducts.find(x=>x.id===id);if(p)mafAddItem({...p})}
+function mafAddCustom(){const price=mafPrices[mafCategory][mafQty];mafAddItem({id:'maf-custom-'+Date.now(),zone:'Merch',name:`${mafCategory} personnalisé — ${mafQty} unités`,desc:`${mafColor} • ${mafLogoPosition} • ${mafPrint} • ${(price/mafQty).toFixed(2)}$/u`,price,stock:999})}
+function mafAddItem(item){const found=mafCart.find(x=>x.id===item.id);if(found){if(found.qty>=found.stock)return alert('Stock maximum atteint');found.qty++}else mafCart.push({...item,qty:1});mafRender()}
+function mafQtyChange(id,d){const i=mafCart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)mafRemove(id);else mafRender()}
+function mafRemove(id){mafCart=mafCart.filter(x=>x.id!==id);mafRender()}
+function mafClear(){if(mafCart.length&&confirm('Vider le panier Art & Fact?')){mafCart=[];mafRender()}}
+function mafOpenCheckout(){const lines=mafCart.length?mafCart.map(i=>`${i.qty}x ${i.name} — ${i.price*i.qty}$`).join('\n'):'Panier vide';alert(`Commande Meyden Art & Fact\n\n${lines}\n\nTotal : ${mafTotal()}$ CAD\n\nPaiement suggéré : Interac à matthieuprudhomme1984@gmail.com`)}
+
+function init(){bindAll();activateAllButtons();renderMonitors();renderMonitorLibraries();renderFiveCentralMonitors();renderArtists();setupAdhesionForms();renderFlow();updateFlow(false);renderPlans();renderLibraries();updateScenario('realistic');sync();runSelfTests();launchYoutube($('youtubeInput')?.value||'');startFlowLoop();mafRender()}
+init();
 </script>
 </body>
 </html>
