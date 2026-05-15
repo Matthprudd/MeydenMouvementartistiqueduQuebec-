@@ -315,7 +315,139 @@
 
   <section class="glass rounded-[32px] p-5"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="text-2xl font-black">Guichet Meyden Coins</h2><p class="text-white/60 text-sm">Demande d’échange trimestrielle.</p></div><button data-modal="coinsModal" class="rounded-2xl bg-orange-500 px-4 py-3 font-black text-black">Ouvrir le guichet</button></div><div class="grid gap-4 lg:grid-cols-3"><div class="glass rounded-3xl p-4"><b>Statut</b><div id="coinsWindowStatus" class="text-2xl font-black text-green-300">Ouvert</div></div><div class="glass rounded-3xl p-4"><b>Règle</b><div class="text-2xl font-black text-yellow-300">1/3 provision</div></div><div class="glass rounded-3xl p-4"><b>Cycle</b><div id="coinsQuarterLabel" class="text-2xl font-black text-orange-300">T2</div></div></div></section>
 
-  <section id="studio-lujamko" class="glass cyan-glow rounded-[32px] p-5"><div class="grid gap-6 lg:grid-cols-[1.05fr_.95fr] items-center"><div><div class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-cyan-300">Studio d’enregistrement intégré</div><h2 class="mt-5 text-4xl lg:text-6xl font-black leading-[.95]">LUJAMKO<br><span class="text-cyan-300">Production Studio</span></h2><p class="mt-5 text-lg leading-8 text-white/70 max-w-2xl">Studio immersif pour transformer une idée sonore en contenu exploitable.</p><div class="mt-6 flex flex-wrap gap-3"><button data-modal="sceneBookModal" class="rounded-2xl bg-[#0f52ba] px-5 py-3 font-black text-white">Réserver une session</button><button data-scroll="media" class="rounded-2xl bg-white/10 px-5 py-3 font-black">Voir le moniteur média</button><button data-scroll="dashboard" class="rounded-2xl bg-orange-500 px-5 py-3 font-black text-black">Structurer avec Meyden</button></div></div><div class="rounded-[30px] overflow-hidden border border-cyan-400/20 bg-gradient-to-br from-[#091a3f] via-black to-[#0f52ba] p-5 cyan-glow"><div id="lujamkoMonitor" class="aspect-video rounded-[26px] border border-white/10 bg-black/50 flex items-center justify-center text-center p-6 overflow-hidden"><div><div class="text-xs uppercase tracking-[.25em] text-cyan-300">Lujamko x Meyden</div><div class="mt-3 text-3xl font-black">Son • Image • Contenu</div><p class="mt-3 text-white/60">Une session peut devenir un actif.</p></div></div><button id="lujamkoTunedBtn" class="w-full rounded-2xl bg-cyan-300 py-4 mt-4 text-lg font-black text-black hover:bg-white transition">Tuned On — Studio Lujamko</button><div class="grid grid-cols-3 gap-3 mt-4 text-sm"><button id="lujamkoPreviewBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Démo monitor</button><button id="lujamkoResetBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Reset studio</button><div class="rounded-2xl border border-cyan-400/20 bg-black/30 p-3"><div class="text-white/45">Tuned</div><div id="lujamkoTunedCount" class="text-xl font-black text-cyan-300">0</div></div></div></div></div></section>
+  <section id="studio-lujamko" class="glass cyan-glow rounded-[32px] p-5">
+  <style>
+    #studio-lujamko .lj-card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(14px);border-radius:24px}
+    #studio-lujamko .lj-btn{border-radius:16px;padding:12px 16px;font-weight:900;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.10)}
+    #studio-lujamko .lj-btn.active,#studio-lujamko .lj-btn.primary{background:#67e8f9;color:#000}
+    #studio-lujamko .lj-btn.purple{background:#8b5cf6;color:#fff}
+    #studio-lujamko .lj-btn.green{background:#22c55e;color:#001b0a}
+    #studio-lujamko .lj-btn.red{background:rgba(239,68,68,.20);color:#fecaca;border:1px solid rgba(239,68,68,.35)}
+    #studio-lujamko .lj-input{width:100%;border-radius:16px;background:rgba(0,0,0,.42);border:1px solid rgba(103,232,249,.22);padding:12px 14px;color:#fff}
+    #studio-lujamko .lj-view{display:none}
+    #studio-lujamko .lj-view.open{display:block}
+    #studio-lujamko .lj-pill{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;border:1px solid rgba(103,232,249,.28);background:rgba(103,232,249,.10);color:#67e8f9}
+    #studio-lujamko .lj-item{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;border-radius:18px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.10);padding:10px}
+    #studio-lujamko .lj-ico{width:42px;height:42px;border-radius:14px;background:rgba(103,232,249,.14);display:grid;place-items:center}
+    #studio-lujamko .lj-engine{background:#02040a;border:1px solid rgba(103,232,249,.20);border-radius:24px;overflow:hidden}
+    #studio-lujamko .lj-screen{position:relative;min-height:280px;background:#000}
+    #studio-lujamko .lj-screen video{width:100%;height:280px;object-fit:contain;background:#000;display:none}
+    #studio-lujamko .lj-screen audio{width:calc(100% - 28px);position:absolute;left:14px;bottom:145px;z-index:2}
+    #studio-lujamko .lj-screen.video video{display:block}
+    #studio-lujamko .lj-screen.video .lj-bg,#studio-lujamko .lj-screen.video audio{display:none}
+    #studio-lujamko .lj-bg{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle,#13213a,#02040a 70%)}
+    #studio-lujamko .lj-disc{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#111827 0 18%,#1f2937 19% 35%,#090d16 36% 64%,#67e8f9 65%,#0b1020 66%);box-shadow:0 0 55px rgba(103,232,249,.2)}
+    #studio-lujamko .lj-overlay{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 14px;background:linear-gradient(transparent,rgba(0,0,0,.94))}
+    #studio-lujamko .lj-wave{height:62px;background:rgba(103,232,249,.08);border:1px solid rgba(103,232,249,.18);border-radius:16px;margin:10px 0;display:flex;align-items:end;gap:3px;padding:8px}
+    #studio-lujamko .lj-wave span{flex:1;border-radius:99px;background:linear-gradient(180deg,#67e8f9,#8b5cf6)}
+    #studio-lujamko .lj-progress{height:8px;border-radius:99px;background:rgba(255,255,255,.15);overflow:hidden}
+    #studio-lujamko .lj-bar{height:100%;width:0%;background:linear-gradient(90deg,#67e8f9,#8b5cf6)}
+  </style>
+
+  <div class="flex flex-wrap justify-between gap-4 items-start mb-5">
+    <div>
+      <div class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-cyan-300">Studio OS intégré</div>
+      <h2 class="mt-4 text-4xl lg:text-6xl font-black leading-[.95]">LUJAMKO<br><span class="text-cyan-300">Studio Interface</span></h2>
+      <p class="mt-4 text-white/65 max-w-3xl leading-7">Interface hybride intégrée dans MEYDEN OS : moteur média MP3/MP4, service & opérations Luc Gauthier, dossiers clients, portail client, permissions et vitrine studio.</p>
+    </div>
+    <div class="lj-card p-4 min-w-[240px]">
+      <div class="text-white/45 text-sm">Connexion active</div>
+      <div id="ljRoleLabel" class="text-2xl font-black text-cyan-300">Luc / Studio 70%</div>
+      <div class="text-white/45 text-sm mt-1">NIP studio : 5055</div>
+    </div>
+  </div>
+
+  <div class="grid gap-3 md:grid-cols-3 mb-5">
+    <button class="lj-btn active" data-lj-role="principal">Admin 100% — 7077</button>
+    <button class="lj-btn" data-lj-role="studio">Luc Studio 70% — 5055</button>
+    <button class="lj-btn" data-lj-role="client">Client invité — 0010</button>
+  </div>
+
+  <div class="flex flex-wrap gap-2 mb-5">
+    <button class="lj-btn primary" data-lj-view="lj-dashboard">Dashboard</button>
+    <button class="lj-btn" data-lj-view="lj-engine">Moteur média</button>
+    <button class="lj-btn" data-lj-view="lj-operations">Service & opérations</button>
+    <button class="lj-btn" data-lj-view="lj-clients">Dossiers clients</button>
+    <button class="lj-btn" data-lj-view="lj-portal">Portail client</button>
+    <button class="lj-btn" data-lj-view="lj-vitrine">Vitrine</button>
+  </div>
+
+  <div id="lj-dashboard" class="lj-view open">
+    <div class="grid gap-5 lg:grid-cols-[1.2fr_.8fr]">
+      <div class="lj-card p-4">
+        <h3 class="text-2xl font-black mb-3">Moteur média rapide</h3>
+        <div id="ljEngineMount"></div>
+      </div>
+      <div class="space-y-4">
+        <div class="lj-card p-4">
+          <h3 class="text-xl font-black mb-3">Service & opérations Luc</h3>
+          <div id="ljOpsMini" class="grid gap-2"></div>
+          <button class="lj-btn primary mt-3 w-full" id="ljAddTaskBtn">Ajouter tâche</button>
+        </div>
+        <div class="lj-card p-4">
+          <h3 class="text-xl font-black mb-3">Dossiers clients</h3>
+          <div id="ljClientMini" class="grid gap-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="lj-engine" class="lj-view">
+    <div class="lj-card p-4">
+      <div class="flex flex-wrap justify-between gap-3 mb-4">
+        <h3 class="text-2xl font-black">Moteur média professionnel MP3 / MP4</h3>
+        <label class="lj-btn primary cursor-pointer">Importer média <input id="ljMediaInput" type="file" accept="audio/*,video/*" class="hidden"></label>
+      </div>
+      <div id="ljEngineMountFull"></div>
+      <div class="mt-4">
+        <h4 class="font-black mb-2">Librairie session</h4>
+        <div id="ljLibrary" class="grid gap-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="lj-operations" class="lj-view">
+    <div class="lj-card p-4">
+      <div class="flex flex-wrap justify-between gap-3 mb-4"><h3 class="text-2xl font-black">Zone réservée Luc Gauthier — service & opérations</h3><button class="lj-btn primary" id="ljAddTaskBtn2">Ajouter tâche</button></div>
+      <div id="ljOpsList" class="grid gap-2"></div>
+    </div>
+  </div>
+
+  <div id="lj-clients" class="lj-view">
+    <div class="lj-card p-4">
+      <div class="flex flex-wrap justify-between gap-3 mb-4"><h3 class="text-2xl font-black">Dossiers clients</h3><button class="lj-btn primary" id="ljAddClientBtn">Nouveau client</button></div>
+      <div id="ljClientsList" class="grid gap-2"></div>
+    </div>
+  </div>
+
+  <div id="lj-portal" class="lj-view">
+    <div class="lj-card p-4">
+      <h3 class="text-2xl font-black mb-3">Expérience client premium</h3>
+      <p class="text-white/60 mb-4">Le client voit seulement ses versions, ses validations, ses commentaires et ses livrables.</p>
+      <div id="ljPortalList" class="grid gap-2 mb-4"></div>
+      <div class="grid gap-3 md:grid-cols-3">
+        <button class="lj-btn primary" id="ljApproveBtn">Approuver master</button>
+        <button class="lj-btn" id="ljCommentBtn">Envoyer commentaire</button>
+        <button class="lj-btn green" id="ljDownloadBtn">Télécharger index</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="lj-vitrine" class="lj-view">
+    <div class="lj-card p-4">
+      <h3 class="text-2xl font-black mb-3">Vitrine Studio Lujamko</h3>
+      <div id="lujamkoMonitor" class="aspect-video rounded-[26px] border border-cyan-400/20 bg-black/50 flex items-center justify-center text-center p-6 overflow-hidden">
+        <div><div class="text-xs uppercase tracking-[.25em] text-cyan-300">Lujamko x Meyden</div><div class="mt-3 text-3xl font-black">Son • Mix • Master • Service</div><p class="mt-3 text-white/60">Une session devient un actif.</p></div>
+      </div>
+      <button id="lujamkoTunedBtn" class="w-full rounded-2xl bg-cyan-300 py-4 mt-4 text-lg font-black text-black hover:bg-white transition">Tuned On — Studio Lujamko</button>
+      <div class="grid grid-cols-3 gap-3 mt-4 text-sm">
+        <button id="lujamkoPreviewBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Démo monitor</button>
+        <button id="lujamkoResetBtn" class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3 font-black">Reset studio</button>
+        <div class="rounded-2xl border border-cyan-400/20 bg-black/30 p-3"><div class="text-white/45">Tuned</div><div id="lujamkoTunedCount" class="text-xl font-black text-cyan-300">0</div></div>
+      </div>
+    </div>
+  </div>
+</section>
 <section id="auditeur-central" class="glass rounded-[32px] p-5 mb-6">
   <div class="flex flex-wrap justify-between gap-3 mb-4">
     <div>
@@ -1100,5 +1232,180 @@ init();
 })();
 </script>
 
+
+<script>
+(function(){
+  const root = document.getElementById('studio-lujamko');
+  if(!root || root.dataset.ljInstalled) return;
+  root.dataset.ljInstalled = "1";
+
+  const qs = (s)=>root.querySelector(s);
+  const qsa = (s)=>Array.from(root.querySelectorAll(s));
+  const saveKey = 'ljStudioIntegratedStateV1';
+  const store = JSON.parse(localStorage.getItem(saveKey)||'null') || {
+    role:'studio',
+    tuned:0,
+    files:[],
+    tasks:[
+      {id:'t1', txt:'Préparer Master V1 pour validation client', status:'À faire'},
+      {id:'t2', txt:'Confirmer session vocale de la semaine', status:'En cours'}
+    ],
+    clients:[
+      {id:'c1', name:'Client Alpha', project:'Single démo', status:'Mix en cours'},
+      {id:'c2', name:'Projet Beta', project:'EP 3 titres', status:'Master à valider'}
+    ],
+    approvals:[
+      {id:'a1', project:'Single démo', version:'Master V1', status:'À valider'}
+    ]
+  };
+  const save=()=>localStorage.setItem(saveKey, JSON.stringify({...store, files:store.files.map(f=>({...f,url:''}))}));
+  const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
+  const toast=(t)=>{ if(window.toast) window.toast(t); else alert(t); };
+
+  function roleName(){
+    return store.role==='principal'?'Admin principal 100%':store.role==='studio'?'Luc / Studio 70%':'Client invité';
+  }
+  function canStudio(){return store.role==='principal'||store.role==='studio'}
+
+  function engineHTML(){
+    const bars = Array.from({length:34},(_,i)=>`<span style="height:${18+Math.abs(Math.sin(i*.7))*38}px"></span>`).join('');
+    return `<div class="lj-engine">
+      <div class="lj-screen" id="ljScreen">
+        <video id="ljVideo" playsinline controls></video>
+        <audio id="ljAudio" controls></audio>
+        <div class="lj-bg"><div class="lj-disc"></div></div>
+        <div class="lj-overlay">
+          <h3 id="ljNowTitle">Aucun média chargé</h3>
+          <div class="mini" id="ljNowStatus">Importe un MP3, WAV, MP4 ou MOV.</div>
+          <div class="lj-wave">${bars}</div>
+          <div class="lj-progress"><div class="lj-bar" id="ljBar"></div></div>
+          <div class="flex gap-2 justify-center mt-3">
+            <button class="lj-btn" id="ljBack">−10</button>
+            <button class="lj-btn primary" id="ljPlay">Play</button>
+            <button class="lj-btn" id="ljForward">+10</button>
+            <button class="lj-btn" id="ljLoop">Loop</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function item(icon,title,sub,action=''){
+    return `<div class="lj-item"><div class="lj-ico">${icon}</div><div><b>${title}</b><div class="mini">${sub||''}</div></div><div>${action}</div></div>`;
+  }
+
+  function render(){
+    qs('#ljRoleLabel').textContent = roleName();
+    qsa('[data-lj-role]').forEach(b=>b.classList.toggle('active', b.dataset.ljRole===store.role));
+
+    const engineMount = qs('#ljEngineMount');
+    const engineMountFull = qs('#ljEngineMountFull');
+    if(engineMount) engineMount.innerHTML = engineHTML();
+    if(engineMountFull) engineMountFull.innerHTML = engineHTML();
+
+    const ops = store.tasks.map(t=>item('🧠',t.txt,'Service & opérations',`<button class="lj-btn ${t.status==='Terminé'?'green':''}" data-lj-task="${t.id}">${t.status}</button>`)).join('');
+    ['#ljOpsMini','#ljOpsList'].forEach(id=>{const el=qs(id); if(el)el.innerHTML = ops || '<p class="muted">Aucune tâche.</p>';});
+
+    const clients = store.clients.map(c=>item('👤',c.name,`${c.project} · ${c.status}`,`<button class="lj-btn" data-lj-client="${c.id}">Ouvrir</button>`)).join('');
+    ['#ljClientMini','#ljClientsList'].forEach(id=>{const el=qs(id); if(el)el.innerHTML = clients || '<p class="muted">Aucun client.</p>';});
+
+    const portal = store.approvals.map(a=>item('✅',a.project,`${a.version} · ${a.status}`,`<span class="lj-pill">${a.status}</span>`)).join('');
+    const portalEl=qs('#ljPortalList'); if(portalEl) portalEl.innerHTML = portal || '<p class="muted">Aucune validation.</p>';
+
+    const lib=qs('#ljLibrary');
+    if(lib) lib.innerHTML = store.files.map((f,i)=>item(f.kind==='video'?'🎬':'🎧',f.name,`${f.type||'média'} · session`, `<button class="lj-btn" data-lj-play="${i}">Lire</button>`)).join('') || '<p class="muted">Aucun fichier importé dans cette session.</p>';
+
+    bindDynamic();
+  }
+
+  function bindDynamic(){
+    qsa('[data-lj-task]').forEach(btn=>btn.onclick=()=>{
+      const t=store.tasks.find(x=>x.id===btn.dataset.ljTask); if(!t) return;
+      t.status = t.status==='Terminé'?'À faire':'Terminé'; save(); render();
+    });
+    qsa('[data-lj-play]').forEach(btn=>btn.onclick=()=>playFile(Number(btn.dataset.ljPlay)));
+    qsa('[data-lj-client]').forEach(btn=> {
+      btn.onclick=()=> {
+        const c=store.clients.find(x=>x.id===btn.dataset.ljClient);
+        toast(`Dossier client : ${c.name} — ${c.project}`);
+      };
+    });
+    [qs('#ljMediaInput')].filter(Boolean).forEach(inp=>inp.onchange=(e)=>importFile(e.target.files[0]));
+    qsa('#ljPlay').forEach(btn=>btn.onclick=togglePlay);
+    qsa('#ljBack').forEach(btn=>btn.onclick=()=>seek(-10));
+    qsa('#ljForward').forEach(btn=>btn.onclick=()=>seek(10));
+    qsa('#ljLoop').forEach(btn=>btn.onclick=()=>{mediaEls().forEach(m=>m.loop=!m.loop); toast('Loop modifié');});
+  }
+
+  function visibleEngine(){
+    return qsa('.lj-engine').find(e=>e.offsetParent!==null) || qs('.lj-engine');
+  }
+  function mediaEls(){
+    const e=visibleEngine();
+    return e ? [e.querySelector('#ljAudio'), e.querySelector('#ljVideo')].filter(Boolean) : [];
+  }
+  function activeMedia(){
+    const [a,v]=mediaEls();
+    return v && v.style.display==='block' ? v : a;
+  }
+  function playFile(i){
+    const f=store.files[i]; if(!f || !f.url) return toast('Fichier disponible seulement dans cette session. Réimporte-le si la page a été rechargée.');
+    const e=visibleEngine(); if(!e) return;
+    const a=e.querySelector('#ljAudio'), v=e.querySelector('#ljVideo'), screen=e.querySelector('#ljScreen');
+    if(f.kind==='video'){ a.pause(); a.removeAttribute('src'); v.src=f.url; v.style.display='block'; screen.classList.add('video'); v.play(); }
+    else { v.pause(); v.removeAttribute('src'); v.style.display='none'; a.src=f.url; screen.classList.remove('video'); a.play(); }
+    e.querySelector('#ljNowTitle').textContent=f.name;
+    e.querySelector('#ljNowStatus').textContent=f.type||'média local';
+    const media = f.kind==='video'?v:a;
+    media.ontimeupdate=()=>{ const bar=e.querySelector('#ljBar'); if(bar) bar.style.width=((media.currentTime/(media.duration||1))*100)+'%'; };
+  }
+  function togglePlay(){
+    const m=activeMedia(); if(!m || !m.src){ if(store.files[0]) playFile(0); else toast('Importe un média avant de lire.'); return; }
+    if(m.paused) m.play(); else m.pause();
+  }
+  function seek(delta){ const m=activeMedia(); if(m&&m.src) m.currentTime=Math.max(0, Math.min(m.duration||0, m.currentTime+delta)); }
+
+  function importFile(file){
+    if(!file) return;
+    const kind=file.type.startsWith('video')?'video':'audio';
+    const url=URL.createObjectURL(file);
+    store.files.unshift({id:uid(),name:file.name,type:file.type,kind,url});
+    toast('Média importé dans Studio Lujamko');
+    render();
+  }
+
+  qsa('[data-lj-role]').forEach(btn=>btn.onclick=()=>{
+    store.role=btn.dataset.ljRole; save(); render();
+    toast('Accès : '+roleName());
+  });
+  qsa('[data-lj-view]').forEach(btn=>btn.onclick=()=>{
+    const id=btn.dataset.ljView;
+    if(!canStudio() && !['lj-portal','lj-dashboard'].includes(id)){ toast('Accès réservé au studio.'); return; }
+    qsa('[data-lj-view]').forEach(b=>b.classList.remove('primary'));
+    btn.classList.add('primary');
+    qsa('.lj-view').forEach(v=>v.classList.remove('open'));
+    qs('#'+id).classList.add('open');
+    render();
+  });
+
+  function addTask(){
+    if(!canStudio()) return toast('Accès réservé au studio.');
+    const txt=prompt('Nouvelle tâche opération :','Envoyer Master V2 au client');
+    if(txt){store.tasks.unshift({id:uid(),txt,status:'À faire'}); save(); render();}
+  }
+  function addClient(){
+    if(!canStudio()) return toast('Accès réservé au studio.');
+    const name=prompt('Nom du client :','Nouveau client');
+    if(name){store.clients.unshift({id:uid(),name,project:'Projet audio',status:'Actif'}); save(); render();}
+  }
+  ['#ljAddTaskBtn','#ljAddTaskBtn2'].forEach(id=>{const b=qs(id); if(b)b.onclick=addTask;});
+  const addClientBtn=qs('#ljAddClientBtn'); if(addClientBtn)addClientBtn.onclick=addClient;
+  const approve=qs('#ljApproveBtn'); if(approve)approve.onclick=()=>{store.approvals.forEach(a=>a.status='Approuvé');save();render();toast('Master approuvé');};
+  const comment=qs('#ljCommentBtn'); if(comment)comment.onclick=()=>{const c=prompt('Commentaire client :','Correction demandée'); if(c){store.tasks.unshift({id:uid(),txt:'Commentaire client : '+c,status:'À faire'});save();render();toast('Commentaire envoyé');}};
+  const down=qs('#ljDownloadBtn'); if(down)down.onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(store,null,2)],{type:'application/json'}));a.download='lujamko-portail-client.json';a.click();};
+
+  render();
+})();
+</script>
 </body>
 </html>
